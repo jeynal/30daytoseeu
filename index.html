@@ -3,31 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>TDL : 30 Days to Love</title>
+  <title>Picka : 30 Days to Love</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, sans-serif; }
     .font-typewriter { font-family: 'Courier Prime', monospace; }
     ::-webkit-scrollbar { width: 3px; }
-    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
-    .chat-bubble { animation: fadeIn 0.2s ease-out forwards; }
+    ::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
+    .chat-bubble { animation: fadeIn 0.18s ease-out forwards; }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
-<body class="bg-neutral-100 text-neutral-800 flex justify-center h-screen overflow-hidden select-none">
+<body class="bg-[#f0f2f5] text-neutral-800 flex justify-center h-screen overflow-hidden select-none">
 
-  <!-- Mobile Shell Frame (Picka White/Light Theme) -->
-  <div class="w-full max-w-md h-full flex flex-col bg-white border-x border-neutral-200 shadow-xl relative overflow-hidden">
+  <!-- Mobile Shell Frame (Picka Authentic Layout) -->
+  <div class="w-full max-w-md h-full flex flex-col bg-white shadow-2xl relative overflow-hidden border-x border-neutral-200">
 
-    <!-- TOP HEADER (Picka Style) -->
-    <header class="bg-white border-b border-neutral-200 px-4 py-2.5 flex items-center justify-between z-20 shrink-0">
+    <!-- ================= TOP APP BAR ================= -->
+    <header id="main-header" class="bg-white px-4 py-3 flex items-center justify-between z-20 shrink-0 border-b border-neutral-100">
+      <h1 id="header-page-title" class="font-bold text-xl tracking-tight text-neutral-900">Chats</h1>
+      <!-- Right Action Icons (Shop, Gift Box, Share) -->
+      <div class="flex items-center space-x-3 text-neutral-600">
+        <button class="hover:text-neutral-900 text-lg">🏪</button>
+        <button class="hover:text-neutral-900 text-lg">🎁</button>
+        <button class="hover:text-neutral-900 text-lg">↗️</button>
+      </div>
+    </header>
+
+    <!-- Sub-Header for Inside Chat Room (TDL : All Group) -->
+    <header id="chat-inside-header" class="hidden bg-white border-b border-neutral-200 px-4 py-2.5 flex items-center justify-between z-20 shrink-0">
       <div class="flex items-center space-x-3">
-        <button onclick="goHome()" class="text-neutral-700 hover:text-neutral-900 font-bold text-lg">←</button>
-        <h1 id="header-title" class="font-bold text-base tracking-tight text-neutral-800">TDL : All Group</h1>
+        <button onclick="leaveChatRoom()" class="text-neutral-700 hover:text-neutral-900 font-bold text-lg">←</button>
+        <div>
+          <h2 class="font-bold text-sm tracking-tight text-neutral-900">TDL : All Group</h2>
+          <p class="text-[10px] text-neutral-400">8 Members</p>
+        </div>
       </div>
       <div class="flex items-center space-x-3 text-xs text-neutral-500 font-medium">
         <button onclick="toggleSpeed()" id="btn-speed" class="flex flex-col items-center hover:text-neutral-800">
@@ -45,73 +59,237 @@
       </div>
     </header>
 
-    <!-- MAIN VIEWPORT -->
-    <main class="flex-1 overflow-hidden relative flex flex-col bg-[#fcfcfc]">
+    <!-- ================= MAIN VIEWPORT (5 TABS) ================= -->
+    <main class="flex-1 overflow-hidden relative flex flex-col bg-white">
 
-      <!-- ================= 1. HOME SCREEN (Picka Lobby) ================= -->
-      <section id="view-home" class="flex-1 flex flex-col p-5 overflow-y-auto space-y-4">
-        <div class="pt-2">
-          <span class="text-[10px] bg-rose-100 text-rose-600 px-2 py-0.5 rounded-full font-bold">SEASON 1</span>
-          <h2 class="text-xl font-bold text-neutral-900 mt-1.5">30 Days to Love</h2>
-          <p class="text-xs text-neutral-500 mt-0.5">เซี่ยงไฮ้ · รายการทดลองรัก 30 วัน</p>
+      <!-- ================= TAB 1: CHATS VIEW ================= -->
+      <section id="tab-chats" class="tab-page flex-1 overflow-y-auto flex flex-col">
+        <!-- Picka Gold Banner -->
+        <div class="px-4 pt-3 pb-2">
+          <div class="bg-gradient-to-r from-neutral-100 to-neutral-50 border border-neutral-200/70 rounded-2xl p-3 flex items-center justify-between shadow-sm">
+            <div>
+              <h3 class="text-xs font-bold text-neutral-800">Like and Get Free Gold</h3>
+              <p class="text-[10px] text-neutral-400">Fastest & easiest ways to earn gold</p>
+            </div>
+            <div class="text-xl">💰</div>
+          </div>
         </div>
 
-        <!-- Master Notification Invitation -->
-        <div class="bg-white border border-rose-200 rounded-2xl p-4 shadow-sm relative overflow-hidden">
-          <div class="flex items-start justify-between">
-            <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-full bg-rose-500 flex items-center justify-center text-white font-bold text-sm shadow">
-                M
+        <!-- Chat Channels List -->
+        <div class="divide-y divide-neutral-100">
+          
+          <!-- Channel 1: TDL All Group -->
+          <div onclick="enterGroupChat()" class="p-4 flex items-center space-x-3 hover:bg-neutral-50 cursor-pointer transition">
+            <!-- 4-Grid Group Avatar -->
+            <div class="w-12 h-12 rounded-full overflow-hidden grid grid-cols-2 grid-rows-2 bg-neutral-200 border border-neutral-200 shrink-0">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop" class="w-full h-full object-cover">
+              <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=50&h=50&fit=crop" class="w-full h-full object-cover">
+              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=50&h=50&fit=crop" class="w-full h-full object-cover">
+              <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=50&h=50&fit=crop" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex justify-between items-baseline">
+                <h4 class="text-sm font-bold text-neutral-900 truncate">TDL : All Group</h4>
+                <span class="text-[10px] text-rose-500 font-semibold">19:00</span>
               </div>
-              <div>
-                <h3 class="text-xs font-bold text-neutral-800 flex items-center gap-1.5">
-                  LUMEN MASTER
-                  <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
-                </h3>
-                <p class="text-[10px] text-rose-500">ข้อความจากโปรดิวเซอร์รายการ</p>
+              <p id="group-last-msg" class="text-xs text-neutral-400 truncate mt-0.5">[Please enter your message.]</p>
+            </div>
+          </div>
+
+          <!-- Channel 2: Daily Feed -->
+          <div class="p-4 flex items-center space-x-3 hover:bg-neutral-50 cursor-pointer transition">
+            <div class="w-12 h-12 rounded-full bg-pink-100 border border-pink-200 flex items-center justify-center font-bold text-pink-500 text-sm shrink-0">
+              D
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex justify-between items-baseline">
+                <h4 class="text-sm font-bold text-neutral-900 truncate">&lt;Daily Feed&gt;</h4>
+                <span class="text-[10px] text-neutral-400">Today</span>
+              </div>
+              <p class="text-xs text-neutral-400 truncate mt-0.5">Checked it</p>
+            </div>
+          </div>
+
+          <!-- Channel 3: Heart Sending -->
+          <div onclick="openMidnightHeartSignal()" class="p-4 flex items-center space-x-3 hover:bg-neutral-50 cursor-pointer transition">
+            <div class="w-12 h-12 rounded-full bg-rose-100 border border-rose-200 flex items-center justify-center font-bold text-rose-500 text-sm shrink-0">
+              H
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex justify-between items-baseline">
+                <h4 class="text-sm font-bold text-neutral-900 truncate">&lt;Heart Sending&gt;</h4>
+                <span class="text-[10px] text-rose-500 font-semibold">23:59</span>
+              </div>
+              <p id="heart-last-msg" class="text-xs text-neutral-400 truncate mt-0.5">Thanks Foco</p>
+            </div>
+          </div>
+
+          <!-- Channel 4: Plan Master Announcement -->
+          <div class="p-4 flex items-center space-x-3 hover:bg-neutral-50 cursor-pointer transition">
+            <div class="w-12 h-12 rounded-full bg-amber-100 border border-amber-200 flex items-center justify-center font-bold text-amber-600 text-sm shrink-0">
+              M
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex justify-between items-baseline">
+                <h4 class="text-sm font-bold text-neutral-900 truncate">Personal Announcement</h4>
+                <span class="text-[10px] text-neutral-400">Notice</span>
+              </div>
+              <p class="text-xs text-neutral-400 truncate mt-0.5">The Icebreaker 1:1 match will be announced.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= TAB 2: PEOPLE VIEW ================= -->
+      <section id="tab-people" class="tab-page hidden flex-1 overflow-y-auto flex flex-col">
+        <!-- Picka Gold Banner -->
+        <div class="px-4 pt-3 pb-2">
+          <div class="bg-gradient-to-r from-neutral-100 to-neutral-50 border border-neutral-200/70 rounded-2xl p-3 flex items-center justify-between shadow-sm">
+            <div>
+              <h3 class="text-xs font-bold text-neutral-800">Like and Get Free Gold</h3>
+              <p class="text-[10px] text-neutral-400">Fastest & easiest ways to earn gold</p>
+            </div>
+            <div class="text-xl">💰</div>
+          </div>
+        </div>
+
+        <!-- Player Profile Row (Top) -->
+        <div class="p-4 flex items-center space-x-3 border-b border-neutral-100">
+          <img id="people-player-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" class="w-13 h-13 rounded-full object-cover border border-neutral-200">
+          <div>
+            <h3 id="people-player-name" class="font-bold text-sm text-neutral-900">Lee Ahyeon (คุณ)</h3>
+            <p id="people-player-sub" class="text-xs text-neutral-400 mt-0.5">ผู้เข้าร่วมรายการ 30 Days to Love</p>
+          </div>
+        </div>
+
+        <!-- Friends Count & List -->
+        <div class="px-4 py-2 bg-neutral-50/50">
+          <span class="text-xs text-neutral-400 font-semibold">Friends 8</span>
+        </div>
+
+        <div id="people-friends-list" class="divide-y divide-neutral-100">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- ================= TAB 3: STORY VIEW ================= -->
+      <section id="tab-story" class="tab-page hidden flex-1 overflow-y-auto p-4 space-y-4">
+        <!-- Invitation Banner Card (Frank Mansion & Club) -->
+        <div class="rounded-2xl overflow-hidden border border-neutral-200 shadow-sm relative bg-[#1c2430] text-center p-6 text-white aspect-[4/3] flex flex-col justify-center items-center">
+          <div class="border border-white/30 p-5 rounded-lg w-full h-full flex flex-col justify-between items-center bg-black/20 backdrop-blur-xs">
+            <span class="text-[10px] tracking-widest uppercase opacity-80">I N V I T A T I O N</span>
+            <div>
+              <div class="w-10 h-10 mx-auto rounded-full border border-white/50 flex items-center justify-center font-serif text-lg italic">F</div>
+              <h3 class="font-serif text-sm tracking-wide mt-1">Frank Mansion & Club</h3>
+              <p class="text-[9px] text-neutral-300 mt-1 max-w-[200px]">You are invited to 30 Days to Love in Shanghai.</p>
+            </div>
+            <div class="flex justify-between w-full text-[9px] border-t border-white/20 pt-1 text-neutral-300">
+              <span>No. 1004</span>
+              <span>EXP. Day 30</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Episode Selection Cards -->
+        <div class="space-y-3">
+          <div class="flex justify-between items-center">
+            <h3 class="font-bold text-sm text-neutral-900 flex items-center gap-1.5">TDL1 🎞️💖</h3>
+            <span class="text-xs text-neutral-400 cursor-pointer">more</span>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <!-- Card 1: Prologue -->
+            <div class="bg-white border border-neutral-200 rounded-xl overflow-hidden shadow-sm">
+              <div class="h-32 bg-pink-100 flex items-center justify-center p-3 text-center border-b border-pink-200">
+                <span class="text-xs font-serif text-pink-600 font-bold">Prologue: 30 Days to Love</span>
+              </div>
+              <div class="p-2.5">
+                <h4 class="text-xs font-bold text-neutral-800 truncate">Prologue: 30 Days</h4>
+                <p class="text-[10px] text-neutral-400">Short · Romance</p>
               </div>
             </div>
-            <span class="text-[10px] bg-neutral-100 text-neutral-500 px-2 py-0.5 rounded-full">Day 1</span>
+            <!-- Card 2: Main Story CD -->
+            <div class="bg-white border border-neutral-200 rounded-xl overflow-hidden shadow-sm">
+              <div class="h-32 bg-[#e8a5b8] flex items-center justify-center border-b border-pink-300">
+                <div class="w-16 h-16 rounded-full bg-pink-400 border-4 border-white flex items-center justify-center shadow">
+                  <div class="w-4 h-4 rounded-full bg-black"></div>
+                </div>
+              </div>
+              <div class="p-2.5">
+                <h4 class="text-xs font-bold text-neutral-800 truncate"><span class="text-rose-500 text-[10px] font-bold">NEW</span> 30 Days to Love 1</h4>
+                <p class="text-[10px] text-neutral-400">Long · Romance</p>
+              </div>
+            </div>
           </div>
-          <p class="text-xs text-neutral-600 mt-3 leading-relaxed">
-            "ยินดีต้อนรับผู้เข้าร่วมทั้ง 8 คนแรก สู่ค่ำคืนเปิดตัว กรุณากรอกข้อมูลโปรไฟล์ของคุณเพื่อสร้างการ์ดแนะนำตัวก่อนเข้าห้องแชตรวมครับ"
-          </p>
-          <button onclick="startRegistration()" class="mt-4 w-full bg-[#ff5a5f] hover:bg-[#e0484d] text-white py-2.5 rounded-xl text-xs font-bold transition shadow-sm flex items-center justify-center gap-1.5">
-            <span>✉️ เริ่มสร้างโปรไฟล์การ์ด</span>
+        </div>
+      </section>
+
+      <!-- ================= TAB 4: MY VIEW (Profile & Time Leap) ================= -->
+      <section id="tab-my" class="tab-page hidden flex-1 overflow-y-auto flex flex-col">
+        <!-- Sub Tabs (My story / Ending Book / History) -->
+        <div class="flex border-b border-neutral-200 text-xs font-bold px-4 pt-1">
+          <button class="py-2.5 text-[#ff5a5f] border-b-2 border-[#ff5a5f] mr-4">My story</button>
+          <button class="py-2.5 text-neutral-400 hover:text-neutral-700 mr-4">Ending Book</button>
+          <button class="py-2.5 text-neutral-400 hover:text-neutral-700">History</button>
+        </div>
+
+        <div class="p-5 space-y-5">
+          <!-- Story Banner Header -->
+          <div class="flex items-center justify-between pb-3 border-b border-neutral-100">
+            <div class="flex items-center space-x-3">
+              <img id="my-player-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" class="w-12 h-12 rounded-full object-cover border border-neutral-200">
+              <div>
+                <h3 class="font-bold text-sm text-neutral-900">30 Days to Love 1</h3>
+                <p id="my-player-name" class="text-xs text-neutral-400 mt-0.5">Lee Ahyeon</p>
+              </div>
+            </div>
+            <button onclick="openRegistrationModal()" class="text-xs text-neutral-400 hover:text-neutral-800">Details &gt;</button>
+          </div>
+
+          <!-- Episode Status -->
+          <div class="flex justify-between items-center text-xs">
+            <span class="flex items-center gap-2 text-neutral-600 font-semibold">📖 EPISODE</span>
+            <span class="font-bold text-neutral-900">1 / 120</span>
+          </div>
+
+          <!-- Chatting Status -->
+          <div class="flex justify-between items-center text-xs">
+            <span class="flex items-center gap-2 text-neutral-600 font-semibold">Ⓜ️ CHATTING STATUS</span>
+            <span class="font-bold text-rose-500">In progress</span>
+          </div>
+
+          <!-- Time Leap Section -->
+          <div class="flex justify-between items-center text-xs pt-1">
+            <span class="flex items-center gap-2 text-neutral-600 font-semibold">⏱️ TIME LEAP</span>
+            <span class="font-bold text-neutral-900">6</span>
+          </div>
+
+          <!-- Big Coral Button: TIME LEAP -->
+          <button onclick="enterGroupChat()" class="w-full bg-[#ff5a5f] hover:bg-[#e0484d] text-white py-3 rounded-2xl text-xs font-bold transition shadow-sm active:scale-[0.99] tracking-wider uppercase">
+            TIME LEAP / กลับเข้าสู่ห้องแชต
           </button>
         </div>
-
-        <!-- Participant Overview -->
-        <div class="bg-white border border-neutral-200 rounded-2xl p-4 space-y-2">
-          <div class="flex justify-between text-xs font-bold text-neutral-700">
-            <span>สมาชิกปัจจุบัน (8 คน)</span>
-            <span class="text-rose-500 text-[11px] font-normal">ชาย 4 · หญิง 4</span>
-          </div>
-          <p class="text-[11px] text-neutral-500 leading-relaxed">
-            * สมาชิกใหม่คนที่ 9 (ผู้หญิง) จะเข้าร่วมใน Day 7<br>
-            * สมาชิกใหม่คนที่ 10 (ผู้ชาย) จะเข้าร่วมใน Day 9 (Late Comers)
-          </p>
-        </div>
       </section>
 
-      <!-- ================= 2. PRODUCER CHAT (REGISTRATION) ================= -->
-      <section id="view-producer-chat" class="hidden flex-1 flex flex-col h-full bg-[#f8f9fa] overflow-hidden">
-        <div id="producer-stream" class="flex-1 overflow-y-auto p-4 space-y-3">
-          <!-- Producer conversation -->
-        </div>
-        <div id="producer-input-panel" class="p-3 border-t border-neutral-200 bg-white">
-          <div id="producer-form-container" class="space-y-2">
-            <!-- Dynamic input elements -->
+      <!-- ================= TAB 5: MORE VIEW ================= -->
+      <section id="tab-more" class="tab-page hidden flex-1 overflow-y-auto p-4 space-y-4">
+        <h2 class="text-base font-bold text-neutral-900">Settings & About</h2>
+        <div class="space-y-2 text-xs">
+          <div class="p-3 bg-neutral-50 rounded-xl flex justify-between items-center">
+            <span>เวอร์ชันแอปพลิเคชัน</span>
+            <span class="text-neutral-400">1.0.0 (Shanghai Edition)</span>
+          </div>
+          <div class="p-3 bg-neutral-50 rounded-xl flex justify-between items-center">
+            <span>เสียงและเอฟเฟกต์</span>
+            <span class="text-rose-500 font-semibold">เปิด</span>
           </div>
         </div>
       </section>
 
-      <!-- ================= 3. GROUP CHAT ROOM (Picka Realistic Style) ================= -->
-      <section id="view-group-chat" class="hidden flex-1 flex flex-col h-full bg-[#ffffff] overflow-hidden">
-        
-        <!-- Stream for bubbles -->
+      <!-- ================= INNER VIEW: CHAT ROOM ================= -->
+      <section id="view-inner-chat" class="hidden flex-1 flex flex-col h-full bg-white overflow-hidden">
         <div id="group-stream" class="flex-1 overflow-y-auto p-4 space-y-3.5">
-          <!-- Realistic chat bubbles like Picka -->
+          <!-- Chat bubbles -->
         </div>
 
         <!-- Typing status -->
@@ -122,22 +300,23 @@
           <span id="typing-name" class="ml-1 text-[11px]">กำลังพิมพ์...</span>
         </div>
 
-        <!-- Tap Next Button (for comfortable reading) -->
+        <!-- Tap Next Button -->
         <div id="next-tap-bar" class="hidden p-2 bg-neutral-50 border-t border-neutral-200 text-center">
           <button onclick="advanceDialogue()" class="w-full py-2 bg-white hover:bg-neutral-100 text-neutral-700 text-xs font-semibold rounded-xl border border-neutral-300 shadow-sm flex items-center justify-center gap-1">
             <span>แตะเพื่ออ่านข้อความถัดไป</span> ▼
           </button>
         </div>
 
-        <!-- Player Choices (Coral Styled Bottom Bar) -->
+        <!-- Player Choices Box -->
         <div id="group-choices-box" class="hidden bg-neutral-50 border-t border-neutral-200 p-2.5 flex flex-col gap-1.5 max-h-[42vh] overflow-y-auto">
-          <!-- 3-4 style options -->
+          <!-- Options -->
         </div>
       </section>
 
-      <!-- ================= 4. MIDNIGHT SECRET HEART VIEW ================= -->
+      <!-- ================= INNER VIEW: HEART SIGNAL ================= -->
       <section id="view-heart-signal" class="hidden flex-1 flex flex-col h-full bg-white p-5 overflow-y-auto space-y-4">
         <div>
+          <button onclick="leaveChatRoom()" class="text-xs text-neutral-400 hover:text-neutral-800 mb-2">← ย้อนกลับ</button>
           <span class="text-[10px] bg-rose-100 text-rose-600 px-2.5 py-0.5 rounded-full font-bold">23:59 PM</span>
           <h2 class="text-base font-bold text-neutral-900 mt-2">Anonymous Heart Signal คืนแรก</h2>
           <p class="text-xs text-neutral-500 mt-0.5">เลือกคนที่คุณสะดุดตาที่สุดจาก 4 หนุ่มในค่ำคืนนี้</p>
@@ -166,125 +345,97 @@
 
     </main>
 
-    <!-- FOOTER NAV -->
-    <nav class="bg-white border-t border-neutral-200 px-4 py-2 flex justify-around items-center z-20 shrink-0">
-      <button onclick="goHome()" class="flex flex-col items-center text-neutral-600 hover:text-rose-500 text-xs">
-        <span class="text-base">💬</span>
-        <span class="text-[10px] mt-0.5">ห้องแชต</span>
+    <!-- ================= BOTTOM NAVIGATION (5 ICONS LIKE PICKA) ================= -->
+    <nav id="bottom-bar" class="bg-white border-t border-neutral-200 px-4 py-2.5 flex justify-around items-center z-20 shrink-0">
+      
+      <!-- 1. Chats Tab -->
+      <button onclick="switchTab('chats')" id="nav-chats" class="nav-btn text-[#ff5a5f] flex flex-col items-center">
+        <!-- Chat Bubble Icon -->
+        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
       </button>
-      <button onclick="openCardsModal()" class="flex flex-col items-center text-neutral-600 hover:text-rose-500 text-xs">
-        <span class="text-base">📇</span>
-        <span class="text-[10px] mt-0.5">โปรไฟล์การ์ด</span>
+
+      <!-- 2. People Tab -->
+      <button onclick="switchTab('people')" id="nav-people" class="nav-btn text-neutral-400 hover:text-neutral-700 flex flex-col items-center">
+        <!-- Two People Icon -->
+        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
       </button>
+
+      <!-- 3. Story Tab -->
+      <button onclick="switchTab('story')" id="nav-story" class="nav-btn text-neutral-400 hover:text-neutral-700 flex flex-col items-center">
+        <!-- 4-Square Grid Icon -->
+        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M3 3v8h8V3H3zm0 18h8v-8H3v8zm10-18v8h8V3h-8zm0 18h8v-8h-8v8z"/></svg>
+      </button>
+
+      <!-- 4. MY Tab -->
+      <button onclick="switchTab('my')" id="nav-my" class="nav-btn text-neutral-400 hover:text-neutral-700 flex flex-col items-center">
+        <!-- Profile/ID Icon -->
+        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+      </button>
+
+      <!-- 5. More Tab -->
+      <button onclick="switchTab('more')" id="nav-more" class="nav-btn text-neutral-400 hover:text-neutral-700 flex flex-col items-center">
+        <!-- Three Dots Icon -->
+        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+      </button>
+
     </nav>
 
-    <!-- MODAL: BROWSE ALL PROFILE CARDS -->
-    <div id="cards-modal" class="hidden absolute inset-0 bg-black/70 backdrop-blur-sm z-30 flex flex-col p-4 overflow-y-auto space-y-4">
-      <div class="flex justify-between items-center text-white pb-2 border-b border-neutral-700">
-        <h3 class="text-sm font-bold">Profile Cards ทั้งหมด</h3>
-        <button onclick="closeCardsModal()" class="text-xs text-neutral-300 hover:text-white">✕ ปิด</button>
-      </div>
-      <div id="cards-grid" class="space-y-4">
-        <!-- Rendered Polaroid-style cards -->
+    <!-- REGISTRATION MODAL (EDIT PROFILE) -->
+    <div id="modal-reg" class="hidden absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl w-full max-w-sm p-5 space-y-4 shadow-xl">
+        <h3 class="font-bold text-sm text-neutral-900 border-b border-neutral-100 pb-2">ข้อมูลโปรไฟล์ของคุณ</h3>
+        <div class="space-y-2 text-xs">
+          <div>
+            <label class="text-neutral-500 block mb-1">ชื่อเล่นของคุณ:</label>
+            <input type="text" id="reg-name" value="Lee Ahyeon" class="w-full bg-neutral-50 border border-neutral-200 rounded-xl p-2.5 text-neutral-800">
+          </div>
+          <div>
+            <label class="text-neutral-500 block mb-1">อาชีพ:</label>
+            <input type="text" id="reg-occ" value="Visual Designer" class="w-full bg-neutral-50 border border-neutral-200 rounded-xl p-2.5 text-neutral-800">
+          </div>
+          <div>
+            <label class="text-neutral-500 block mb-1">สเปกในอุดมคติ:</label>
+            <input type="text" id="reg-ideal" value="คนที่คุยด้วยแล้วสบายใจ เป็นผู้ใหญ่และชัดเจน" class="w-full bg-neutral-50 border border-neutral-200 rounded-xl p-2.5 text-neutral-800">
+          </div>
+        </div>
+        <div class="flex gap-2 pt-2">
+          <button onclick="saveProfile()" class="flex-1 bg-[#ff5a5f] text-white py-2.5 rounded-xl font-bold text-xs">บันทึก</button>
+          <button onclick="closeRegModal()" class="flex-1 bg-neutral-100 text-neutral-600 py-2.5 rounded-xl text-xs">ปิด</button>
+        </div>
       </div>
     </div>
 
   </div>
 
-  <!-- JAVASCRIPT GAME ENGINE -->
+  <!-- SCRIPT ENGINE -->
   <script>
     // -------------------------------------------------------------
-    // 1. DATA: 4 Men + 4 Women (Day 1 Starting Cast)
+    // DATA: 4 Men + 4 Women (Day 1 Starting Cast)
     // -------------------------------------------------------------
-    let playerProfile = {
-      name: 'คุณ',
+    let player = {
+      name: 'Lee Ahyeon',
       age: 24,
       occupation: 'Visual Designer',
-      interests: 'คาเฟ่, ฟังเพลง, สัตว์เลี้ยง',
-      idealType: 'คนที่คุยด้วยแล้วสบายใจ เป็นผู้ใหญ่และชัดเจน',
-      datingStyle: 'ค่อยๆ เป็นค่อยๆ ไป แสดงออกด้วยการกระทำ',
-      bestQuality: 'ความเอาใจใส่และรับฟัง',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces'
+      ideal: 'คนที่คุยด้วยแล้วสบายใจ เป็นผู้ใหญ่และชัดเจน',
+      dating: 'More action than words / In it for the long haul',
+      best: 'Responsibility & Empathy',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop'
     };
 
-    // 4 หนุ่มเริ่มต้น
     const boys = {
-      chenxu: {
-        codeName: 'Skyline',
-        realName: 'เฉินซวี่',
-        age: 29,
-        occupation: 'Architect (สถาปนิก)',
-        interests: 'สเก็ตช์ภาพ, กาแฟดำ, เดินรับลม',
-        idealType: 'คนที่อยู่ด้วยแล้วเป็นความสงบ ไม่ต้องปรุงแต่ง',
-        datingStyle: 'More action than words / In it for the long haul',
-        bestQuality: 'ความมั่นคงและชัดเจน',
-        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=faces',
-        score: 0
-      },
-      xiyao: {
-        codeName: 'Sunny',
-        realName: 'เซี่ยซีเหยา',
-        age: 22,
-        occupation: 'Idol Vocalist (ไอดอลหนุ่ม)',
-        interests: 'ซ้อมเต้น, ชานมชีส, วิดีโอคอล',
-        idealType: 'พี่สาวใจดีที่คอยรับฟังเวลาผมเหนื่อย',
-        datingStyle: 'ติดแจ อ้อนตลอดเวลา แต่รักเดียวใจเดียว 100%',
-        bestQuality: 'ความสดใสและพลังบวก',
-        avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&h=100&fit=crop&crop=faces',
-        score: 0
-      },
-      wenjun: {
-        codeName: 'Midnight',
-        realName: 'เวินจวิ้น',
-        age: 28,
-        occupation: 'Lounge & Bar Owner',
-        interests: 'ดนตรีแจ๊ส, ไวน์, ศิลปะร่วมสมัย',
-        idealType: 'คนที่ทำให้ผมอยากแกล้งและอยากดูแลเป็นพิเศษ',
-        datingStyle: 'สุภาพ ช่างเอาใจใส่ แต่ชวนให้ใจเต้นแรง',
-        bestQuality: 'สายตาและการดูแลที่ทำให้รู้สึกพิเศษ',
-        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=faces',
-        score: 0
-      },
-      guyan: {
-        codeName: 'Kuro',
-        realName: 'กู้เยี่ยน',
-        age: 24,
-        occupation: 'Game Programmer',
-        interests: 'เขียนโค้ดตอนดึก, แมวดำ, หูฟังครอบหัว',
-        idealType: 'คนที่ไม่เสียงดัง และเข้าใจความเงียบของผม',
-        datingStyle: 'ปากไม่ตรงกับใจ แต่จำได้ทุกรายละเอียด',
-        bestQuality: 'ความใส่ใจที่ซ่อนอยู่ใต้ความเฉยชา',
-        avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&h=100&fit=crop&crop=faces',
-        score: 0
-      }
+      chenxu: { name: 'Kang Jaewook', realName: 'เฉินซวี่', job: 'Architect', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop', score: 0 },
+      xiyao: { name: 'Choi Sanghyeon', realName: 'เซี่ยซีเหยา', job: 'Idol Vocalist', avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&h=100&fit=crop', score: 0 },
+      wenjun: { name: 'Yoo Eunsung', realName: 'เวินจวิ้น', job: 'Lounge Owner', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop', score: 0 },
+      guyan: { name: 'Kuro', realName: 'กู้เยี่ยน', job: 'Game Programmer', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&h=100&fit=crop', score: 0 }
     };
 
-    // 4 สาวเริ่มต้น (รวมผู้เล่น)
     const girls = {
-      yingyin: {
-        codeName: 'Scarlet',
-        realName: 'ซ่งอิงอิน',
-        age: 26,
-        occupation: 'Fashion Editor',
-        avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop&crop=faces'
-      },
-      jiangyue: {
-        codeName: 'Luna',
-        realName: 'เจียงเยว่',
-        age: 24,
-        occupation: 'Pianist',
-        avatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100&h=100&fit=crop&crop=faces'
-      },
-      tangmei: {
-        codeName: 'Mochi',
-        realName: 'ถังเม่ย',
-        age: 23,
-        occupation: 'Food Vlogger',
-        avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces'
-      }
+      rian: { name: 'Kim Rian', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop' },
+      iseul: { name: 'Song Iseul', avatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100&h=100&fit=crop' },
+      foco: { name: 'Foco (ถังเม่ย)', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop' }
     };
 
-    // สติกเกอร์เม่นน่ารักแบบ Picka[span_11](start_span)[span_11](end_span)[span_12](start_span)[span_12](end_span)
+    // สติกเกอร์น้องเม่น Foco สไตล์ Picka
     const hedgehogSticker = `
       <div class="flex flex-col items-start my-1">
         <span class="text-xs text-neutral-500 font-bold mb-0.5 ml-2">???</span>
@@ -296,10 +447,10 @@
     `;
 
     // -------------------------------------------------------------
-    // 2. SPEED CONTROLLER (สบายตา ไม่ไหลเร็ว)
+    // SPEED CONTROLLER
     // -------------------------------------------------------------
-    let speedMode = 0; // 0 = Slow (1600ms), 1 = Normal (900ms), 2 = Tap Manual
-    const delays = [1600, 900, 0];
+    let speedMode = 0; // 0 = Slow (1600ms), 1 = Normal (850ms), 2 = Tap Manual
+    const delays = [1600, 850, 0];
 
     function toggleSpeed() {
       speedMode = (speedMode + 1) % 3;
@@ -318,253 +469,159 @@
     }
 
     // -------------------------------------------------------------
-    // 3. REGISTRATION CHAT FLOW
+    // TAB SWITCHER
     // -------------------------------------------------------------
-    const regQuestions = [
-      { key: 'name', label: 'ชื่อเล่นของคุณในรายการ:', placeholder: 'เช่น ปิ๊ง, เมย์, ริน...', type: 'text' },
-      { key: 'age', label: 'อายุของคุณ:', placeholder: 'เช่น 23, 25...', type: 'number' },
-      { key: 'occupation', label: 'อาชีพปัจจุบัน:', placeholder: 'เช่น วิศวกร, ดีไซเนอร์...', type: 'text' },
-      { key: 'interests', label: 'งานอดิเรก / สิ่งที่ชอบ (คั่นด้วยจุลภาค):', placeholder: 'เช่น ฟังเพลง, คาเฟ่, วาดรูป...', type: 'text' },
-      { key: 'idealType', label: 'สเปกในอุดมคติ (คนที่ทำให้ใจเต้น):', placeholder: 'เช่น อบอุ่น ชัดเจน, หมาเด็กขี้อ้อน...', type: 'text' },
-      { key: 'datingStyle', label: 'สไตล์การเดตของคุณ:', placeholder: 'เช่น ชอบกินของอร่อย, ชอบเดินคุยสบายๆ...', type: 'text' },
-      { key: 'bestQuality', label: 'จุดเด่นที่สุดในตัวคุณ:', placeholder: 'เช่น รอยยิ้ม, การรับฟัง...', type: 'text' }
-    ];
+    function switchTab(tabKey) {
+      document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
+      document.querySelectorAll('.nav-btn').forEach(b => {
+        b.classList.remove('text-[#ff5a5f]');
+        b.classList.add('text-neutral-400');
+      });
 
-    let currentRegIdx = 0;
-
-    function startRegistration() {
-      document.getElementById('view-home').classList.add('hidden');
-      document.getElementById('view-producer-chat').classList.remove('hidden');
-      document.getElementById('header-title').textContent = 'LUMEN Master';
-
-      addProducerMsg("สวัสดีครับผู้เข้าร่วมหมายเลข 8 ยินดีต้อนรับสู่รายการ 30 Days to Love");
-      setTimeout(() => {
-        addProducerMsg("เพื่อเริ่มคืนแรก กรุณายืนยันข้อมูลสำหรับทำการ์ดแนะนำตัว 'Profile Card' ครับ");
-        renderRegInput(0);
-      }, 900);
-    }
-
-    function renderRegInput(idx) {
-      currentRegIdx = idx;
-      if (idx >= regQuestions.length) {
-        addProducerMsg("บันทึกข้อมูลเรียบร้อยแล้วครับ! การ์ดของคุณถูกสร้างแล้ว");
-        setTimeout(() => {
-          addProducerMsg("ในคืนแรกนี้ จะเริ่มด้วย 'Anonymous Chat' โดยทุกคนจะใช้นามสมมุติตามที่ระบบสุ่มให้ก่อน");
-          setTimeout(() => {
-            document.getElementById('producer-form-container').innerHTML = `
-              <button onclick="enterGroupChat()" class="w-full bg-[#ff5a5f] hover:bg-[#e0484d] text-white font-bold py-2.5 rounded-xl text-xs transition shadow-sm">
-                เข้าสู่ห้องแชตรวม (8 คน) →
-              </button>
-            `;
-          }, 800);
-        }, 800);
-        return;
+      const targetPage = document.getElementById(`tab-${tabKey}`);
+      const targetBtn = document.getElementById(`nav-${tabKey}`);
+      if (targetPage) targetPage.classList.remove('hidden');
+      if (targetBtn) {
+        targetBtn.classList.add('text-[#ff5a5f]');
+        targetBtn.classList.remove('text-neutral-400');
       }
 
-      const q = regQuestions[idx];
-      addProducerMsg(`[คำถาม ${idx+1}/7] ${q.label}`);
-      document.getElementById('producer-form-container').innerHTML = `
-        <div class="flex gap-2">
-          <input type="${q.type}" id="reg-input-field" class="flex-1 bg-white border border-neutral-300 rounded-xl px-3 py-2 text-xs text-neutral-800 focus:outline-none focus:border-rose-400" placeholder="${q.placeholder}">
-          <button onclick="submitRegInput(${idx})" class="bg-[#ff5a5f] hover:bg-[#e0484d] px-4 py-2 rounded-xl text-xs font-bold text-white transition">ส่ง</button>
-        </div>
-      `;
-      document.getElementById('reg-input-field').focus();
+      const titles = {
+        chats: 'Chats',
+        people: 'People',
+        story: 'Story',
+        my: 'MY',
+        more: 'More'
+      };
+      document.getElementById('header-page-title').textContent = titles[tabKey] || 'Chats';
+
+      if (tabKey === 'people') renderPeopleTab();
     }
 
-    function submitRegInput(idx) {
-      const field = document.getElementById('reg-input-field');
-      const val = field.value.trim();
-      if (!val) return;
+    function renderPeopleTab() {
+      const container = document.getElementById('people-friends-list');
+      container.innerHTML = '';
 
-      playerProfile[regQuestions[idx].key] = val;
-      addUserMsgToStream(document.getElementById('producer-stream'), val);
+      // All 7 others + Daily Feed + Master
+      const friends = [
+        { name: boys.xiyao.name, role: 'Choi Sanghyeon', img: boys.xiyao.avatar },
+        { name: 'Daily Feed', role: 'Official Feed', img: 'https://placehold.co/100x100/fbcfe8/be185d?text=D' },
+        { name: 'Foco (ถังเม่ย)', role: 'Food Vlogger', img: girls.foco.avatar },
+        { name: boys.chenxu.name, role: 'Kang Jaewook', img: boys.chenxu.avatar },
+        { name: girls.rian.name, role: 'Kim Rian', img: girls.rian.avatar },
+        { name: 'Plan Master', role: 'Producer', img: 'https://placehold.co/100x100/fed7aa/c2410c?text=M' },
+        { name: girls.iseul.name, role: 'Song Iseul', img: girls.iseul.avatar },
+        { name: boys.wenjun.name, role: 'Yoo Eunsung', img: boys.wenjun.avatar }
+      ];
 
-      setTimeout(() => {
-        renderRegInput(idx + 1);
-      }, 500);
-    }
-
-    function addProducerMsg(txt) {
-      const stream = document.getElementById('producer-stream');
-      const b = document.createElement('div');
-      b.className = "chat-bubble flex items-start space-x-2";
-      b.innerHTML = `
-        <div class="w-7 h-7 rounded-full bg-rose-500 flex items-center justify-center text-[10px] font-bold text-white shrink-0 mt-0.5">M</div>
-        <div class="bg-white border border-neutral-200 text-neutral-700 px-3 py-2 rounded-2xl rounded-tl-none text-xs max-w-[85%] leading-relaxed shadow-sm">
-          ${txt}
-        </div>
-      `;
-      stream.appendChild(b);
-      stream.scrollTop = stream.scrollHeight;
-    }
-
-    function addUserMsgToStream(container, txt) {
-      const b = document.createElement('div');
-      b.className = "chat-bubble flex justify-end";
-      b.innerHTML = `
-        <div class="bg-[#ff5a5f] text-white px-3.5 py-2 rounded-2xl rounded-tr-none text-xs max-w-[80%] leading-relaxed shadow-sm">
-          ${txt}
-        </div>
-      `;
-      container.appendChild(b);
-      container.scrollTop = container.scrollHeight;
+      friends.forEach(f => {
+        const row = document.createElement('div');
+        row.className = "p-3.5 px-4 flex items-center space-x-3 hover:bg-neutral-50 transition";
+        row.innerHTML = `
+          <img src="${f.img}" class="w-11 h-11 rounded-full object-cover border border-neutral-200 shrink-0">
+          <div>
+            <h4 class="text-xs font-bold text-neutral-800">${f.name}</h4>
+          </div>
+        `;
+        container.appendChild(row);
+      });
     }
 
     // -------------------------------------------------------------
-    // 4. GROUP CHAT ENGINE (PICKA VIBE & STICKERS)
+    // CHAT ENGINE
     // -------------------------------------------------------------
-    const groupStream = document.getElementById('group-stream');
-    const groupChoicesBox = document.getElementById('group-choices-box');
-    const typingIndicator = document.getElementById('typing-indicator');
-    const typingName = document.getElementById('typing-name');
-
     let dialogueQueue = [];
     let waitingForTap = false;
 
     function enterGroupChat() {
-      document.getElementById('view-producer-chat').classList.add('hidden');
-      document.getElementById('view-group-chat').classList.remove('hidden');
-      document.getElementById('header-title').textContent = 'TDL : All Group';
+      document.getElementById('main-header').classList.add('hidden');
+      document.getElementById('bottom-bar').classList.add('hidden');
+      document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
 
-      buildDialogueTree();
-      processQueue();
+      document.getElementById('chat-inside-header').classList.remove('hidden');
+      document.getElementById('view-inner-chat').classList.remove('hidden');
+
+      if (dialogueQueue.length === 0) {
+        buildChatDialogue();
+        processQueue();
+      }
     }
 
-    function buildDialogueTree() {
+    function leaveChatRoom() {
+      document.getElementById('chat-inside-header').classList.add('hidden');
+      document.getElementById('view-inner-chat').classList.add('hidden');
+      document.getElementById('view-heart-signal').classList.add('hidden');
+
+      document.getElementById('main-header').classList.remove('hidden');
+      document.getElementById('bottom-bar').classList.remove('hidden');
+      switchTab('chats');
+    }
+
+    function buildChatDialogue() {
       dialogueQueue = [
         { type: 'sys', text: 'Now, feel free to begin the conversation.' },
-        { type: 'msg', sender: 'Sunny', avatar: boys.xiyao.avatar, text: 'Hey everyone' },
-        { type: 'msg', sender: 'Mochi', avatar: girls.tangmei.avatar, sticker: hedgehogSticker, text: 'hiiii!!' },
-        { type: 'msg', sender: 'Scarlet', avatar: girls.yingyin.avatar, text: 'Hello' },
+        { type: 'msg', sender: 'Choi Sanghyeon', avatar: boys.xiyao.avatar, text: 'Hey everyone' },
+        { type: 'msg', sender: 'Song Iseul', avatar: girls.iseul.avatar, sticker: hedgehogSticker, text: 'hiiii!!' },
+        { type: 'msg', sender: 'Kim Rian', avatar: girls.rian.avatar, text: 'Hello' },
         { type: 'choice', choices: [
           {
-            style: 'ทักทายสดใส',
+            style: 'ทักทายเรียบง่าย/น่ารัก',
             text: 'Nice to meet you all',
-            pts: { xiyao: 3, chenxu: 2 },
+            pts: { chenxu: 3, xiyao: 3 },
             responses: [
-              { type: 'msg', sender: 'Skyline', avatar: boys.chenxu.avatar, text: 'Nice to meet you' },
-              { type: 'msg', sender: 'Kuro', avatar: boys.guyan.avatar, text: 'hey' },
-              { type: 'msg', sender: 'Mochi', avatar: girls.tangmei.avatar, text: 'omg there\'s so many of us 😮' }
-            ]
-          },
-          {
-            style: 'ทักทายเรียบง่าย/สุภาพ',
-            text: 'สวัสดีทุกคนค่ะ เพิ่งมาถึง ตื่นเต้นจัง',
-            pts: { chenxu: 4 },
-            responses: [
-              { type: 'msg', sender: 'Skyline', avatar: boys.chenxu.avatar, text: 'ไม่ต้องเกร็งนะครับ ค่อยๆ คุยกัน' },
-              { type: 'msg', sender: 'Sunny', avatar: boys.xiyao.avatar, text: 'ใช่ครับบบ ยินดีต้อนรับน้า!' }
+              { type: 'msg', sender: 'Kang Jaewook', avatar: boys.chenxu.avatar, text: 'Nice to meet you' },
+              { type: 'msg', sender: 'Yoo Eunsung', avatar: boys.wenjun.avatar, text: 'hey' },
+              { type: 'msg', sender: 'Song Iseul', avatar: girls.iseul.avatar, text: 'omg there\'s so many of us 😮' }
             ]
           },
           {
             style: 'แซวบรรยากาศ',
-            text: 'คนเยอะเหมือนกันนะเนี่ย มีใครเกร็งเหมือนฉันไหม 555',
+            text: 'คนเยอะเหมือนกันนะเนี่ย มีใครตื่นเต้นเหมือนฉันไหม 555',
             pts: { wenjun: 4, guyan: 3 },
             responses: [
-              { type: 'msg', sender: 'Midnight', avatar: boys.wenjun.avatar, text: 'ตอนแรกก็เกร็งครับ แต่พอเธอทักมาก็เริ่มผ่อนคลายแล้ว หืม?' },
+              { type: 'msg', sender: 'Yoo Eunsung', avatar: boys.wenjun.avatar, text: 'ตอนแรกก็ตื่นเต้นครับ แต่พอเธอทักมาก็เริ่มผ่อนคลายแล้ว หืม?' },
               { type: 'msg', sender: 'Kuro', avatar: boys.guyan.avatar, text: '...ก็แค่วันแรก' }
             ]
           }
         ]},
-        // บทสนทนาคุยกันเป็นธรรมชาติ เหมือนในภาพตัวอย่าง Picka
-        { type: 'msg', sender: 'Sunny', avatar: boys.xiyao.avatar, text: 'Which of the two is the fact then' },
-        { type: 'msg', sender: 'Sunny', avatar: boys.xiyao.avatar, text: 'Handsome or responsible?' },
+        // Dialogue from Reference Screenshot (Jaewook is probably flustered lol)
+        { type: 'msg', sender: 'Choi Sanghyeon', avatar: boys.xiyao.avatar, text: 'Which of the two is the fact then' },
+        { type: 'msg', sender: 'Choi Sanghyeon', avatar: boys.xiyao.avatar, text: 'Handsome or responsible?' },
         { type: 'choice', choices: [
           {
-            style: 'เลือกตอบแซว',
+            style: 'ตอบแซวตามภาพตัวอย่าง Picka',
             text: 'Jaewook is probably flustered lol',
-            pts: { chenxu: 4 },
+            pts: { chenxu: 5 },
             responses: [
-              { type: 'msg', sender: 'Scarlet', avatar: girls.yingyin.avatar, text: 'Hoping for the former ☺️' },
-              { type: 'msg', sender: 'Luna', avatar: girls.jiangyue.avatar, text: 'it\'s the former right?!' },
-              { type: 'msg', sender: 'Midnight', avatar: boys.wenjun.avatar, text: 'probably the former' },
-              { type: 'msg', sender: 'Skyline', avatar: boys.chenxu.avatar, text: 'Not quite...' },
-              { type: 'msg', sender: 'Sunny', avatar: boys.xiyao.avatar, text: 'Hahaha' }
+              { type: 'msg', sender: 'Kim Rian', avatar: girls.rian.avatar, text: 'Hoping for the former ☺️' },
+              { type: 'msg', sender: 'Song Iseul', avatar: girls.iseul.avatar, text: 'it\'s the former right?!' },
+              { type: 'msg', sender: 'Yoo Eunsung', avatar: boys.wenjun.avatar, text: 'probably the former' },
+              { type: 'msg', sender: 'Kang Jaewook', avatar: boys.chenxu.avatar, text: 'Not quite...' },
+              { type: 'msg', sender: 'Choi Sanghyeon', avatar: boys.xiyao.avatar, text: 'Hahaha' }
             ]
           },
           {
-            style: 'เลือกคนหล่อ',
+            style: 'เลือกคนหล่อ (Handsome)',
             text: 'แน่นอนว่าต้อง Handsome อยู่แล้วสิ 555',
             pts: { wenjun: 4, xiyao: 3 },
             responses: [
-              { type: 'msg', sender: 'Midnight', avatar: boys.wenjun.avatar, text: 'ตอบถูกใจพี่จังเด็กน้อย' },
-              { type: 'msg', sender: 'Skyline', avatar: boys.chenxu.avatar, text: '...ฮะๆ' }
+              { type: 'msg', sender: 'Yoo Eunsung', avatar: boys.wenjun.avatar, text: 'ตอบถูกใจพี่จังเด็กน้อย' },
+              { type: 'msg', sender: 'Kang Jaewook', avatar: boys.chenxu.avatar, text: '...ฮะๆ' }
             ]
           },
           {
-            style: 'เลือกคนมีความรับผิดชอบ',
+            style: 'เลือกคนมีความรับผิดชอบ (Responsible)',
             text: 'Responsible สำคัญกว่าเยอะค่ะในชีวิตจริง',
             pts: { chenxu: 5 },
             responses: [
-              { type: 'msg', sender: 'Skyline', avatar: boys.chenxu.avatar, text: 'เห็นด้วยครับ' },
+              { type: 'msg', sender: 'Kang Jaewook', avatar: boys.chenxu.avatar, text: 'เห็นด้วยครับ' },
               { type: 'msg', sender: 'Kuro', avatar: boys.guyan.avatar, text: 'มีสาระดี' }
             ]
           }
         ]},
-        // คุยต่อยาวๆ ก่อนตัดเข้า Icebreaker
-        { type: 'msg', sender: 'Mochi', avatar: girls.tangmei.avatar, text: 'หิวรอบดึกจัง มีใครสั่งชานมไหมมม' },
-        { type: 'msg', sender: 'Sunny', avatar: boys.xiyao.avatar, text: 'ผมๆๆ! ชานมชีสหวาน 100% เลยครับ 555' },
-        { type: 'msg', sender: 'Skyline', avatar: boys.chenxu.avatar, text: 'ดึกขนาดนี้ ดื่มนมอุ่นๆ แทนดีกว่านะซีเหยา เอ๊ย Sunny' },
-        { type: 'msg', sender: 'Sunny', avatar: boys.xiyao.avatar, text: 'ง่าาา หลุดชื่อจริงแล้วไหมล่ะคุณ Skyline!' },
-        { type: 'master_event', eventName: 'ICEBREAKER' }
-      ];
-    }
-
-    function triggerIcebreakerReveal() {
-      dialogueQueue = [
-        { type: 'sys', text: '📢 [LUMEN MASTER]: ขณะนี้ถึงเวลากิจกรรม Icebreaker: Profile Cards Reveal' },
-        { type: 'sys', text: 'มาสเตอร์จะส่งการ์ดโปรไฟล์ลงในแชต ให้ทุกคนช่วยกันทายและทำความรู้จักตัวตนที่แท้จริงครับ' },
-        { type: 'card', key: 'chenxu' },
-        { type: 'msg', sender: 'Sunny', avatar: boys.xiyao.avatar, text: 'สถาปนิก 29 ปี! Skyline แน่นอน ฟีลผู้ใหญ่ใจนิ่งขนาดนี้' },
-        { type: 'msg', sender: 'Skyline', avatar: boys.chenxu.avatar, text: 'ทายถูกครับ... เฉินซวี่ครับ ยินดีที่ได้รู้จักทุกคน' },
-        { type: 'card', key: 'xiyao' },
-        { type: 'msg', sender: 'Scarlet', avatar: girls.yingyin.avatar, text: 'Sunny ชัดเจนมาก ไอดอลหนุ่มตาหยี 22 ปี 555' },
-        { type: 'msg', sender: 'Sunny', avatar: boys.xiyao.avatar, text: 'ผมชื่อเซี่ยซีเหยาครับบบ ฝากตัวด้วยน้าพี่สาวทุกคน!' },
-        { type: 'card', key: 'guyan' },
-        { type: 'msg', sender: 'Mochi', avatar: girls.tangmei.avatar, text: 'โปรแกรมเมอร์เกม ชอบแมวดำกับหูฟัง Kuro ชัวร์!' },
-        { type: 'msg', sender: 'Kuro', avatar: boys.guyan.avatar, text: '...อืม กู้เยี่ยน' },
-        { type: 'card', key: 'player' },
-        { type: 'msg', sender: 'Skyline', avatar: boys.chenxu.avatar, text: `การ์ดใบนี้ดูอบอุ่นมากครับ... ชอบตรง '${playerProfile.datingStyle}'` },
-        { type: 'msg', sender: 'Sunny', avatar: boys.xiyao.avatar, text: 'งุ้ยยย สเปกน่ารักจังงง อยากไปเดตด้วยเลยครับบ' },
-        { type: 'msg', sender: 'Midnight', avatar: boys.wenjun.avatar, text: 'เด็กน้อย... การ์ดของเธอทำพี่สะดุดตาตั้งแต่บรรทัดแรกเลยนะ' },
-        { type: 'choice', choices: [
-          {
-            style: 'ขอบคุณเฉินซวี่',
-            text: 'ขอบคุณคุณเฉินซวี่นะคะที่ชอบ สถาปนิกนี่อ่านละเอียดจัง',
-            pts: { chenxu: 5 },
-            responses: [
-              { type: 'msg', sender: 'Skyline', avatar: boys.chenxu.avatar, text: 'เฉพาะกับสิ่งที่น่าสนใจครับ' }
-            ]
-          },
-          {
-            style: 'แกล้งซีเหยา',
-            text: 'ซีเหยาเตรียมท้องไว้เลยนะ เดี๋ยวมีโอกาสจะพาไปกินชานมชีส',
-            pts: { xiyao: 5 },
-            responses: [
-              { type: 'msg', sender: 'Sunny', avatar: boys.xiyao.avatar, text: 'เย้!! สัญญาแล้วนะครับพี่สาววว!' }
-            ]
-          },
-          {
-            style: 'หยอกเวินจวิ้น',
-            text: 'คุณเวินจวิ้นอย่ามองนานสิคะ เดี๋ยวฉันก็เขินแย่',
-            pts: { wenjun: 5 },
-            responses: [
-              { type: 'msg', sender: 'Midnight', avatar: boys.wenjun.avatar, text: 'เขินก็น่ารักดีนี่ครับ หืม?' }
-            ]
-          },
-          {
-            style: 'ทักกู้เยี่ยน',
-            text: 'กู้เยี่ยน เกมที่สร้างมีแมวไหมคะ เผื่อจะขอโหลดมาเล่น',
-            pts: { guyan: 5 },
-            responses: [
-              { type: 'msg', sender: 'Kuro', avatar: boys.guyan.avatar, text: '...มี ไว้จะส่งลิสต์ให้' }
-            ]
-          }
-        ]},
         { type: 'sys', text: '🔒 เวลา 23:55 น. สิ้นสุดการสนทนากลุ่มประจำ Day 1' },
-        { type: 'sys', text: 'มาสเตอร์จะส่งข้อความส่วนตัวไปยังแต่ละท่านเพื่อเริ่มภารกิจ Anonymous Heart Signal' },
-        { type: 'master_event', eventName: 'HEART_SIGNAL' }
+        { type: 'sys', text: 'มาสเตอร์จะเปิดระบบ Anonymous Heart Sending เพื่อให้คุณส่งสัญญาณใจลับครับ' },
+        { type: 'master_event', eventName: 'HEART' }
       ];
     }
 
@@ -583,14 +640,8 @@
         });
       } else if (item.type === 'choice') {
         renderChoices(item.choices);
-      } else if (item.type === 'card') {
-        renderCardInChat(item.key);
-        scheduleNext();
       } else if (item.type === 'master_event') {
-        if (item.eventName === 'ICEBREAKER') {
-          triggerIcebreakerReveal();
-          processQueue();
-        } else if (item.eventName === 'HEART_SIGNAL') {
+        if (item.eventName === 'HEART') {
           setTimeout(openMidnightHeartSignal, 1200);
         }
       }
@@ -614,6 +665,8 @@
 
     function showTyping(sender, cb) {
       if (speedMode === 2) { cb(); return; }
+      const typingIndicator = document.getElementById('typing-indicator');
+      const typingName = document.getElementById('typing-name');
       typingIndicator.classList.remove('hidden');
       typingName.textContent = `${sender} กำลังพิมพ์...`;
       setTimeout(() => {
@@ -623,6 +676,7 @@
     }
 
     function renderSystemMsg(txt) {
+      const stream = document.getElementById('group-stream');
       const b = document.createElement('div');
       b.className = "flex justify-center my-2 chat-bubble";
       b.innerHTML = `
@@ -630,11 +684,12 @@
           ${txt}
         </div>
       `;
-      groupStream.appendChild(b);
-      groupStream.scrollTop = groupStream.scrollHeight;
+      stream.appendChild(b);
+      stream.scrollTop = stream.scrollHeight;
     }
 
     function renderMsgBubble(sender, avatar, text, stickerHtml = null) {
+      const stream = document.getElementById('group-stream');
       const b = document.createElement('div');
       b.className = "chat-bubble flex items-start space-x-2.5";
       b.innerHTML = `
@@ -649,13 +704,28 @@
           ` : ''}
         </div>
       `;
-      groupStream.appendChild(b);
-      groupStream.scrollTop = groupStream.scrollHeight;
+      stream.appendChild(b);
+      stream.scrollTop = stream.scrollHeight;
+      document.getElementById('group-last-msg').textContent = `${sender}: ${text || 'Sticker'}`;
+    }
+
+    function addUserMsg(txt) {
+      const stream = document.getElementById('group-stream');
+      const b = document.createElement('div');
+      b.className = "chat-bubble flex justify-end";
+      b.innerHTML = `
+        <div class="bg-[#ff5a5f] text-white px-3.5 py-2 rounded-2xl rounded-tr-none text-xs max-w-[80%] leading-relaxed shadow-sm">
+          ${txt}
+        </div>
+      `;
+      stream.appendChild(b);
+      stream.scrollTop = stream.scrollHeight;
     }
 
     function renderChoices(choices) {
-      groupChoicesBox.innerHTML = '';
-      groupChoicesBox.classList.remove('hidden');
+      const box = document.getElementById('group-choices-box');
+      box.innerHTML = '';
+      box.classList.remove('hidden');
 
       choices.forEach(c => {
         const btn = document.createElement('button');
@@ -665,8 +735,8 @@
           <span class="text-xs text-neutral-800 font-medium leading-snug">${c.text}</span>
         `;
         btn.onclick = () => {
-          groupChoicesBox.classList.add('hidden');
-          addUserMsgToStream(groupStream, c.text);
+          box.classList.add('hidden');
+          addUserMsg(c.text);
           if (c.pts) {
             for (const [k, v] of Object.entries(c.pts)) {
               if (boys[k]) boys[k].score += v;
@@ -677,88 +747,23 @@
           }
           processQueue();
         };
-        groupChoicesBox.appendChild(btn);
+        box.appendChild(btn);
       });
-      groupStream.scrollTop = groupStream.scrollHeight;
+      document.getElementById('group-stream').scrollTop = document.getElementById('group-stream').scrollHeight;
     }
 
     // -------------------------------------------------------------
-    // 5. PROFILE CARDS (Polaroid style matching image reference)
+    // HEART SIGNAL VIEW
     // -------------------------------------------------------------
-    function createCardHTML(cardData, isPlayer = false) {
-      const nameAge = isPlayer ? `${playerProfile.name}, ${playerProfile.age}` : `${cardData.realName}, ${cardData.age}`;
-      const occ = isPlayer ? playerProfile.occupation : cardData.occupation;
-      const interests = isPlayer ? playerProfile.interests : cardData.interests;
-      const type = isPlayer ? playerProfile.idealType : cardData.idealType;
-      const dating = isPlayer ? playerProfile.datingStyle : cardData.datingStyle;
-      const best = isPlayer ? playerProfile.bestQuality : cardData.bestQuality;
-      const photoUrl = isPlayer ? playerProfile.avatar : cardData.avatar;
-
-      return `
-        <div class="bg-[#fafafa] text-neutral-800 rounded-lg p-4 shadow border border-neutral-300 max-w-sm mx-auto my-2 font-typewriter">
-          <div class="flex justify-between items-center text-[10px] text-neutral-400 border-b border-neutral-200 pb-1 mb-2.5">
-            <span>Day1. Profile : ${nameAge.split(',')[0]}</span>
-            <span class="tracking-wider">30 DAYS TO LOVE</span>
-          </div>
-
-          <div class="bg-neutral-200 rounded aspect-[4/3] w-full overflow-hidden border border-neutral-300 mb-3 shadow-inner relative">
-            <img src="${photoUrl}" class="w-full h-full object-cover">
-            <div class="absolute bottom-1 left-2 text-[9px] text-white/90 drop-shadow font-sans">
-              30 DAYS TO LOVE · SHANGHAI
-            </div>
-          </div>
-
-          <div class="space-y-1.5 text-xs text-neutral-700">
-            <div class="border-b border-neutral-200 pb-1 flex justify-between">
-              <span class="font-bold underline">Name/Age:</span>
-              <span class="font-semibold text-neutral-900">${nameAge}</span>
-            </div>
-            <div class="border-b border-neutral-200 pb-1 flex justify-between">
-              <span class="font-bold underline">Occupation:</span>
-              <span>${occ}</span>
-            </div>
-            <div class="border-b border-neutral-200 pb-1">
-              <span class="font-bold underline block mb-0.5">Interests:</span>
-              <span class="inline-block bg-[#b0c4de]/40 text-neutral-800 px-2 py-0.5 rounded text-[11px]">${interests}</span>
-            </div>
-            <div class="border-b border-neutral-200 pb-1">
-              <span class="font-bold underline block mb-0.5">Type:</span>
-              <div class="bg-[#b0c4de]/40 text-neutral-800 p-1.5 rounded text-[11px] leading-snug">${type}</div>
-            </div>
-            <div class="border-b border-neutral-200 pb-1">
-              <span class="font-bold underline block mb-0.5">Dating Style:</span>
-              <div class="bg-[#b0c4de]/40 text-neutral-800 p-1.5 rounded text-[11px] leading-snug">${dating}</div>
-            </div>
-            <div>
-              <span class="font-bold underline block mb-0.5">Best Quality:</span>
-              <div class="bg-[#b0c4de]/40 text-neutral-800 px-2 py-0.5 rounded text-[11px]">${best}</div>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderCardInChat(key) {
-      const b = document.createElement('div');
-      b.className = "chat-bubble my-2";
-      if (key === 'player') {
-        b.innerHTML = createCardHTML(null, true);
-      } else {
-        b.innerHTML = createCardHTML(boys[key], false);
-      }
-      groupStream.appendChild(b);
-      groupStream.scrollTop = groupStream.scrollHeight;
-    }
-
-    // -------------------------------------------------------------
-    // 6. MIDNIGHT SECRET HEART SIGNAL
-    // -------------------------------------------------------------
-    let chosenGuy = null;
+    let selectedGuy = null;
 
     function openMidnightHeartSignal() {
-      document.getElementById('view-group-chat').classList.add('hidden');
+      document.getElementById('main-header').classList.add('hidden');
+      document.getElementById('bottom-bar').classList.add('hidden');
+      document.getElementById('view-inner-chat').classList.add('hidden');
+      document.getElementById('chat-inside-header').classList.add('hidden');
+
       document.getElementById('view-heart-signal').classList.remove('hidden');
-      document.getElementById('header-title').textContent = 'SECRET HEART';
 
       const targetList = document.getElementById('heart-target-list');
       targetList.innerHTML = '';
@@ -771,8 +776,8 @@
           <div class="flex items-center space-x-3">
             <img src="${guy.avatar}" class="w-10 h-10 rounded-full object-cover border border-neutral-200">
             <div>
-              <span class="text-xs font-bold text-neutral-800">${guy.realName}</span>
-              <p class="text-[10px] text-neutral-500">${guy.occupation}</p>
+              <span class="text-xs font-bold text-neutral-800">${guy.name}</span>
+              <p class="text-[10px] text-neutral-400">${guy.job}</p>
             </div>
           </div>
           <span class="text-xs text-[#ff5a5f] font-bold">เลือก ❤️</span>
@@ -782,7 +787,7 @@
     }
 
     function selectHeartGuy(key, el) {
-      chosenGuy = key;
+      selectedGuy = key;
       document.querySelectorAll('#heart-target-list > div').forEach(d => {
         d.classList.remove('border-rose-400', 'bg-rose-50/50');
       });
@@ -798,7 +803,7 @@
         return;
       }
 
-      boys[chosenGuy].score += 8;
+      boys[selectedGuy].score += 8;
       document.getElementById('heart-message-area').classList.add('hidden');
       document.getElementById('heart-target-list').classList.add('hidden');
 
@@ -806,53 +811,49 @@
       const replyBubble = document.getElementById('heart-reply-bubble');
       resultBox.classList.remove('hidden');
 
-      const guy = boys[chosenGuy];
+      const guy = boys[selectedGuy];
       let reaction = '';
-      if (chosenGuy === 'chenxu') {
-        reaction = `เฉินซวี่: "อืม ได้รับแล้วนะ... ขอบคุณที่ทำให้คืนนี้ไม่เงียบเหงา พักผ่อนเถอะ ไว้คุยกันพรุ่งนี้ครับ"`;
-      } else if (chosenGuy === 'xiyao') {
-        reaction = `เซี่ยซีเหยา: "พี่สาวส่งมาหาผมจริงๆ ด้วยใช่ไหม!? ดีใจจนนอนไม่หลับแล้วเนี่ย พรุ่งนี้เช้าผมจะรีบมารอนะครับ!"`;
-      } else if (chosenGuy === 'wenjun') {
-        reaction = `เวินจวิ้น: "หืม... ส่งข้อความแบบนี้มา ท้าทายพี่อยู่ใช่ไหมครับเด็กน้อย? คืนนี้ฝันดีนะ"`;
-      } else if (chosenGuy === 'guyan') {
-        reaction = `กู้เยี่ยน: "...ใครบอกว่าซึนกัน แค่เตือนเฉยๆ แต่ก็... ฝันดีนะ ยัยตัวยุ่ง"`;
+      if (selectedGuy === 'chenxu') {
+        reaction = `Kang Jaewook (เฉินซวี่): "อืม ได้รับแล้วนะ... ขอบคุณที่ทำให้คืนนี้ไม่เงียบเหงา พักผ่อนเถอะ ไว้คุยกันพรุ่งนี้ครับ"`;
+      } else if (selectedGuy === 'xiyao') {
+        reaction = `Choi Sanghyeon (ซีเหยา): "พี่สาวส่งมาหาผมจริงๆ ด้วยใช่ไหม!? ดีใจจนนอนไม่หลับแล้วเนี่ย พรุ่งนี้เช้าผมจะรีบมารอนะครับ!"`;
+      } else if (selectedGuy === 'wenjun') {
+        reaction = `Yoo Eunsung (เวินจวิ้น): "หืม... ส่งข้อความแบบนี้มา ท้าทายพี่อยู่ใช่ไหมครับเด็กน้อย? คืนนี้ฝันดีนะ"`;
+      } else if (selectedGuy === 'guyan') {
+        reaction = `Kuro (กู้เยี่ยน): "...ใครบอกว่าซึนกัน แค่เตือนเฉยๆ แต่ก็... ฝันดีนะ ยัยตัวยุ่ง"`;
       }
 
       replyBubble.innerHTML = `
-        <span class="text-[10px] text-neutral-400 block mb-1">กล่องข้อความลับของ ${guy.realName}:</span>
+        <span class="text-[10px] text-neutral-400 block mb-1">กล่องข้อความลับของ ${guy.name}:</span>
         "${msg}"
         <div class="mt-2 pt-2 border-t border-neutral-200 text-rose-600 font-semibold">
           ${reaction}
         </div>
       `;
+      document.getElementById('heart-last-msg').textContent = `Sent to ${guy.name}`;
     }
 
     // -------------------------------------------------------------
-    // 7. NAVIGATION & PROFILE MODAL
+    // PROFILE MODAL (MY TAB)
     // -------------------------------------------------------------
-    function goHome() {
-      document.getElementById('view-home').classList.remove('hidden');
-      document.getElementById('view-producer-chat').classList.add('hidden');
-      document.getElementById('view-group-chat').classList.add('hidden');
-      document.getElementById('view-heart-signal').classList.add('hidden');
-      document.getElementById('header-title').textContent = 'TDL : 30 Days to Love';
+    function openRegistrationModal() {
+      document.getElementById('modal-reg').classList.remove('hidden');
     }
-
-    function openCardsModal() {
-      const modal = document.getElementById('cards-modal');
-      const grid = document.getElementById('cards-grid');
-      grid.innerHTML = '';
-
-      grid.innerHTML += createCardHTML(null, true);
-      Object.values(boys).forEach(g => {
-        grid.innerHTML += createCardHTML(g, false);
-      });
-
-      modal.classList.remove('hidden');
+    function closeRegModal() {
+      document.getElementById('modal-reg').classList.add('hidden');
     }
+    function saveProfile() {
+      const name = document.getElementById('reg-name').value.trim() || 'Lee Ahyeon';
+      const occ = document.getElementById('reg-occ').value.trim() || 'Visual Designer';
+      const ideal = document.getElementById('reg-ideal').value.trim();
 
-    function closeCardsModal() {
-      document.getElementById('cards-modal').classList.add('hidden');
+      player.name = name;
+      player.occupation = occ;
+      player.ideal = ideal;
+
+      document.getElementById('people-player-name').textContent = `${name} (คุณ)`;
+      document.getElementById('my-player-name').textContent = name;
+      closeRegModal();
     }
   </script>
 </body>
