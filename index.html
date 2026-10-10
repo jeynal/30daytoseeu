@@ -7,10 +7,15 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { 
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      height: 100dvh;
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
       overflow: hidden;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f1f5f9;
     }
     .font-typewriter { font-family: 'Courier Prime', monospace; }
     ::-webkit-scrollbar { width: 3px; }
@@ -20,29 +25,27 @@
       from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    /* Safe Area padding for iOS/Android bottom navigation */
-    .pb-safe { padding-bottom: env(safe-area-inset-bottom, 12px); }
   </style>
 </head>
-<body class="bg-[#f1f5f9] text-slate-800 flex justify-center overflow-hidden select-none">
+<body class="flex justify-center select-none">
 
-  <!-- Mobile Shell Frame with dynamic viewport height -->
-  <div class="w-full max-w-md h-[100dvh] flex flex-col bg-white shadow-2xl relative overflow-hidden border-x border-slate-200">
+  <!-- Mobile Screen Frame (ความสูงล็อกเต็มจอ 100% แบบพอดีเป๊ะ) -->
+  <div class="w-full max-w-md h-full flex flex-col bg-white shadow-2xl relative overflow-hidden border-x border-slate-200">
 
-    <!-- ================= 1. TOP HEADER (MAIN) ================= -->
+    <!-- ================= 1. HEADER ด้านบน ================= -->
     <header id="main-header" class="bg-white px-4 py-3 flex items-center justify-between z-20 shrink-0 border-b border-slate-100">
       <h1 id="header-page-title" class="font-bold text-xl tracking-tight text-slate-900">Chats</h1>
       <div class="flex items-center space-x-3 text-slate-600">
-        <button class="hover:text-slate-900 text-lg">🏪</button>
-        <button class="hover:text-slate-900 text-lg">🎁</button>
-        <button class="hover:text-slate-900 text-lg">↗️</button>
+        <button class="text-lg">🏪</button>
+        <button class="text-lg">🎁</button>
+        <button class="text-lg">↗️</button>
       </div>
     </header>
 
-    <!-- ================= 2. TOP HEADER (ACTIVE ROOM) ================= -->
+    <!-- Header เฉพาะตอนอยู่ในห้องแชต -->
     <header id="chat-inside-header" class="hidden bg-white border-b border-slate-200 px-4 py-2.5 flex items-center justify-between z-20 shrink-0">
       <div class="flex items-center space-x-3">
-        <!-- Back Button to return to Chats List -->
+        <!-- ปุ่มกดย้อนกลับออกมาหน้า Chats -->
         <button onclick="exitActiveChat()" class="text-slate-700 hover:text-slate-900 font-bold text-xl p-1">←</button>
         <div>
           <h2 id="active-chat-title" class="font-bold text-sm tracking-tight text-slate-900">TDL : All Group</h2>
@@ -65,13 +68,12 @@
       </div>
     </header>
 
-    <!-- ================= 3. SCROLLABLE CONTENT VIEWPORT ================= -->
-    <!-- Added pb-16 to ensure bottom content is never clipped by the persistent footer -->
+    <!-- ================= 2. พื้นที่เนื้อหาหลัก (เว้นที่ว่างด้านล่าง pb-16 ให้แถบเมนู) ================= -->
     <main class="flex-1 overflow-hidden relative flex flex-col bg-white pb-14">
 
-      <!-- ================= TAB 1: CHATS (DYNAMIC CHANNELS) ================= -->
+      <!-- ================= TAB 1: CHATS (ตอนเริ่มมีแค่ MASTER เท่านั้น!) ================= -->
       <section id="tab-chats" class="tab-page flex-1 overflow-y-auto flex flex-col">
-        <!-- Gold Banner -->
+        <!-- แบนเนอร์ทองแบบ Picka -->
         <div class="px-4 pt-3 pb-2">
           <div class="bg-gradient-to-r from-slate-100 to-slate-50 border border-slate-200/80 rounded-2xl p-3 flex items-center justify-between shadow-sm">
             <div>
@@ -82,10 +84,11 @@
           </div>
         </div>
 
+        <!-- รายการแชต: เริ่มต้นมีแค่ Master แชตเดียว! -->
         <div class="divide-y divide-slate-100" id="chat-channel-list">
           
-          <!-- Channel 1: Master (The only chat visible at the start!) -->
-          <div id="channel-master" onclick="openMasterChat()" class="p-4 flex items-center space-x-3 hover:bg-slate-50 cursor-pointer transition bg-rose-50/30">
+          <!-- แชต 1: Master (อันเดียวที่เปิดอยู่) -->
+          <div id="channel-master" onclick="openMasterChat()" class="p-4 flex items-center space-x-3 hover:bg-slate-50 cursor-pointer transition bg-rose-50/20">
             <div class="w-12 h-12 rounded-full bg-[#ff5a5f] flex items-center justify-center font-bold text-white text-base shadow shrink-0">
               M
             </div>
@@ -101,7 +104,7 @@
             </div>
           </div>
 
-          <!-- Channel 2: All Group (Hidden at start -> Appears after Master chat) -->
+          <!-- แชต 2: All Group (ซ่อนอยู่! จะโผล่มาเมื่อคุยกับ Master เสร็จ) -->
           <div id="channel-group" onclick="openGroupChat()" class="hidden p-4 flex items-center space-x-3 hover:bg-slate-50 cursor-pointer transition">
             <div class="w-12 h-12 rounded-full overflow-hidden grid grid-cols-2 grid-rows-2 bg-slate-100 border border-slate-200 shrink-0">
               <div class="bg-slate-300 flex items-center justify-center text-[8px] font-bold text-slate-600">CX</div>
@@ -117,25 +120,11 @@
                 </h4>
                 <span class="text-[10px] text-[#ff5a5f] font-semibold">19:00</span>
               </div>
-              <p id="group-last-msg" class="text-xs text-slate-400 truncate mt-0.5">[Tap to enter room]</p>
+              <p id="group-last-msg" class="text-xs text-slate-400 truncate mt-0.5">Golden Puppy: Hey everyone!! Finally opened!</p>
             </div>
           </div>
 
-          <!-- Channel 3: Daily Feed (Hidden at start) -->
-          <div id="channel-feed" class="hidden p-4 flex items-center space-x-3 hover:bg-slate-50 cursor-pointer transition">
-            <div class="w-12 h-12 rounded-full bg-pink-100 border border-pink-200 flex items-center justify-center font-bold text-pink-500 text-sm shrink-0">
-              D
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex justify-between items-baseline">
-                <h4 class="text-sm font-bold text-slate-900 truncate">&lt;Daily Feed&gt;</h4>
-                <span class="text-[10px] text-slate-400">Day 1</span>
-              </div>
-              <p class="text-xs text-slate-400 truncate mt-0.5">Day 1: Shanghai First Night has started.</p>
-            </div>
-          </div>
-
-          <!-- Channel 4: Heart Sending (Hidden at start -> Appears late night) -->
+          <!-- แชต 3: Heart Sending (ซ่อนอยู่! จะโผล่มาตอนเที่ยงคืนหลังจบแชตรวม) -->
           <div id="channel-heart" onclick="openHeartSendingRoom()" class="hidden p-4 flex items-center space-x-3 hover:bg-slate-50 cursor-pointer transition">
             <div class="w-12 h-12 rounded-full bg-rose-100 border border-rose-200 flex items-center justify-center font-bold text-[#ff5a5f] text-sm shrink-0">
               H
@@ -234,12 +223,12 @@
 
       <!-- ================= TAB 5: MORE ================= -->
       <section id="tab-more" class="tab-page hidden flex-1 overflow-y-auto p-4 space-y-4">
-        <h2 class="text-base font-bold text-slate-900">Settings & API Key</h2>
+        <h2 class="text-base font-bold text-slate-900">Settings & Info</h2>
         <div class="space-y-3 text-xs">
           <div class="p-3 bg-slate-50 rounded-xl space-y-2 border border-slate-200">
-            <label class="block font-semibold text-slate-700">Gemini API Key (Optional / สำหรับ AI วิเคราะห์บทสนทนา):</label>
+            <label class="block font-semibold text-slate-700">Gemini API Key (Optional):</label>
             <input type="password" id="gemini-api-key" placeholder="AIzaSy..." class="w-full p-2 bg-white border border-slate-300 rounded-lg text-xs">
-            <p class="text-[10px] text-slate-400">หากไม่ใส่ ระบบจะประมวลผลคำและให้คะแนนด้วย Logic ภายในแอปอัตโนมัติ</p>
+            <p class="text-[10px] text-slate-400">ถ้าเว้นว่างไว้ ระบบจะคำนวณคะแนนด้วยระบบจับคู่คีย์เวิร์ดภายในแอปตามปกติ</p>
           </div>
         </div>
       </section>
@@ -307,9 +296,8 @@
 
     </main>
 
-    <!-- ================= 4. PERMANENT BOTTOM NAVIGATION BAR ================= -->
-    <!-- Fixed at the bottom of the container with high z-index and safe padding -->
-    <nav id="bottom-bar" class="absolute bottom-0 left-0 right-0 h-14 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 flex justify-around items-center z-50 shrink-0">
+    <!-- ================= 3. แถบเมนูด้านล่าง 5 ปุ่ม (ล็อกติดขอบจอ 100% ไม่หายแน่นอน) ================= -->
+    <nav id="bottom-bar" class="absolute bottom-0 left-0 right-0 h-14 bg-white border-t border-slate-200 px-4 flex justify-around items-center z-50 shrink-0">
       <button onclick="switchTab('chats')" id="nav-chats" class="nav-btn text-[#ff5a5f] flex flex-col items-center">
         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
       </button>
@@ -329,10 +317,9 @@
 
   </div>
 
-  <!-- SCRIPT LOGIC -->
   <script>
     // -------------------------------------------------------------
-    // DATA PROFILES (สเปก 4 หนุ่มจีน Candid + ข้อมูลโปรไฟล์ผู้เล่น)
+    // DATA PROFILES (4 หนุ่มตี๋จีน Candid + โปรไฟล์ผู้เล่น)
     // -------------------------------------------------------------
     let playerProfile = {
       name: 'Lin XinYue',
@@ -408,7 +395,7 @@
     // -------------------------------------------------------------
     // SPEED CONTROLLER
     // -------------------------------------------------------------
-    let speedMode = 0; // 0 = Slow (1700ms), 1 = Normal (950ms), 2 = Tap
+    let speedMode = 0; // 0 = Slow, 1 = Normal, 2 = Tap
     const delays = [1700, 950, 0];
 
     function toggleSpeed() {
@@ -431,7 +418,7 @@
     // NAVIGATION CONTROLLER
     // -------------------------------------------------------------
     function switchTab(tabKey) {
-      exitActiveChat(); // Ensure all active rooms close
+      exitActiveChat();
       document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
       document.querySelectorAll('.nav-btn').forEach(b => {
         b.classList.remove('text-[#ff5a5f]');
@@ -536,11 +523,8 @@
           document.getElementById('master-last-msg').textContent = 'Profile confirmed. Join All Group!';
           document.getElementById('master-unread-dot').classList.add('hidden');
           
-          // DYNAMIC UNLOCK: Make TDL All Group and Daily Feed appear in the list!
+          // ปลดล็อกให้แชตรวม TDL All Group โผล่มาในหน้า Chats ทันทีหลังคุยกับ Master เสร็จ!
           document.getElementById('channel-group').classList.remove('hidden');
-          document.getElementById('channel-feed').classList.remove('hidden');
-          document.getElementById('group-unread-dot').classList.remove('hidden');
-          document.getElementById('group-last-msg').textContent = 'Golden Puppy: Hey everyone!! Finally opened!';
 
           document.getElementById('master-form-box').innerHTML = `
             <button onclick="exitActiveChat();" class="w-full bg-[#ff5a5f] hover:bg-[#e0484d] text-white font-bold py-2.5 rounded-xl text-xs transition shadow-sm">
@@ -744,9 +728,8 @@
           triggerIcebreakerReveal();
           processGroupQueue();
         } else if (item.eventName === 'TRIGGER_HEART_SIGNAL') {
-          // DYNAMIC UNLOCK: Make <Heart Sending> appear in the chat list!
+          // ปลดล็อกให้แชตส่งใจ <Heart Sending> โผล่มาในหน้า Chats ตอนเที่ยงคืน!
           document.getElementById('channel-heart').classList.remove('hidden');
-          document.getElementById('heart-last-msg').textContent = 'Activated! Tap to send heart.';
         }
       }
     }
