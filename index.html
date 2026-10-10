@@ -1,52 +1,51 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Picka : 30 Days to Love</title>
+  <title>LUMEN: 30 Days in Shanghai</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, sans-serif; }
+    body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
     .font-typewriter { font-family: 'Courier Prime', monospace; }
     ::-webkit-scrollbar { width: 3px; }
-    ::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
-    .chat-bubble { animation: fadeIn 0.18s ease-out forwards; }
+    ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 4px; }
+    .chat-bubble { animation: fadeIn 0.2s ease-out forwards; }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
-<body class="bg-[#f0f2f5] text-neutral-800 flex justify-center h-screen overflow-hidden select-none">
+<body class="bg-[#f1f5f9] text-slate-800 flex justify-center h-screen overflow-hidden select-none">
 
-  <!-- Mobile Shell Frame (Picka Authentic Layout) -->
-  <div class="w-full max-w-md h-full flex flex-col bg-white shadow-2xl relative overflow-hidden border-x border-neutral-200">
+  <!-- Mobile Screen Container -->
+  <div class="w-full max-w-md h-full flex flex-col bg-white shadow-2xl relative overflow-hidden border-x border-slate-200">
 
-    <!-- ================= TOP APP BAR ================= -->
-    <header id="main-header" class="bg-white px-4 py-3 flex items-center justify-between z-20 shrink-0 border-b border-neutral-100">
-      <h1 id="header-page-title" class="font-bold text-xl tracking-tight text-neutral-900">Chats</h1>
-      <!-- Right Action Icons (Shop, Gift Box, Share) -->
-      <div class="flex items-center space-x-3 text-neutral-600">
-        <button class="hover:text-neutral-900 text-lg">🏪</button>
-        <button class="hover:text-neutral-900 text-lg">🎁</button>
-        <button class="hover:text-neutral-900 text-lg">↗️</button>
+    <!-- ================= TOP HEADER ================= -->
+    <header id="main-header" class="bg-white px-4 py-3 flex items-center justify-between z-20 shrink-0 border-b border-slate-100">
+      <h1 id="header-page-title" class="font-bold text-xl tracking-tight text-slate-900">Chats</h1>
+      <div class="flex items-center space-x-3 text-slate-600">
+        <button class="hover:text-slate-900 text-lg">🏪</button>
+        <button class="hover:text-slate-900 text-lg">🎁</button>
+        <button class="hover:text-slate-900 text-lg">↗️</button>
       </div>
     </header>
 
-    <!-- Sub-Header for Inside Chat Room (TDL : All Group) -->
-    <header id="chat-inside-header" class="hidden bg-white border-b border-neutral-200 px-4 py-2.5 flex items-center justify-between z-20 shrink-0">
+    <!-- Sub-Header inside Chat Room -->
+    <header id="chat-inside-header" class="hidden bg-white border-b border-slate-200 px-4 py-2.5 flex items-center justify-between z-20 shrink-0">
       <div class="flex items-center space-x-3">
-        <button onclick="leaveChatRoom()" class="text-neutral-700 hover:text-neutral-900 font-bold text-lg">←</button>
+        <button onclick="leaveChatRoom()" class="text-slate-700 hover:text-slate-900 font-bold text-lg">←</button>
         <div>
-          <h2 class="font-bold text-sm tracking-tight text-neutral-900">TDL : All Group</h2>
-          <p class="text-[10px] text-neutral-400">8 Members</p>
+          <h2 class="font-bold text-sm tracking-tight text-slate-900">TDL : All Group</h2>
+          <p class="text-[10px] text-slate-400">8 Members (Shanghai)</p>
         </div>
       </div>
-      <div class="flex items-center space-x-3 text-xs text-neutral-500 font-medium">
-        <button onclick="toggleSpeed()" id="btn-speed" class="flex flex-col items-center hover:text-neutral-800">
+      <div class="flex items-center space-x-3 text-xs text-slate-500 font-medium">
+        <button onclick="toggleSpeed()" id="btn-speed" class="flex flex-col items-center hover:text-slate-800">
           <span class="text-sm font-bold">⏩</span>
-          <span id="speed-label" class="text-[9px]">ช้า</span>
+          <span id="speed-label" class="text-[9px]">Slow</span>
         </button>
         <div class="flex flex-col items-center">
           <span class="text-sm">🔋</span>
@@ -66,75 +65,82 @@
       <section id="tab-chats" class="tab-page flex-1 overflow-y-auto flex flex-col">
         <!-- Picka Gold Banner -->
         <div class="px-4 pt-3 pb-2">
-          <div class="bg-gradient-to-r from-neutral-100 to-neutral-50 border border-neutral-200/70 rounded-2xl p-3 flex items-center justify-between shadow-sm">
+          <div class="bg-gradient-to-r from-slate-100 to-slate-50 border border-slate-200/80 rounded-2xl p-3 flex items-center justify-between shadow-sm">
             <div>
-              <h3 class="text-xs font-bold text-neutral-800">Like and Get Free Gold</h3>
-              <p class="text-[10px] text-neutral-400">Fastest & easiest ways to earn gold</p>
+              <h3 class="text-xs font-bold text-slate-800">Like and Get Free Gold</h3>
+              <p class="text-[10px] text-slate-400">Fastest & easiest ways to earn gold</p>
             </div>
             <div class="text-xl">💰</div>
           </div>
         </div>
 
         <!-- Chat Channels List -->
-        <div class="divide-y divide-neutral-100">
+        <div class="divide-y divide-slate-100">
           
-          <!-- Channel 1: TDL All Group -->
-          <div onclick="enterGroupChat()" class="p-4 flex items-center space-x-3 hover:bg-neutral-50 cursor-pointer transition">
-            <!-- 4-Grid Group Avatar -->
-            <div class="w-12 h-12 rounded-full overflow-hidden grid grid-cols-2 grid-rows-2 bg-neutral-200 border border-neutral-200 shrink-0">
-              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop" class="w-full h-full object-cover">
-              <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=50&h=50&fit=crop" class="w-full h-full object-cover">
-              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=50&h=50&fit=crop" class="w-full h-full object-cover">
-              <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=50&h=50&fit=crop" class="w-full h-full object-cover">
+          <!-- Master Application Notice (Unread Card) -->
+          <div id="master-notice-banner" onclick="startRegistration()" class="p-4 bg-rose-50/60 flex items-center space-x-3 hover:bg-rose-50 cursor-pointer transition border-l-4 border-[#ff5a5f]">
+            <div class="w-12 h-12 rounded-full bg-[#ff5a5f] flex items-center justify-center font-bold text-white text-base shadow shrink-0">
+              M
             </div>
             <div class="flex-1 min-w-0">
               <div class="flex justify-between items-baseline">
-                <h4 class="text-sm font-bold text-neutral-900 truncate">TDL : All Group</h4>
-                <span class="text-[10px] text-rose-500 font-semibold">19:00</span>
+                <h4 class="text-xs font-bold text-slate-900 truncate flex items-center gap-1.5">
+                  LUMEN Master
+                  <span class="w-2 h-2 rounded-full bg-[#ff5a5f] animate-ping"></span>
+                </h4>
+                <span class="text-[10px] text-[#ff5a5f] font-bold">URGENT</span>
               </div>
-              <p id="group-last-msg" class="text-xs text-neutral-400 truncate mt-0.5">[Please enter your message.]</p>
+              <p class="text-xs text-slate-600 truncate mt-0.5">Please confirm your profile card details before joining!</p>
             </div>
           </div>
 
-          <!-- Channel 2: Daily Feed -->
-          <div class="p-4 flex items-center space-x-3 hover:bg-neutral-50 cursor-pointer transition">
+          <!-- Channel: TDL All Group -->
+          <div onclick="enterGroupChat()" class="p-4 flex items-center space-x-3 hover:bg-slate-50 cursor-pointer transition">
+            <!-- 4 Aesthetic Chinese Guys Candid Grid Avatar -->
+            <div class="w-12 h-12 rounded-full overflow-hidden grid grid-cols-2 grid-rows-2 bg-slate-200 border border-slate-200 shrink-0">
+              <!-- Chen Xu (Gray sweater / neck angle) -->
+              <div class="bg-slate-300 flex items-center justify-center text-[8px] font-bold text-slate-600">CX</div>
+              <!-- Xia Xiyao (Blue sweater candid) -->
+              <div class="bg-sky-200 flex items-center justify-center text-[8px] font-bold text-sky-700">XY</div>
+              <!-- Wen Jun (Black henley / collarbone) -->
+              <div class="bg-neutral-800 flex items-center justify-center text-[8px] font-bold text-neutral-300">WJ</div>
+              <!-- Gu Yan (Dark street cap / side jaw) -->
+              <div class="bg-slate-700 flex items-center justify-center text-[8px] font-bold text-slate-200">GY</div>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex justify-between items-baseline">
+                <h4 class="text-sm font-bold text-slate-900 truncate">TDL : All Group</h4>
+                <span class="text-[10px] text-[#ff5a5f] font-semibold">19:00</span>
+              </div>
+              <p id="group-last-msg" class="text-xs text-slate-400 truncate mt-0.5">[Tap to enter room]</p>
+            </div>
+          </div>
+
+          <!-- Channel: Daily Feed -->
+          <div class="p-4 flex items-center space-x-3 hover:bg-slate-50 cursor-pointer transition">
             <div class="w-12 h-12 rounded-full bg-pink-100 border border-pink-200 flex items-center justify-center font-bold text-pink-500 text-sm shrink-0">
               D
             </div>
             <div class="flex-1 min-w-0">
               <div class="flex justify-between items-baseline">
-                <h4 class="text-sm font-bold text-neutral-900 truncate">&lt;Daily Feed&gt;</h4>
-                <span class="text-[10px] text-neutral-400">Today</span>
+                <h4 class="text-sm font-bold text-slate-900 truncate">&lt;Daily Feed&gt;</h4>
+                <span class="text-[10px] text-slate-400">Day 1</span>
               </div>
-              <p class="text-xs text-neutral-400 truncate mt-0.5">Checked it</p>
+              <p class="text-xs text-slate-400 truncate mt-0.5">Welcome to Shanghai 30 Days Project.</p>
             </div>
           </div>
 
-          <!-- Channel 3: Heart Sending -->
-          <div onclick="openMidnightHeartSignal()" class="p-4 flex items-center space-x-3 hover:bg-neutral-50 cursor-pointer transition">
-            <div class="w-12 h-12 rounded-full bg-rose-100 border border-rose-200 flex items-center justify-center font-bold text-rose-500 text-sm shrink-0">
+          <!-- Channel: Heart Sending -->
+          <div onclick="openMidnightHeartSignal()" class="p-4 flex items-center space-x-3 hover:bg-slate-50 cursor-pointer transition">
+            <div class="w-12 h-12 rounded-full bg-rose-100 border border-rose-200 flex items-center justify-center font-bold text-[#ff5a5f] text-sm shrink-0">
               H
             </div>
             <div class="flex-1 min-w-0">
               <div class="flex justify-between items-baseline">
-                <h4 class="text-sm font-bold text-neutral-900 truncate">&lt;Heart Sending&gt;</h4>
-                <span class="text-[10px] text-rose-500 font-semibold">23:59</span>
+                <h4 class="text-sm font-bold text-slate-900 truncate">&lt;Heart Sending&gt;</h4>
+                <span class="text-[10px] text-[#ff5a5f] font-semibold">23:59</span>
               </div>
-              <p id="heart-last-msg" class="text-xs text-neutral-400 truncate mt-0.5">Thanks Foco</p>
-            </div>
-          </div>
-
-          <!-- Channel 4: Plan Master Announcement -->
-          <div class="p-4 flex items-center space-x-3 hover:bg-neutral-50 cursor-pointer transition">
-            <div class="w-12 h-12 rounded-full bg-amber-100 border border-amber-200 flex items-center justify-center font-bold text-amber-600 text-sm shrink-0">
-              M
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex justify-between items-baseline">
-                <h4 class="text-sm font-bold text-neutral-900 truncate">Personal Announcement</h4>
-                <span class="text-[10px] text-neutral-400">Notice</span>
-              </div>
-              <p class="text-xs text-neutral-400 truncate mt-0.5">The Icebreaker 1:1 match will be announced.</p>
+              <p id="heart-last-msg" class="text-xs text-slate-400 truncate mt-0.5">Will be activated tonight.</p>
             </div>
           </div>
 
@@ -145,301 +151,342 @@
       <section id="tab-people" class="tab-page hidden flex-1 overflow-y-auto flex flex-col">
         <!-- Picka Gold Banner -->
         <div class="px-4 pt-3 pb-2">
-          <div class="bg-gradient-to-r from-neutral-100 to-neutral-50 border border-neutral-200/70 rounded-2xl p-3 flex items-center justify-between shadow-sm">
+          <div class="bg-gradient-to-r from-slate-100 to-slate-50 border border-slate-200/80 rounded-2xl p-3 flex items-center justify-between shadow-sm">
             <div>
-              <h3 class="text-xs font-bold text-neutral-800">Like and Get Free Gold</h3>
-              <p class="text-[10px] text-neutral-400">Fastest & easiest ways to earn gold</p>
+              <h3 class="text-xs font-bold text-slate-800">Like and Get Free Gold</h3>
+              <p class="text-[10px] text-slate-400">Fastest & easiest ways to earn gold</p>
             </div>
             <div class="text-xl">💰</div>
           </div>
         </div>
 
-        <!-- Player Profile Row (Top) -->
-        <div class="p-4 flex items-center space-x-3 border-b border-neutral-100">
-          <img id="people-player-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" class="w-13 h-13 rounded-full object-cover border border-neutral-200">
+        <!-- User Profile Card -->
+        <div class="p-4 flex items-center space-x-3 border-b border-slate-100">
+          <div class="w-13 h-13 rounded-full bg-rose-100 border border-rose-300 flex items-center justify-center text-sm font-bold text-[#ff5a5f]">
+            You
+          </div>
           <div>
-            <h3 id="people-player-name" class="font-bold text-sm text-neutral-900">Lee Ahyeon (คุณ)</h3>
-            <p id="people-player-sub" class="text-xs text-neutral-400 mt-0.5">ผู้เข้าร่วมรายการ 30 Days to Love</p>
+            <h3 id="people-player-name" class="font-bold text-sm text-slate-900">You (Player)</h3>
+            <p id="people-player-sub" class="text-xs text-slate-400 mt-0.5">Shanghai · Day 1 Participant</p>
           </div>
         </div>
 
         <!-- Friends Count & List -->
-        <div class="px-4 py-2 bg-neutral-50/50">
-          <span class="text-xs text-neutral-400 font-semibold">Friends 8</span>
+        <div class="px-4 py-2 bg-slate-50/70">
+          <span class="text-xs text-slate-400 font-semibold">Friends 8</span>
         </div>
 
-        <div id="people-friends-list" class="divide-y divide-neutral-100">
-          <!-- Rendered by JS -->
+        <div id="people-friends-list" class="divide-y divide-slate-100">
+          <!-- Injected by JS -->
         </div>
       </section>
 
       <!-- ================= TAB 3: STORY VIEW ================= -->
       <section id="tab-story" class="tab-page hidden flex-1 overflow-y-auto p-4 space-y-4">
-        <!-- Invitation Banner Card (Frank Mansion & Club) -->
-        <div class="rounded-2xl overflow-hidden border border-neutral-200 shadow-sm relative bg-[#1c2430] text-center p-6 text-white aspect-[4/3] flex flex-col justify-center items-center">
-          <div class="border border-white/30 p-5 rounded-lg w-full h-full flex flex-col justify-between items-center bg-black/20 backdrop-blur-xs">
+        <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-sm relative bg-[#0f172a] text-center p-6 text-white aspect-[4/3] flex flex-col justify-center items-center">
+          <div class="border border-white/20 p-5 rounded-lg w-full h-full flex flex-col justify-between items-center bg-black/20">
             <span class="text-[10px] tracking-widest uppercase opacity-80">I N V I T A T I O N</span>
             <div>
-              <div class="w-10 h-10 mx-auto rounded-full border border-white/50 flex items-center justify-center font-serif text-lg italic">F</div>
-              <h3 class="font-serif text-sm tracking-wide mt-1">Frank Mansion & Club</h3>
-              <p class="text-[9px] text-neutral-300 mt-1 max-w-[200px]">You are invited to 30 Days to Love in Shanghai.</p>
+              <div class="w-10 h-10 mx-auto rounded-full border border-white/40 flex items-center justify-center font-serif text-lg italic">L</div>
+              <h3 class="font-serif text-sm tracking-wide mt-1">LUMEN Club Shanghai</h3>
+              <p class="text-[9px] text-slate-300 mt-1 max-w-[200px]">30 Days Anonymous Love Project.</p>
             </div>
-            <div class="flex justify-between w-full text-[9px] border-t border-white/20 pt-1 text-neutral-300">
-              <span>No. 1004</span>
+            <div class="flex justify-between w-full text-[9px] border-t border-white/20 pt-1 text-slate-300">
+              <span>Season 1</span>
               <span>EXP. Day 30</span>
             </div>
           </div>
         </div>
 
-        <!-- Episode Selection Cards -->
         <div class="space-y-3">
           <div class="flex justify-between items-center">
-            <h3 class="font-bold text-sm text-neutral-900 flex items-center gap-1.5">TDL1 🎞️💖</h3>
-            <span class="text-xs text-neutral-400 cursor-pointer">more</span>
+            <h3 class="font-bold text-sm text-slate-900">Shanghai Edition 🎞️💖</h3>
+            <span class="text-xs text-slate-400">more</span>
           </div>
           <div class="grid grid-cols-2 gap-3">
-            <!-- Card 1: Prologue -->
-            <div class="bg-white border border-neutral-200 rounded-xl overflow-hidden shadow-sm">
-              <div class="h-32 bg-pink-100 flex items-center justify-center p-3 text-center border-b border-pink-200">
-                <span class="text-xs font-serif text-pink-600 font-bold">Prologue: 30 Days to Love</span>
+            <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+              <div class="h-32 bg-rose-50 flex items-center justify-center p-3 text-center border-b border-rose-100">
+                <span class="text-xs font-serif text-rose-500 font-bold">Prologue: Shanghai Night</span>
               </div>
               <div class="p-2.5">
-                <h4 class="text-xs font-bold text-neutral-800 truncate">Prologue: 30 Days</h4>
-                <p class="text-[10px] text-neutral-400">Short · Romance</p>
+                <h4 class="text-xs font-bold text-slate-800 truncate">Prologue</h4>
+                <p class="text-[10px] text-slate-400">Short · Romance</p>
               </div>
             </div>
-            <!-- Card 2: Main Story CD -->
-            <div class="bg-white border border-neutral-200 rounded-xl overflow-hidden shadow-sm">
-              <div class="h-32 bg-[#e8a5b8] flex items-center justify-center border-b border-pink-300">
-                <div class="w-16 h-16 rounded-full bg-pink-400 border-4 border-white flex items-center justify-center shadow">
+            <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+              <div class="h-32 bg-slate-100 flex items-center justify-center border-b border-slate-200">
+                <div class="w-16 h-16 rounded-full bg-rose-400 border-4 border-white flex items-center justify-center shadow">
                   <div class="w-4 h-4 rounded-full bg-black"></div>
                 </div>
               </div>
               <div class="p-2.5">
-                <h4 class="text-xs font-bold text-neutral-800 truncate"><span class="text-rose-500 text-[10px] font-bold">NEW</span> 30 Days to Love 1</h4>
-                <p class="text-[10px] text-neutral-400">Long · Romance</p>
+                <h4 class="text-xs font-bold text-slate-800 truncate"><span class="text-[#ff5a5f] text-[10px] font-bold">NEW</span> 30 Days in Shanghai</h4>
+                <p class="text-[10px] text-slate-400">Long · Romance</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ================= TAB 4: MY VIEW (Profile & Time Leap) ================= -->
+      <!-- ================= TAB 4: MY VIEW ================= -->
       <section id="tab-my" class="tab-page hidden flex-1 overflow-y-auto flex flex-col">
-        <!-- Sub Tabs (My story / Ending Book / History) -->
-        <div class="flex border-b border-neutral-200 text-xs font-bold px-4 pt-1">
+        <div class="flex border-b border-slate-200 text-xs font-bold px-4 pt-1">
           <button class="py-2.5 text-[#ff5a5f] border-b-2 border-[#ff5a5f] mr-4">My story</button>
-          <button class="py-2.5 text-neutral-400 hover:text-neutral-700 mr-4">Ending Book</button>
-          <button class="py-2.5 text-neutral-400 hover:text-neutral-700">History</button>
+          <button class="py-2.5 text-slate-400 mr-4">Ending Book</button>
+          <button class="py-2.5 text-slate-400">History</button>
         </div>
 
         <div class="p-5 space-y-5">
-          <!-- Story Banner Header -->
-          <div class="flex items-center justify-between pb-3 border-b border-neutral-100">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
             <div class="flex items-center space-x-3">
-              <img id="my-player-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" class="w-12 h-12 rounded-full object-cover border border-neutral-200">
+              <div class="w-12 h-12 rounded-full bg-rose-100 border border-rose-300 flex items-center justify-center text-sm font-bold text-[#ff5a5f]">
+                You
+              </div>
               <div>
-                <h3 class="font-bold text-sm text-neutral-900">30 Days to Love 1</h3>
-                <p id="my-player-name" class="text-xs text-neutral-400 mt-0.5">Lee Ahyeon</p>
+                <h3 class="font-bold text-sm text-slate-900">30 Days in Shanghai</h3>
+                <p id="my-player-name" class="text-xs text-slate-400 mt-0.5">Player</p>
               </div>
             </div>
-            <button onclick="openRegistrationModal()" class="text-xs text-neutral-400 hover:text-neutral-800">Details &gt;</button>
+            <button onclick="startRegistration()" class="text-xs text-slate-400 hover:text-slate-800">Edit Profile &gt;</button>
           </div>
 
-          <!-- Episode Status -->
           <div class="flex justify-between items-center text-xs">
-            <span class="flex items-center gap-2 text-neutral-600 font-semibold">📖 EPISODE</span>
-            <span class="font-bold text-neutral-900">1 / 120</span>
+            <span class="text-slate-600 font-semibold">📖 EPISODE</span>
+            <span class="font-bold text-slate-900">1 / 120</span>
           </div>
 
-          <!-- Chatting Status -->
           <div class="flex justify-between items-center text-xs">
-            <span class="flex items-center gap-2 text-neutral-600 font-semibold">Ⓜ️ CHATTING STATUS</span>
-            <span class="font-bold text-rose-500">In progress</span>
+            <span class="text-slate-600 font-semibold">Ⓜ️ CHATTING STATUS</span>
+            <span class="font-bold text-[#ff5a5f]">In progress</span>
           </div>
 
-          <!-- Time Leap Section -->
           <div class="flex justify-between items-center text-xs pt-1">
-            <span class="flex items-center gap-2 text-neutral-600 font-semibold">⏱️ TIME LEAP</span>
-            <span class="font-bold text-neutral-900">6</span>
+            <span class="text-slate-600 font-semibold">⏱️ TIME LEAP</span>
+            <span class="font-bold text-slate-900">6</span>
           </div>
 
-          <!-- Big Coral Button: TIME LEAP -->
-          <button onclick="enterGroupChat()" class="w-full bg-[#ff5a5f] hover:bg-[#e0484d] text-white py-3 rounded-2xl text-xs font-bold transition shadow-sm active:scale-[0.99] tracking-wider uppercase">
-            TIME LEAP / กลับเข้าสู่ห้องแชต
+          <button onclick="enterGroupChat()" class="w-full bg-[#ff5a5f] hover:bg-[#e0484d] text-white py-3 rounded-2xl text-xs font-bold transition shadow-sm tracking-wider uppercase">
+            TIME LEAP / ENTER CHAT
           </button>
         </div>
       </section>
 
       <!-- ================= TAB 5: MORE VIEW ================= -->
       <section id="tab-more" class="tab-page hidden flex-1 overflow-y-auto p-4 space-y-4">
-        <h2 class="text-base font-bold text-neutral-900">Settings & About</h2>
+        <h2 class="text-base font-bold text-slate-900">Settings & Info</h2>
         <div class="space-y-2 text-xs">
-          <div class="p-3 bg-neutral-50 rounded-xl flex justify-between items-center">
-            <span>เวอร์ชันแอปพลิเคชัน</span>
-            <span class="text-neutral-400">1.0.0 (Shanghai Edition)</span>
+          <div class="p-3 bg-slate-50 rounded-xl flex justify-between items-center">
+            <span>App Version</span>
+            <span class="text-slate-400">1.0.0 (Shanghai Edition)</span>
           </div>
-          <div class="p-3 bg-neutral-50 rounded-xl flex justify-between items-center">
-            <span>เสียงและเอฟเฟกต์</span>
-            <span class="text-rose-500 font-semibold">เปิด</span>
+          <div class="p-3 bg-slate-50 rounded-xl flex justify-between items-center">
+            <span>Late Comers Notice</span>
+            <span class="text-slate-500">Day 7 (Girl) / Day 9 (Guy)</span>
           </div>
         </div>
       </section>
 
-      <!-- ================= INNER VIEW: CHAT ROOM ================= -->
+      <!-- ================= INNER VIEW: PRODUCER INTERVIEW (REGISTRATION) ================= -->
+      <section id="view-producer-interview" class="hidden flex-1 flex flex-col h-full bg-[#f8fafc] overflow-hidden">
+        <div class="px-4 py-2.5 border-b border-slate-200 bg-white flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <button onclick="leaveChatRoom()" class="text-slate-600 hover:text-slate-900 font-bold mr-1">←</button>
+            <span class="text-xs font-bold text-slate-800">LUMEN Master (Producer)</span>
+          </div>
+          <span class="text-[10px] text-emerald-500 font-medium">● Online</span>
+        </div>
+        <div id="producer-stream" class="flex-1 overflow-y-auto p-4 space-y-3">
+          <!-- Master messages -->
+        </div>
+        <div id="producer-input-panel" class="p-3 border-t border-slate-200 bg-white">
+          <div id="producer-form-container" class="space-y-2">
+            <!-- Dynamic input -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= INNER VIEW: GROUP CHAT ROOM ================= -->
       <section id="view-inner-chat" class="hidden flex-1 flex flex-col h-full bg-white overflow-hidden">
         <div id="group-stream" class="flex-1 overflow-y-auto p-4 space-y-3.5">
           <!-- Chat bubbles -->
         </div>
 
         <!-- Typing status -->
-        <div id="typing-indicator" class="hidden px-4 py-1 text-xs text-neutral-400 italic flex items-center gap-1.5 bg-neutral-50 border-t border-neutral-100">
-          <span class="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce"></span>
-          <span class="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
-          <span class="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
-          <span id="typing-name" class="ml-1 text-[11px]">กำลังพิมพ์...</span>
+        <div id="typing-indicator" class="hidden px-4 py-1 text-xs text-slate-400 italic flex items-center gap-1.5 bg-slate-50 border-t border-slate-100">
+          <span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></span>
+          <span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+          <span class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+          <span id="typing-name" class="ml-1 text-[11px]">typing...</span>
         </div>
 
         <!-- Tap Next Button -->
-        <div id="next-tap-bar" class="hidden p-2 bg-neutral-50 border-t border-neutral-200 text-center">
-          <button onclick="advanceDialogue()" class="w-full py-2 bg-white hover:bg-neutral-100 text-neutral-700 text-xs font-semibold rounded-xl border border-neutral-300 shadow-sm flex items-center justify-center gap-1">
-            <span>แตะเพื่ออ่านข้อความถัดไป</span> ▼
+        <div id="next-tap-bar" class="hidden p-2 bg-slate-50 border-t border-slate-200 text-center">
+          <button onclick="advanceDialogue()" class="w-full py-2 bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold rounded-xl border border-slate-300 shadow-sm flex items-center justify-center gap-1">
+            <span>Tap to read next message</span> ▼
           </button>
         </div>
 
-        <!-- Player Choices Box -->
-        <div id="group-choices-box" class="hidden bg-neutral-50 border-t border-neutral-200 p-2.5 flex flex-col gap-1.5 max-h-[42vh] overflow-y-auto">
+        <!-- Player Choices Box (4 Styles) -->
+        <div id="group-choices-box" class="hidden bg-slate-50 border-t border-slate-200 p-2.5 flex flex-col gap-1.5 max-h-[42vh] overflow-y-auto">
           <!-- Options -->
         </div>
       </section>
 
-      <!-- ================= INNER VIEW: HEART SIGNAL ================= -->
+      <!-- ================= INNER VIEW: HEART SIGNAL (MIDNIGHT) ================= -->
       <section id="view-heart-signal" class="hidden flex-1 flex flex-col h-full bg-white p-5 overflow-y-auto space-y-4">
         <div>
-          <button onclick="leaveChatRoom()" class="text-xs text-neutral-400 hover:text-neutral-800 mb-2">← ย้อนกลับ</button>
-          <span class="text-[10px] bg-rose-100 text-rose-600 px-2.5 py-0.5 rounded-full font-bold">23:59 PM</span>
-          <h2 class="text-base font-bold text-neutral-900 mt-2">Anonymous Heart Signal คืนแรก</h2>
-          <p class="text-xs text-neutral-500 mt-0.5">เลือกคนที่คุณสะดุดตาที่สุดจาก 4 หนุ่มในค่ำคืนนี้</p>
+          <button onclick="leaveChatRoom()" class="text-xs text-slate-400 hover:text-slate-800 mb-2">← Back</button>
+          <span class="text-[10px] bg-rose-100 text-[#ff5a5f] px-2.5 py-0.5 rounded-full font-bold">23:59 PM</span>
+          <h2 class="text-base font-bold text-slate-900 mt-2">Anonymous Heart Signal (Day 1)</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Send your anonymous signal to the person who caught your eye tonight.</p>
         </div>
 
         <div id="heart-target-list" class="space-y-2">
           <!-- 4 Boys choices -->
         </div>
 
-        <div id="heart-message-area" class="hidden space-y-2 pt-2 border-t border-neutral-200">
-          <label class="text-xs text-neutral-700 font-semibold">ข้อความลับ (เขาจะไม่รู้ว่าใครส่ง):</label>
-          <textarea id="heart-custom-msg" rows="3" class="w-full bg-neutral-50 border border-neutral-300 rounded-xl p-3 text-xs text-neutral-800 focus:outline-none focus:border-rose-400" placeholder="พิมพ์ข้อความที่อยากบอกเขา..."></textarea>
+        <div id="heart-message-area" class="hidden space-y-2 pt-2 border-t border-slate-200">
+          <label class="text-xs text-slate-700 font-semibold">Your Secret Message (Anonymous):</label>
+          <textarea id="heart-custom-msg" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-xs text-slate-800 focus:outline-none focus:border-rose-400" placeholder="Type a message you want to say to him..."></textarea>
           <button onclick="sendMidnightHeart()" class="w-full bg-[#ff5a5f] hover:bg-[#e0484d] text-white font-bold py-2.5 rounded-xl text-xs shadow transition">
-            💌 ส่งหัวใจลับ
+            💌 Send Secret Heart
           </button>
         </div>
 
-        <div id="heart-result-box" class="hidden bg-neutral-50 border border-neutral-200 p-4 rounded-2xl space-y-3">
-          <p class="text-xs text-emerald-600 font-bold">✓ ส่งสัญญาณใจเรียบร้อยแล้ว!</p>
-          <div id="heart-reply-bubble" class="p-3 bg-white rounded-xl border border-neutral-200 text-xs text-neutral-700 italic">
+        <div id="heart-result-box" class="hidden bg-slate-50 border border-slate-200 p-4 rounded-2xl space-y-3">
+          <p class="text-xs text-emerald-600 font-bold">✓ Heart Signal successfully delivered!</p>
+          <div id="heart-reply-bubble" class="p-3 bg-white rounded-xl border border-slate-200 text-xs text-slate-700 italic">
             <!-- Guy response -->
           </div>
-          <p class="text-[11px] text-neutral-400 text-center pt-2">🎉 จบภารกิจ Day 1 ราตรีสวัสดิ์ค่ะ</p>
+          <p class="text-[11px] text-slate-400 text-center pt-2">🎉 Day 1 Complete. Good night and see you on Day 2.</p>
         </div>
       </section>
 
     </main>
 
-    <!-- ================= BOTTOM NAVIGATION (5 ICONS LIKE PICKA) ================= -->
-    <nav id="bottom-bar" class="bg-white border-t border-neutral-200 px-4 py-2.5 flex justify-around items-center z-20 shrink-0">
-      
-      <!-- 1. Chats Tab -->
+    <!-- ================= BOTTOM NAVIGATION BAR (5 ICONS) ================= -->
+    <nav id="bottom-bar" class="bg-white border-t border-slate-200 px-4 py-2.5 flex justify-around items-center z-20 shrink-0">
       <button onclick="switchTab('chats')" id="nav-chats" class="nav-btn text-[#ff5a5f] flex flex-col items-center">
-        <!-- Chat Bubble Icon -->
         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
       </button>
-
-      <!-- 2. People Tab -->
-      <button onclick="switchTab('people')" id="nav-people" class="nav-btn text-neutral-400 hover:text-neutral-700 flex flex-col items-center">
-        <!-- Two People Icon -->
+      <button onclick="switchTab('people')" id="nav-people" class="nav-btn text-slate-400 hover:text-slate-700 flex flex-col items-center">
         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
       </button>
-
-      <!-- 3. Story Tab -->
-      <button onclick="switchTab('story')" id="nav-story" class="nav-btn text-neutral-400 hover:text-neutral-700 flex flex-col items-center">
-        <!-- 4-Square Grid Icon -->
+      <button onclick="switchTab('story')" id="nav-story" class="nav-btn text-slate-400 hover:text-slate-700 flex flex-col items-center">
         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M3 3v8h8V3H3zm0 18h8v-8H3v8zm10-18v8h8V3h-8zm0 18h8v-8h-8v8z"/></svg>
       </button>
-
-      <!-- 4. MY Tab -->
-      <button onclick="switchTab('my')" id="nav-my" class="nav-btn text-neutral-400 hover:text-neutral-700 flex flex-col items-center">
-        <!-- Profile/ID Icon -->
+      <button onclick="switchTab('my')" id="nav-my" class="nav-btn text-slate-400 hover:text-slate-700 flex flex-col items-center">
         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
       </button>
-
-      <!-- 5. More Tab -->
-      <button onclick="switchTab('more')" id="nav-more" class="nav-btn text-neutral-400 hover:text-neutral-700 flex flex-col items-center">
-        <!-- Three Dots Icon -->
+      <button onclick="switchTab('more')" id="nav-more" class="nav-btn text-slate-400 hover:text-slate-700 flex flex-col items-center">
         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
       </button>
-
     </nav>
-
-    <!-- REGISTRATION MODAL (EDIT PROFILE) -->
-    <div id="modal-reg" class="hidden absolute inset-0 bg-black/60 backdrop-blur-sm z-30 flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl w-full max-w-sm p-5 space-y-4 shadow-xl">
-        <h3 class="font-bold text-sm text-neutral-900 border-b border-neutral-100 pb-2">ข้อมูลโปรไฟล์ของคุณ</h3>
-        <div class="space-y-2 text-xs">
-          <div>
-            <label class="text-neutral-500 block mb-1">ชื่อเล่นของคุณ:</label>
-            <input type="text" id="reg-name" value="Lee Ahyeon" class="w-full bg-neutral-50 border border-neutral-200 rounded-xl p-2.5 text-neutral-800">
-          </div>
-          <div>
-            <label class="text-neutral-500 block mb-1">อาชีพ:</label>
-            <input type="text" id="reg-occ" value="Visual Designer" class="w-full bg-neutral-50 border border-neutral-200 rounded-xl p-2.5 text-neutral-800">
-          </div>
-          <div>
-            <label class="text-neutral-500 block mb-1">สเปกในอุดมคติ:</label>
-            <input type="text" id="reg-ideal" value="คนที่คุยด้วยแล้วสบายใจ เป็นผู้ใหญ่และชัดเจน" class="w-full bg-neutral-50 border border-neutral-200 rounded-xl p-2.5 text-neutral-800">
-          </div>
-        </div>
-        <div class="flex gap-2 pt-2">
-          <button onclick="saveProfile()" class="flex-1 bg-[#ff5a5f] text-white py-2.5 rounded-xl font-bold text-xs">บันทึก</button>
-          <button onclick="closeRegModal()" class="flex-1 bg-neutral-100 text-neutral-600 py-2.5 rounded-xl text-xs">ปิด</button>
-        </div>
-      </div>
-    </div>
 
   </div>
 
-  <!-- SCRIPT ENGINE -->
+  <!-- ================= JAVASCRIPT ENGINE ================= -->
   <script>
     // -------------------------------------------------------------
-    // DATA: 4 Men + 4 Women (Day 1 Starting Cast)
+    // 1. DATA: 4 CHINESE MEN + 4 WOMEN (DAY 1 STARTING ROSTER)
     // -------------------------------------------------------------
-    let player = {
-      name: 'Lee Ahyeon',
+    let playerProfile = {
+      name: 'Lin You',
       age: 24,
       occupation: 'Visual Designer',
-      ideal: 'คนที่คุยด้วยแล้วสบายใจ เป็นผู้ใหญ่และชัดเจน',
-      dating: 'More action than words / In it for the long haul',
-      best: 'Responsibility & Empathy',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop'
+      interests: 'Quiet cafes, City walks, Lo-Fi music',
+      idealType: 'Someone calm, mature, and undeniably clear about his feelings',
+      datingStyle: 'More action than words / In it for the long haul',
+      bestQuality: 'Good listener with steady empathy',
+      codeName: 'Cloud'
     };
 
+    // 4 หนุ่มสเปกที่คุณกำหนด (ภาพสไตล์ candid ไม่เห็นหน้าตรง)
     const boys = {
-      chenxu: { name: 'Kang Jaewook', realName: 'เฉินซวี่', job: 'Architect', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop', score: 0 },
-      xiyao: { name: 'Choi Sanghyeon', realName: 'เซี่ยซีเหยา', job: 'Idol Vocalist', avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&h=100&fit=crop', score: 0 },
-      wenjun: { name: 'Yoo Eunsung', realName: 'เวินจวิ้น', job: 'Lounge Owner', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop', score: 0 },
-      guyan: { name: 'Kuro', realName: 'กู้เยี่ยน', job: 'Game Programmer', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&h=100&fit=crop', score: 0 }
+      chenxu: {
+        codeName: 'Mr. Horizon',
+        realName: 'Chen Xu (เฉินซวี่)',
+        age: 29,
+        occupation: 'Architectural Director',
+        interests: 'Building sketches, Black coffee, Bund evening walks',
+        idealType: 'Someone who feels like peace without needing words',
+        datingStyle: 'More action than words / In it for the long haul',
+        bestQuality: 'Reliability and unwavering clarity',
+        candidDesc: 'Aesthetic candid: Side profile of a tall man in a cozy gray knit sweater, sharp jawline, warm afternoon cafe lighting, face partly out of frame.',
+        bgTone: 'bg-slate-300 text-slate-700',
+        score: 0
+      },
+      xiyao: {
+        codeName: 'Golden Puppy',
+        realName: 'Xia Xiyao (เซี่ยซีเหยา)',
+        age: 22,
+        occupation: 'Idol Vocalist & Dancer',
+        interests: 'Dance practice, Cheese milk tea, Late-night voice notes',
+        idealType: 'A sweet older sister who pats my head when I am exhausted',
+        datingStyle: 'Clingy & affectionate 24/7, but 100% loyal to only her',
+        bestQuality: 'Endless energy and pure heart',
+        candidDesc: 'Aesthetic candid: Young guy in pastel soft-blue sweater examining fabrics, subtle earring, clean side neck, soft aesthetic look.',
+        bgTone: 'bg-sky-200 text-sky-800',
+        score: 0
+      },
+      wenjun: {
+        codeName: 'Velvet Noir',
+        realName: 'Wen Jun (เวินจวิ้น)',
+        age: 28,
+        occupation: 'Contemporary Lounge & Gallery Owner',
+        interests: 'Jazz vinyls, Vintage wine, Modern art exhibitions',
+        idealType: 'A lovely little one who makes me want to tease and spoil her',
+        datingStyle: 'Gentle and attentive, but with a gaze that makes your heart race',
+        bestQuality: 'Gaze that makes whoever he looks at feel like the only one in the room',
+        candidDesc: 'Aesthetic candid: Moody indoor shot, man in dark button-up collar shirt, sharp collarbone, drinking whiskey at the bar counter, face in soft shadow.',
+        bgTone: 'bg-neutral-800 text-neutral-300',
+        score: 0
+      },
+      guyan: {
+        codeName: 'Black Cat',
+        realName: 'Gu Yan (กู้เยี่ยน)',
+        age: 24,
+        occupation: 'Indie Game Programmer',
+        interests: 'Midnight coding, Black cats, Over-ear headphones',
+        idealType: 'Someone quiet who understands and respects my silence',
+        datingStyle: 'Tsundere with words, but remembers every single little detail about her',
+        bestQuality: 'Quiet attentiveness hidden beneath indifference',
+        candidDesc: 'Aesthetic candid: Guy in dark track jacket and black cap walking at night in neon city, over-ear headphones, looking away from camera.',
+        bgTone: 'bg-slate-700 text-slate-200',
+        score: 0
+      }
     };
 
+    // 3 สาวผู้เข้าร่วมคนอื่น (รวมผู้เล่นเป็น 4)
     const girls = {
-      rian: { name: 'Kim Rian', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop' },
-      iseul: { name: 'Song Iseul', avatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100&h=100&fit=crop' },
-      foco: { name: 'Foco (ถังเม่ย)', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop' }
+      yingyin: {
+        codeName: 'Scarlet',
+        realName: 'Song Yingyin (ซ่งอิงอิน)',
+        age: 26,
+        occupation: 'Fashion Creative Director',
+        bgTone: 'bg-purple-200 text-purple-800'
+      },
+      jiangyue: {
+        codeName: 'Luna',
+        realName: 'Jiang Yue (เจียงเยว่)',
+        age: 24,
+        occupation: 'Classical Pianist',
+        bgTone: 'bg-teal-200 text-teal-800'
+      },
+      tangmei: {
+        codeName: 'Mochi (Foco)',
+        realName: 'Tang Mei (ถังเม่ย)',
+        age: 23,
+        occupation: 'Food & Lifestyle Vlogger',
+        bgTone: 'bg-orange-200 text-orange-800'
+      }
     };
 
-    // สติกเกอร์น้องเม่น Foco สไตล์ Picka
+    // Picka Hedgehog Sticker HTML
     const hedgehogSticker = `
       <div class="flex flex-col items-start my-1">
-        <span class="text-xs text-neutral-500 font-bold mb-0.5 ml-2">???</span>
-        <div class="bg-amber-50 border border-amber-200/80 rounded-2xl p-2.5 max-w-[130px] shadow-sm flex flex-col items-center">
+        <span class="text-xs text-slate-400 font-bold mb-0.5 ml-2">???</span>
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-2.5 max-w-[130px] shadow-sm flex flex-col items-center">
           <span class="text-3xl">🦔</span>
           <span class="text-[10px] text-amber-800 font-semibold mt-0.5">Hi</span>
         </div>
@@ -447,35 +494,35 @@
     `;
 
     // -------------------------------------------------------------
-    // SPEED CONTROLLER
+    // 2. SPEED CONTROLLER
     // -------------------------------------------------------------
-    let speedMode = 0; // 0 = Slow (1600ms), 1 = Normal (850ms), 2 = Tap Manual
-    const delays = [1600, 850, 0];
+    let speedMode = 0; // 0 = Slow (1700ms), 1 = Normal (950ms), 2 = Tap Manual
+    const delays = [1700, 950, 0];
 
     function toggleSpeed() {
       speedMode = (speedMode + 1) % 3;
       const label = document.getElementById('speed-label');
       const tapBar = document.getElementById('next-tap-bar');
       if (speedMode === 0) {
-        label.textContent = 'ช้า';
+        label.textContent = 'Slow';
         tapBar.classList.add('hidden');
       } else if (speedMode === 1) {
-        label.textContent = 'ปกติ';
+        label.textContent = 'Normal';
         tapBar.classList.add('hidden');
       } else {
-        label.textContent = 'แตะอ่าน';
+        label.textContent = 'Tap Mode';
         tapBar.classList.remove('hidden');
       }
     }
 
     // -------------------------------------------------------------
-    // TAB SWITCHER
+    // 3. TAB CONTROLLER
     // -------------------------------------------------------------
     function switchTab(tabKey) {
       document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
       document.querySelectorAll('.nav-btn').forEach(b => {
         b.classList.remove('text-[#ff5a5f]');
-        b.classList.add('text-neutral-400');
+        b.classList.add('text-slate-400');
       });
 
       const targetPage = document.getElementById(`tab-${tabKey}`);
@@ -483,7 +530,7 @@
       if (targetPage) targetPage.classList.remove('hidden');
       if (targetBtn) {
         targetBtn.classList.add('text-[#ff5a5f]');
-        targetBtn.classList.remove('text-neutral-400');
+        targetBtn.classList.remove('text-slate-400');
       }
 
       const titles = {
@@ -495,32 +542,34 @@
       };
       document.getElementById('header-page-title').textContent = titles[tabKey] || 'Chats';
 
-      if (tabKey === 'people') renderPeopleTab();
+      if (tabKey === 'people') renderPeopleList();
     }
 
-    function renderPeopleTab() {
+    function renderPeopleList() {
       const container = document.getElementById('people-friends-list');
       container.innerHTML = '';
 
-      // All 7 others + Daily Feed + Master
-      const friends = [
-        { name: boys.xiyao.name, role: 'Choi Sanghyeon', img: boys.xiyao.avatar },
-        { name: 'Daily Feed', role: 'Official Feed', img: 'https://placehold.co/100x100/fbcfe8/be185d?text=D' },
-        { name: 'Foco (ถังเม่ย)', role: 'Food Vlogger', img: girls.foco.avatar },
-        { name: boys.chenxu.name, role: 'Kang Jaewook', img: boys.chenxu.avatar },
-        { name: girls.rian.name, role: 'Kim Rian', img: girls.rian.avatar },
-        { name: 'Plan Master', role: 'Producer', img: 'https://placehold.co/100x100/fed7aa/c2410c?text=M' },
-        { name: girls.iseul.name, role: 'Song Iseul', img: girls.iseul.avatar },
-        { name: boys.wenjun.name, role: 'Yoo Eunsung', img: boys.wenjun.avatar }
+      const list = [
+        { name: boys.xiyao.realName, code: 'Golden Puppy', tone: boys.xiyao.bgTone },
+        { name: 'Daily Feed', code: 'Official Feed', tone: 'bg-pink-100 text-pink-600' },
+        { name: girls.tangmei.realName, code: 'Mochi (Foco)', tone: girls.tangmei.bgTone },
+        { name: boys.chenxu.realName, code: 'Mr. Horizon', tone: boys.chenxu.bgTone },
+        { name: girls.yingyin.realName, code: 'Scarlet', tone: girls.yingyin.bgTone },
+        { name: 'Plan Master', code: 'Producer', tone: 'bg-amber-100 text-amber-700' },
+        { name: girls.jiangyue.realName, code: 'Luna', tone: girls.jiangyue.bgTone },
+        { name: boys.wenjun.realName, code: 'Velvet Noir', tone: boys.wenjun.bgTone }
       ];
 
-      friends.forEach(f => {
+      list.forEach(item => {
         const row = document.createElement('div');
-        row.className = "p-3.5 px-4 flex items-center space-x-3 hover:bg-neutral-50 transition";
+        row.className = "p-3.5 px-4 flex items-center space-x-3 hover:bg-slate-50 transition";
         row.innerHTML = `
-          <img src="${f.img}" class="w-11 h-11 rounded-full object-cover border border-neutral-200 shrink-0">
+          <div class="w-11 h-11 rounded-full ${item.tone} flex items-center justify-center font-bold text-xs shrink-0 border border-slate-200">
+            ${item.code[0]}
+          </div>
           <div>
-            <h4 class="text-xs font-bold text-neutral-800">${f.name}</h4>
+            <h4 class="text-xs font-bold text-slate-800">${item.name}</h4>
+            <p class="text-[10px] text-slate-400">${item.code}</p>
           </div>
         `;
         container.appendChild(row);
@@ -528,7 +577,114 @@
     }
 
     // -------------------------------------------------------------
-    // CHAT ENGINE
+    // 4. PRODUCER INTERVIEW (REGISTRATION CHAT)
+    // -------------------------------------------------------------
+    const regQuestions = [
+      { key: 'name', label: 'Your Name / Nickname in the show:', placeholder: 'e.g. Lin You, Ping, May...', type: 'text' },
+      { key: 'age', label: 'Your Age:', placeholder: 'e.g. 23, 24...', type: 'number' },
+      { key: 'occupation', label: 'Occupation:', placeholder: 'e.g. Visual Designer, Engineer...', type: 'text' },
+      { key: 'interests', label: 'Interests & Hobbies (comma-separated):', placeholder: 'e.g. Cafes, Lo-Fi, Photography...', type: 'text' },
+      { key: 'idealType', label: 'Your Ideal Type:', placeholder: 'e.g. Calm, mature & clear about feelings...', type: 'text' },
+      { key: 'datingStyle', label: 'Your Dating Style:', placeholder: 'e.g. More action than words, Steady...', type: 'text' },
+      { key: 'bestQuality', label: 'Your Best Quality:', placeholder: 'e.g. Empathy, Good listener, Sincere...', type: 'text' }
+    ];
+
+    let currentRegStep = 0;
+
+    function startRegistration() {
+      document.getElementById('main-header').classList.add('hidden');
+      document.getElementById('bottom-bar').classList.add('hidden');
+      document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
+
+      document.getElementById('view-producer-interview').classList.remove('hidden');
+
+      const stream = document.getElementById('producer-stream');
+      stream.innerHTML = '';
+      addProducerBubble("Hello, Participant #8. Welcome to the LUMEN 30 Days in Shanghai project.");
+      setTimeout(() => {
+        addProducerBubble("Before we open the All-Group Lounge tonight, please confirm your profile card details. This will be used in our Icebreaker event.");
+        renderRegQuestion(0);
+      }, 800);
+    }
+
+    function renderRegQuestion(idx) {
+      currentRegStep = idx;
+      if (idx >= regQuestions.length) {
+        addProducerBubble("All details recorded! Your official Profile Card has been generated.");
+        setTimeout(() => {
+          addProducerBubble("Tonight begins with 'Anonymous Chat'. Everyone will use their assigned code names first.");
+          setTimeout(() => {
+            document.getElementById('producer-form-container').innerHTML = `
+              <button onclick="enterGroupChatFromInterview()" class="w-full bg-[#ff5a5f] hover:bg-[#e0484d] text-white font-bold py-2.5 rounded-xl text-xs transition shadow-sm">
+                Enter TDL : All Group (8 Members) →
+              </button>
+            `;
+          }, 800);
+        }, 800);
+        return;
+      }
+
+      const q = regQuestions[idx];
+      addProducerBubble(`[Question ${idx+1}/7] ${q.label}`);
+      document.getElementById('producer-form-container').innerHTML = `
+        <div class="flex gap-2">
+          <input type="${q.type}" id="reg-input-field" class="flex-1 bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-rose-400" placeholder="${q.placeholder}">
+          <button onclick="submitRegStep(${idx})" class="bg-[#ff5a5f] hover:bg-[#e0484d] px-4 py-2 rounded-xl text-xs font-bold text-white transition">Send</button>
+        </div>
+      `;
+      document.getElementById('reg-input-field').focus();
+    }
+
+    function submitRegStep(idx) {
+      const field = document.getElementById('reg-input-field');
+      const val = field.value.trim();
+      if (!val) return;
+
+      playerProfile[regQuestions[idx].key] = val;
+      addUserBubble(document.getElementById('producer-stream'), val);
+
+      // Update player profile name display
+      document.getElementById('people-player-name').textContent = `${playerProfile.name} (You)`;
+      document.getElementById('my-player-name').textContent = playerProfile.name;
+
+      setTimeout(() => {
+        renderRegQuestion(idx + 1);
+      }, 400);
+    }
+
+    function addProducerBubble(txt) {
+      const stream = document.getElementById('producer-stream');
+      const b = document.createElement('div');
+      b.className = "chat-bubble flex items-start space-x-2";
+      b.innerHTML = `
+        <div class="w-7 h-7 rounded-full bg-[#ff5a5f] flex items-center justify-center text-[10px] font-bold text-white shrink-0 mt-0.5">M</div>
+        <div class="bg-white border border-slate-200 text-slate-700 px-3 py-2 rounded-2xl rounded-tl-none text-xs max-w-[85%] leading-relaxed shadow-sm">
+          ${txt}
+        </div>
+      `;
+      stream.appendChild(b);
+      stream.scrollTop = stream.scrollHeight;
+    }
+
+    function addUserBubble(container, txt) {
+      const b = document.createElement('div');
+      b.className = "chat-bubble flex justify-end";
+      b.innerHTML = `
+        <div class="bg-[#ff5a5f] text-white px-3.5 py-2 rounded-2xl rounded-tr-none text-xs max-w-[80%] leading-relaxed shadow-sm">
+          ${txt}
+        </div>
+      `;
+      container.appendChild(b);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function enterGroupChatFromInterview() {
+      document.getElementById('view-producer-interview').classList.add('hidden');
+      enterGroupChat();
+    }
+
+    // -------------------------------------------------------------
+    // 5. GROUP CHAT ENGINE (NATURAL ENGLISH WITH CHINESE LORE)
     // -------------------------------------------------------------
     let dialogueQueue = [];
     let waitingForTap = false;
@@ -542,7 +698,7 @@
       document.getElementById('view-inner-chat').classList.remove('hidden');
 
       if (dialogueQueue.length === 0) {
-        buildChatDialogue();
+        buildGroupDialogue();
         processQueue();
       }
     }
@@ -550,6 +706,7 @@
     function leaveChatRoom() {
       document.getElementById('chat-inside-header').classList.add('hidden');
       document.getElementById('view-inner-chat').classList.add('hidden');
+      document.getElementById('view-producer-interview').classList.add('hidden');
       document.getElementById('view-heart-signal').classList.add('hidden');
 
       document.getElementById('main-header').classList.remove('hidden');
@@ -557,74 +714,172 @@
       switchTab('chats');
     }
 
-    function buildChatDialogue() {
+    // สร้างบทสนทนา Day 1 ภาษาอังกฤษเป็นธรรมชาติ มีลูกเล่นและตัวเลือก 4 สไตล์
+    function buildGroupDialogue() {
       dialogueQueue = [
         { type: 'sys', text: 'Now, feel free to begin the conversation.' },
-        { type: 'msg', sender: 'Choi Sanghyeon', avatar: boys.xiyao.avatar, text: 'Hey everyone' },
-        { type: 'msg', sender: 'Song Iseul', avatar: girls.iseul.avatar, sticker: hedgehogSticker, text: 'hiiii!!' },
-        { type: 'msg', sender: 'Kim Rian', avatar: girls.rian.avatar, text: 'Hello' },
+        { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'Hey everyone!! Finally the room opened 🎉' },
+        { type: 'msg', sender: 'Mochi', tone: girls.tangmei.bgTone, sticker: hedgehogSticker, text: 'hiiii!!' },
+        { type: 'msg', sender: 'Scarlet', tone: girls.yingyin.bgTone, text: 'Hello everyone.' },
+        { type: 'msg', sender: 'Black Cat', tone: boys.guyan.bgTone, text: '...so many notification dings already.' },
+        { type: 'msg', sender: 'Mr. Horizon', tone: boys.chenxu.bgTone, text: 'Good evening. It is quite late, hope nobody had a long flight today.' },
+        { type: 'msg', sender: 'Velvet Noir', tone: boys.wenjun.bgTone, text: 'Evening. Glad to meet you all on our first Shanghai night.' },
+        
+        // Choice 1: แนะนำตัวครั้งแรก (4 สไตล์ตรงตามหนุ่มทั้ง 4)
         { type: 'choice', choices: [
           {
-            style: 'ทักทายเรียบง่าย/น่ารัก',
-            text: 'Nice to meet you all',
-            pts: { chenxu: 3, xiyao: 3 },
+            style: 'Calm & Mature (Chen Xu)',
+            text: 'Hello Mr. Horizon. Flights were fine, but Shanghai night air is definitely chilly.',
+            pts: { chenxu: 5 },
             responses: [
-              { type: 'msg', sender: 'Kang Jaewook', avatar: boys.chenxu.avatar, text: 'Nice to meet you' },
-              { type: 'msg', sender: 'Yoo Eunsung', avatar: boys.wenjun.avatar, text: 'hey' },
-              { type: 'msg', sender: 'Song Iseul', avatar: girls.iseul.avatar, text: 'omg there\'s so many of us 😮' }
+              { type: 'msg', sender: 'Mr. Horizon', tone: boys.chenxu.bgTone, text: 'It really is. Make sure to keep warm indoors.' },
+              { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'Aww look who started talking first haha!' }
             ]
           },
           {
-            style: 'แซวบรรยากาศ',
-            text: 'คนเยอะเหมือนกันนะเนี่ย มีใครตื่นเต้นเหมือนฉันไหม 555',
-            pts: { wenjun: 4, guyan: 3 },
+            style: 'Cute & Playful (Xia Xiyao)',
+            text: 'Hii Golden Puppy! Love the username, feels like a cute energetic puppy already 🐶',
+            pts: { xiyao: 5 },
             responses: [
-              { type: 'msg', sender: 'Yoo Eunsung', avatar: boys.wenjun.avatar, text: 'ตอนแรกก็ตื่นเต้นครับ แต่พอเธอทักมาก็เริ่มผ่อนคลายแล้ว หืม?' },
-              { type: 'msg', sender: 'Kuro', avatar: boys.guyan.avatar, text: '...ก็แค่วันแรก' }
+              { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'Omg thank you! Finally someone noticed my vibe hehe ✨' },
+              { type: 'msg', sender: 'Black Cat', tone: boys.guyan.bgTone, text: 'Overreacting.' }
+            ]
+          },
+          {
+            style: 'Flirty & Charming (Wen Jun)',
+            text: 'Velvet Noir sounds mysterious. You sound like someone who frequents jazz bars.',
+            pts: { wenjun: 5 },
+            responses: [
+              { type: 'msg', sender: 'Velvet Noir', tone: boys.wenjun.bgTone, text: 'Sharp intuition, little one. Maybe we will cross paths at one.' },
+              { type: 'msg', sender: 'Scarlet', tone: girls.yingyin.bgTone, text: 'Already pulling charms on day one?' }
+            ]
+          },
+          {
+            style: 'Teasing Tsundere (Gu Yan)',
+            text: 'Black Cat complains about notifications but hasn’t muted the group yet lol',
+            pts: { guyan: 5 },
+            responses: [
+              { type: 'msg', sender: 'Black Cat', tone: boys.guyan.bgTone, text: '...too lazy to find the mute button.' },
+              { type: 'msg', sender: 'Mochi', tone: girls.tangmei.bgTone, text: 'hahaha caught red-handed!' }
             ]
           }
         ]},
-        // Dialogue from Reference Screenshot (Jaewook is probably flustered lol)
-        { type: 'msg', sender: 'Choi Sanghyeon', avatar: boys.xiyao.avatar, text: 'Which of the two is the fact then' },
-        { type: 'msg', sender: 'Choi Sanghyeon', avatar: boys.xiyao.avatar, text: 'Handsome or responsible?' },
+
+        // Dialogue continuity - Picka natural vibe
+        { type: 'msg', sender: 'Mochi', tone: girls.tangmei.bgTone, text: 'Which of the two is the fact then' },
+        { type: 'msg', sender: 'Mochi', tone: girls.tangmei.bgTone, text: 'Handsome or responsible?' },
         { type: 'choice', choices: [
           {
-            style: 'ตอบแซวตามภาพตัวอย่าง Picka',
-            text: 'Jaewook is probably flustered lol',
-            pts: { chenxu: 5 },
+            style: 'Playful Tease (Chen Xu Flustered)',
+            text: 'Mr. Horizon is probably flustered lol',
+            pts: { chenxu: 4 },
             responses: [
-              { type: 'msg', sender: 'Kim Rian', avatar: girls.rian.avatar, text: 'Hoping for the former ☺️' },
-              { type: 'msg', sender: 'Song Iseul', avatar: girls.iseul.avatar, text: 'it\'s the former right?!' },
-              { type: 'msg', sender: 'Yoo Eunsung', avatar: boys.wenjun.avatar, text: 'probably the former' },
-              { type: 'msg', sender: 'Kang Jaewook', avatar: boys.chenxu.avatar, text: 'Not quite...' },
-              { type: 'msg', sender: 'Choi Sanghyeon', avatar: boys.xiyao.avatar, text: 'Hahaha' }
+              { type: 'msg', sender: 'Luna', tone: girls.jiangyue.bgTone, text: 'Hoping for the former ☺️' },
+              { type: 'msg', sender: 'Scarlet', tone: girls.yingyin.bgTone, text: 'it\'s the former right?!' },
+              { type: 'msg', sender: 'Velvet Noir', tone: boys.wenjun.bgTone, text: 'Probably the former.' },
+              { type: 'msg', sender: 'Mr. Horizon', tone: boys.chenxu.bgTone, text: 'Not quite...' },
+              { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'Hahaha busted!' }
             ]
           },
           {
-            style: 'เลือกคนหล่อ (Handsome)',
-            text: 'แน่นอนว่าต้อง Handsome อยู่แล้วสิ 555',
+            style: 'Handsome First',
+            text: 'Handsome obviously! Who doesn’t like good visuals? lol',
             pts: { wenjun: 4, xiyao: 3 },
             responses: [
-              { type: 'msg', sender: 'Yoo Eunsung', avatar: boys.wenjun.avatar, text: 'ตอบถูกใจพี่จังเด็กน้อย' },
-              { type: 'msg', sender: 'Kang Jaewook', avatar: boys.chenxu.avatar, text: '...ฮะๆ' }
+              { type: 'msg', sender: 'Velvet Noir', tone: boys.wenjun.bgTone, text: 'Honesty is a charming trait.' },
+              { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'Yay I hope you find me handsome when cards reveal!' }
             ]
           },
           {
-            style: 'เลือกคนมีความรับผิดชอบ (Responsible)',
-            text: 'Responsible สำคัญกว่าเยอะค่ะในชีวิตจริง',
+            style: 'Responsible First',
+            text: 'Responsibility is much more attractive in real life.',
             pts: { chenxu: 5 },
             responses: [
-              { type: 'msg', sender: 'Kang Jaewook', avatar: boys.chenxu.avatar, text: 'เห็นด้วยครับ' },
-              { type: 'msg', sender: 'Kuro', avatar: boys.guyan.avatar, text: 'มีสาระดี' }
+              { type: 'msg', sender: 'Mr. Horizon', tone: boys.chenxu.bgTone, text: 'I agree with you.' },
+              { type: 'msg', sender: 'Black Cat', tone: boys.guyan.bgTone, text: 'Sensible answer.' }
             ]
           }
         ]},
-        { type: 'sys', text: '🔒 เวลา 23:55 น. สิ้นสุดการสนทนากลุ่มประจำ Day 1' },
-        { type: 'sys', text: 'มาสเตอร์จะเปิดระบบ Anonymous Heart Sending เพื่อให้คุณส่งสัญญาณใจลับครับ' },
-        { type: 'master_event', eventName: 'HEART' }
+
+        // Late Night chat flow before Icebreaker
+        { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'Anyone craving late night snacks? I want cheese milk tea so bad 🧋' },
+        { type: 'msg', sender: 'Mr. Horizon', tone: boys.chenxu.bgTone, text: 'Warm milk is better for this hour, Xiyao... wait, slip of the tongue.' },
+        { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'Noooo you leaked my real name hyung!! 😭' },
+        { type: 'master_event', eventName: 'TRIGGER_ICEBREAKER' }
       ];
     }
 
+    // กิจกรรม Master Icebreaker: ส่ง Profile Cards สไตล์โพลารอยด์
+    function triggerIcebreakerReveal() {
+      dialogueQueue = [
+        { type: 'sys', text: '📢 [LUMEN MASTER]: It is 21:00. Time for the Icebreaker: Profile Cards Reveal.' },
+        { type: 'sys', text: 'The producer will now drop the submitted Profile Cards one by one. Guess who is who!' },
+        
+        // Card 1: Chen Xu
+        { type: 'card', key: 'chenxu' },
+        { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'Architect 29 yo! Mr. Horizon for sure, mature aura all over it.' },
+        { type: 'msg', sender: 'Mr. Horizon', tone: boys.chenxu.bgTone, text: 'You guessed it quickly... I am Chen Xu (เฉินซวี่). Nice to formally meet you all.' },
+
+        // Card 2: Xia Xiyao
+        { type: 'card', key: 'xiyao' },
+        { type: 'msg', sender: 'Scarlet', tone: girls.yingyin.bgTone, text: 'Idol vocalist 22 yo, loves milk tea. Clearly Golden Puppy haha.' },
+        { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'Yes! My name is Xia Xiyao (เซี่ยซีเหยา)! Please take care of me jiejie!' },
+
+        // Card 3: Gu Yan
+        { type: 'card', key: 'guyan' },
+        { type: 'msg', sender: 'Mochi', tone: girls.tangmei.bgTone, text: 'Game programmer, black cat lover. Black Cat 100%!' },
+        { type: 'msg', sender: 'Black Cat', tone: boys.guyan.bgTone, text: '...Yeah. Gu Yan (กู้เยี่ยน).' },
+
+        // Card 4: Player's Card
+        { type: 'card', key: 'player' },
+        { type: 'msg', sender: 'Mr. Horizon', tone: boys.chenxu.bgTone, text: `This card feels very sincere... '${playerProfile.datingStyle}'. It leaves a deep impression.` },
+        { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: `Waaah such a warm aesthetic card! I really want to go on a date with her!` },
+        { type: 'msg', sender: 'Velvet Noir', tone: boys.wenjun.bgTone, text: `Little one... your card caught my attention right from the first line.` },
+
+        // Choice: Player reacts to the guys complimenting her card
+        { type: 'choice', choices: [
+          {
+            style: 'Warm & Thankful to Chen Xu',
+            text: 'Thank you Chen Xu. Architects really notice every detail, don\'t they?',
+            pts: { chenxu: 5 },
+            responses: [
+              { type: 'msg', sender: 'Mr. Horizon', tone: boys.chenxu.bgTone, text: 'Only for things that are worth paying attention to.' }
+            ]
+          },
+          {
+            style: 'Tease Xia Xiyao with Milk Tea',
+            text: 'Xiyao, get ready. If we get a chance, cheese milk tea is on me!',
+            pts: { xiyao: 5 },
+            responses: [
+              { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'Yay!! You promised jiejie, you cannot take it back!' }
+            ]
+          },
+          {
+            style: 'Flirt back with Wen Jun',
+            text: 'Don\'t stare at my card for too long Wen Jun, or I might get flustered.',
+            pts: { wenjun: 5 },
+            responses: [
+              { type: 'msg', sender: 'Velvet Noir', tone: boys.wenjun.bgTone, text: 'Getting flustered is rather cute though, isn\'t it?' }
+            ]
+          },
+          {
+            style: 'Nudge Tsundere Gu Yan',
+            text: 'Gu Yan, does your game have cats in it? I might want to play it.',
+            pts: { guyan: 5 },
+            responses: [
+              { type: 'msg', sender: 'Black Cat', tone: boys.guyan.bgTone, text: '...Yeah. I will send you the beta link later.' }
+            ]
+          }
+        ]},
+
+        // Midnight Closing
+        { type: 'sys', text: '🔒 23:55 PM: TDL All Group chatroom is now officially locked for Day 1.' },
+        { type: 'sys', text: 'The Master has sent you an invitation to the Anonymous Heart Sending.' },
+        { type: 'master_event', eventName: 'TRIGGER_HEART_SIGNAL' }
+      ];
+    }
+
+    // Process Message Queue
     function processQueue() {
       if (dialogueQueue.length === 0) return;
 
@@ -635,13 +890,19 @@
         scheduleNext();
       } else if (item.type === 'msg') {
         showTyping(item.sender, () => {
-          renderMsgBubble(item.sender, item.avatar, item.text, item.sticker);
+          renderMsgBubble(item.sender, item.tone, item.text, item.sticker);
           scheduleNext();
         });
       } else if (item.type === 'choice') {
         renderChoices(item.choices);
+      } else if (item.type === 'card') {
+        renderCardInChat(item.key);
+        scheduleNext();
       } else if (item.type === 'master_event') {
-        if (item.eventName === 'HEART') {
+        if (item.eventName === 'TRIGGER_ICEBREAKER') {
+          triggerIcebreakerReveal();
+          processQueue();
+        } else if (item.eventName === 'TRIGGER_HEART_SIGNAL') {
           setTimeout(openMidnightHeartSignal, 1200);
         }
       }
@@ -668,7 +929,7 @@
       const typingIndicator = document.getElementById('typing-indicator');
       const typingName = document.getElementById('typing-name');
       typingIndicator.classList.remove('hidden');
-      typingName.textContent = `${sender} กำลังพิมพ์...`;
+      typingName.textContent = `${sender} is typing...`;
       setTimeout(() => {
         typingIndicator.classList.add('hidden');
         cb();
@@ -680,7 +941,7 @@
       const b = document.createElement('div');
       b.className = "flex justify-center my-2 chat-bubble";
       b.innerHTML = `
-        <div class="bg-neutral-100 text-neutral-500 border border-neutral-200/80 px-3.5 py-1.5 rounded-full text-[11px] max-w-[90%] text-center">
+        <div class="bg-slate-100 text-slate-500 border border-slate-200 px-3.5 py-1.5 rounded-full text-[11px] max-w-[90%] text-center">
           ${txt}
         </div>
       `;
@@ -688,17 +949,19 @@
       stream.scrollTop = stream.scrollHeight;
     }
 
-    function renderMsgBubble(sender, avatar, text, stickerHtml = null) {
+    function renderMsgBubble(sender, tone, text, stickerHtml = null) {
       const stream = document.getElementById('group-stream');
       const b = document.createElement('div');
       b.className = "chat-bubble flex items-start space-x-2.5";
       b.innerHTML = `
-        <img src="${avatar}" class="w-9 h-9 rounded-full object-cover shrink-0 mt-0.5 border border-neutral-200">
+        <div class="w-9 h-9 rounded-full ${tone} flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 border border-slate-200">
+          ${sender[0]}
+        </div>
         <div class="space-y-0.5 max-w-[80%]">
-          <span class="text-[11px] font-semibold text-neutral-600 ml-1">${sender}</span>
+          <span class="text-[11px] font-semibold text-slate-600 ml-1">${sender}</span>
           ${stickerHtml ? stickerHtml : ''}
           ${text ? `
-            <div class="bg-neutral-100 text-neutral-800 px-3.5 py-2 rounded-2xl rounded-tl-none text-xs leading-relaxed shadow-sm">
+            <div class="bg-slate-100 text-slate-800 px-3.5 py-2 rounded-2xl rounded-tl-none text-xs leading-relaxed shadow-sm">
               ${text}
             </div>
           ` : ''}
@@ -709,19 +972,6 @@
       document.getElementById('group-last-msg').textContent = `${sender}: ${text || 'Sticker'}`;
     }
 
-    function addUserMsg(txt) {
-      const stream = document.getElementById('group-stream');
-      const b = document.createElement('div');
-      b.className = "chat-bubble flex justify-end";
-      b.innerHTML = `
-        <div class="bg-[#ff5a5f] text-white px-3.5 py-2 rounded-2xl rounded-tr-none text-xs max-w-[80%] leading-relaxed shadow-sm">
-          ${txt}
-        </div>
-      `;
-      stream.appendChild(b);
-      stream.scrollTop = stream.scrollHeight;
-    }
-
     function renderChoices(choices) {
       const box = document.getElementById('group-choices-box');
       box.innerHTML = '';
@@ -729,14 +979,14 @@
 
       choices.forEach(c => {
         const btn = document.createElement('button');
-        btn.className = "w-full text-left bg-white hover:bg-rose-50 border border-neutral-300 hover:border-rose-300 p-2.5 rounded-xl transition flex flex-col gap-0.5 active:scale-[0.99] shadow-sm";
+        btn.className = "w-full text-left bg-white hover:bg-rose-50 border border-slate-300 hover:border-rose-300 p-2.5 rounded-xl transition flex flex-col gap-0.5 active:scale-[0.99] shadow-sm";
         btn.innerHTML = `
           <span class="text-[10px] font-bold text-[#ff5a5f] uppercase tracking-wider">${c.style}</span>
-          <span class="text-xs text-neutral-800 font-medium leading-snug">${c.text}</span>
+          <span class="text-xs text-slate-800 font-medium leading-snug">${c.text}</span>
         `;
         btn.onclick = () => {
           box.classList.add('hidden');
-          addUserMsg(c.text);
+          addUserBubble(document.getElementById('group-stream'), c.text);
           if (c.pts) {
             for (const [k, v] of Object.entries(c.pts)) {
               if (boys[k]) boys[k].score += v;
@@ -753,9 +1003,77 @@
     }
 
     // -------------------------------------------------------------
-    // HEART SIGNAL VIEW
+    // 6. PROFILE CARDS (AESTHETIC POLAROID MATCHING REFERENCE)
     // -------------------------------------------------------------
-    let selectedGuy = null;
+    function createCardHTML(cardData, isPlayer = false) {
+      const nameAge = isPlayer ? `${playerProfile.name}, ${playerProfile.age}` : `${cardData.realName}, ${cardData.age}`;
+      const occ = isPlayer ? playerProfile.occupation : cardData.occupation;
+      const interests = isPlayer ? playerProfile.interests : cardData.interests;
+      const type = isPlayer ? playerProfile.idealType : cardData.idealType;
+      const dating = isPlayer ? playerProfile.datingStyle : cardData.datingStyle;
+      const best = isPlayer ? playerProfile.bestQuality : cardData.bestQuality;
+      const photoDesc = isPlayer ? 'Aesthetic Candid Photo of You in Shanghai' : cardData.candidDesc;
+
+      return `
+        <div class="bg-[#fafafa] text-slate-800 rounded-lg p-4 shadow border border-slate-300 max-w-sm mx-auto my-2 font-typewriter">
+          <div class="flex justify-between items-center text-[10px] text-slate-400 border-b border-slate-200 pb-1 mb-2.5">
+            <span>Day 1. Profile : ${nameAge.split(',')[0]}</span>
+            <span class="tracking-wider">30 DAYS TO LOVE</span>
+          </div>
+
+          <!-- Candid aesthetic photo representation without full front face -->
+          <div class="bg-slate-200 rounded aspect-[4/3] w-full overflow-hidden border border-slate-300 mb-3 p-3 flex flex-col justify-end relative shadow-inner">
+            <div class="bg-black/40 backdrop-blur-xs p-2 rounded text-[10px] text-white/95 leading-relaxed font-sans">
+              📷 <em>${photoDesc}</em>
+            </div>
+          </div>
+
+          <div class="space-y-1.5 text-xs text-slate-700">
+            <div class="border-b border-slate-200 pb-1 flex justify-between">
+              <span class="font-bold underline">Name/Age:</span>
+              <span class="font-semibold text-slate-900">${nameAge}</span>
+            </div>
+            <div class="border-b border-slate-200 pb-1 flex justify-between">
+              <span class="font-bold underline">Occupation:</span>
+              <span>${occ}</span>
+            </div>
+            <div class="border-b border-slate-200 pb-1">
+              <span class="font-bold underline block mb-0.5">Interests:</span>
+              <span class="inline-block bg-[#b0c4de]/40 text-slate-800 px-2 py-0.5 rounded text-[11px]">${interests}</span>
+            </div>
+            <div class="border-b border-slate-200 pb-1">
+              <span class="font-bold underline block mb-0.5">Type:</span>
+              <div class="bg-[#b0c4de]/40 text-slate-800 p-1.5 rounded text-[11px] leading-snug">${type}</div>
+            </div>
+            <div class="border-b border-slate-200 pb-1">
+              <span class="font-bold underline block mb-0.5">Dating Style:</span>
+              <div class="bg-[#b0c4de]/40 text-slate-800 p-1.5 rounded text-[11px] leading-snug">${dating}</div>
+            </div>
+            <div>
+              <span class="font-bold underline block mb-0.5">Best Quality:</span>
+              <div class="bg-[#b0c4de]/40 text-slate-800 px-2 py-0.5 rounded text-[11px]">${best}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCardInChat(key) {
+      const b = document.createElement('div');
+      b.className = "chat-bubble my-2";
+      if (key === 'player') {
+        b.innerHTML = createCardHTML(null, true);
+      } else {
+        b.innerHTML = createCardHTML(boys[key], false);
+      }
+      document.getElementById('group-stream').appendChild(b);
+      document.getElementById('group-stream').scrollTop = document.getElementById('group-stream').scrollHeight;
+    }
+
+    // -------------------------------------------------------------
+    // 7. MIDNIGHT HEART SIGNAL
+    // -------------------------------------------------------------
+    let selectedHeartBoy = null;
 
     function openMidnightHeartSignal() {
       document.getElementById('main-header').classList.add('hidden');
@@ -770,24 +1088,26 @@
 
       Object.entries(boys).forEach(([k, guy]) => {
         const item = document.createElement('div');
-        item.className = "p-3 rounded-2xl bg-white border border-neutral-200 hover:border-rose-400 flex items-center justify-between cursor-pointer transition shadow-sm active:scale-[0.99]";
-        item.onclick = () => selectHeartGuy(k, item);
+        item.className = "p-3 rounded-2xl bg-white border border-slate-200 hover:border-rose-400 flex items-center justify-between cursor-pointer transition shadow-sm active:scale-[0.99]";
+        item.onclick = () => selectHeartBoy(k, item);
         item.innerHTML = `
           <div class="flex items-center space-x-3">
-            <img src="${guy.avatar}" class="w-10 h-10 rounded-full object-cover border border-neutral-200">
+            <div class="w-10 h-10 rounded-full ${guy.bgTone} flex items-center justify-center font-bold text-xs border border-slate-200">
+              ${guy.realName[0]}
+            </div>
             <div>
-              <span class="text-xs font-bold text-neutral-800">${guy.name}</span>
-              <p class="text-[10px] text-neutral-400">${guy.job}</p>
+              <span class="text-xs font-bold text-slate-800">${guy.realName}</span>
+              <p class="text-[10px] text-slate-400">${guy.occupation}</p>
             </div>
           </div>
-          <span class="text-xs text-[#ff5a5f] font-bold">เลือก ❤️</span>
+          <span class="text-xs text-[#ff5a5f] font-bold">Select ❤️</span>
         `;
         targetList.appendChild(item);
       });
     }
 
-    function selectHeartGuy(key, el) {
-      selectedGuy = key;
+    function selectHeartBoy(key, el) {
+      selectedHeartBoy = key;
       document.querySelectorAll('#heart-target-list > div').forEach(d => {
         d.classList.remove('border-rose-400', 'bg-rose-50/50');
       });
@@ -799,11 +1119,11 @@
     function sendMidnightHeart() {
       const msg = document.getElementById('heart-custom-msg').value.trim();
       if (!msg) {
-        alert('กรุณาพิมพ์ข้อความสั้นๆ ก่อนส่งนะคะ');
+        alert('Please write a short message before sending.');
         return;
       }
 
-      boys[selectedGuy].score += 8;
+      boys[selectedHeartBoy].score += 8;
       document.getElementById('heart-message-area').classList.add('hidden');
       document.getElementById('heart-target-list').classList.add('hidden');
 
@@ -811,49 +1131,26 @@
       const replyBubble = document.getElementById('heart-reply-bubble');
       resultBox.classList.remove('hidden');
 
-      const guy = boys[selectedGuy];
+      const guy = boys[selectedHeartBoy];
       let reaction = '';
-      if (selectedGuy === 'chenxu') {
-        reaction = `Kang Jaewook (เฉินซวี่): "อืม ได้รับแล้วนะ... ขอบคุณที่ทำให้คืนนี้ไม่เงียบเหงา พักผ่อนเถอะ ไว้คุยกันพรุ่งนี้ครับ"`;
-      } else if (selectedGuy === 'xiyao') {
-        reaction = `Choi Sanghyeon (ซีเหยา): "พี่สาวส่งมาหาผมจริงๆ ด้วยใช่ไหม!? ดีใจจนนอนไม่หลับแล้วเนี่ย พรุ่งนี้เช้าผมจะรีบมารอนะครับ!"`;
-      } else if (selectedGuy === 'wenjun') {
-        reaction = `Yoo Eunsung (เวินจวิ้น): "หืม... ส่งข้อความแบบนี้มา ท้าทายพี่อยู่ใช่ไหมครับเด็กน้อย? คืนนี้ฝันดีนะ"`;
-      } else if (selectedGuy === 'guyan') {
-        reaction = `Kuro (กู้เยี่ยน): "...ใครบอกว่าซึนกัน แค่เตือนเฉยๆ แต่ก็... ฝันดีนะ ยัยตัวยุ่ง"`;
+      if (selectedHeartBoy === 'chenxu') {
+        reaction = `Chen Xu (เฉินซวี่): "Mmh, I received it. Thank you for making tonight less lonely. Get some rest, let's talk tomorrow."`;
+      } else if (selectedHeartBoy === 'xiyao') {
+        reaction = `Xia Xiyao (เซี่ยซีเหยา): "Did jiejie really send this to me!? I'm too excited to sleep now! I'll be waiting for you in the morning!"`;
+      } else if (selectedHeartBoy === 'wenjun') {
+        reaction = `Wen Jun (เวินจวิ้น): "Mmh... sending this kind of message, are you challenging me, little one? Sweet dreams tonight."`;
+      } else if (selectedHeartBoy === 'guyan') {
+        reaction = `Gu Yan (กู้เยี่ยน): "...Who said I'm tsundere? I just happened to be awake. But yeah... good night, trouble."`;
       }
 
       replyBubble.innerHTML = `
-        <span class="text-[10px] text-neutral-400 block mb-1">กล่องข้อความลับของ ${guy.name}:</span>
+        <span class="text-[10px] text-slate-400 block mb-1">Delivered to ${guy.realName}'s Secret Inbox:</span>
         "${msg}"
-        <div class="mt-2 pt-2 border-t border-neutral-200 text-rose-600 font-semibold">
+        <div class="mt-2 pt-2 border-t border-slate-200 text-[#ff5a5f] font-semibold">
           ${reaction}
         </div>
       `;
-      document.getElementById('heart-last-msg').textContent = `Sent to ${guy.name}`;
-    }
-
-    // -------------------------------------------------------------
-    // PROFILE MODAL (MY TAB)
-    // -------------------------------------------------------------
-    function openRegistrationModal() {
-      document.getElementById('modal-reg').classList.remove('hidden');
-    }
-    function closeRegModal() {
-      document.getElementById('modal-reg').classList.add('hidden');
-    }
-    function saveProfile() {
-      const name = document.getElementById('reg-name').value.trim() || 'Lee Ahyeon';
-      const occ = document.getElementById('reg-occ').value.trim() || 'Visual Designer';
-      const ideal = document.getElementById('reg-ideal').value.trim();
-
-      player.name = name;
-      player.occupation = occ;
-      player.ideal = ideal;
-
-      document.getElementById('people-player-name').textContent = `${name} (คุณ)`;
-      document.getElementById('my-player-name').textContent = name;
-      closeRegModal();
+      document.getElementById('heart-last-msg').textContent = `Delivered to ${guy.realName}`;
     }
   </script>
 </body>
