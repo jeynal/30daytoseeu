@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUMEN: 30 Days in Shanghai</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+    .chat-bubble { animation: popIn 0.25s ease-out forwards; }
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-stone-950 text-neutral-100 font-sans flex justify-center h-screen overflow-hidden">
+
+  <!-- Mobile Screen Shell -->
+  <div class="w-full max-w-md h-full flex flex-col bg-neutral-900 border-x border-neutral-800 shadow-2xl relative">
+    
+    <!-- Top Bar -->
+    <header class="bg-neutral-900/95 backdrop-blur border-b border-neutral-800 p-4 flex items-center justify-between z-10">
+      <div>
+        <div class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
+          <h1 class="font-bold text-sm tracking-wide text-neutral-100">LUMEN PROJECT</h1>
+        </div>
+        <p class="text-[11px] text-neutral-400" id="current-day-label">Day 1: จุดเริ่มต้นในเซี่ยงไฮ้</p>
+      </div>
+      <button onclick="toggleScoreModal()" class="text-xs bg-rose-950/40 text-rose-300 border border-rose-800/60 px-3 py-1.5 rounded-full hover:bg-rose-900/50 transition">
+        ❤️ หัวใจสะสม
+      </button>
+    </header>
+
+    <!-- Chat Stream -->
+    <main id="chat-box" class="flex-1 overflow-y-auto p-4 space-y-3.5">
+      <!-- Chat bubbles rendered here -->
+    </main>
+
+    <!-- Typing Indicator -->
+    <div id="typing-bar" class="hidden px-5 py-2 text-xs text-neutral-400 italic flex items-center gap-1.5">
+      <span class="w-1.5 h-1.5 bg-rose-400 rounded-full animate-bounce"></span>
+      <span class="w-1.5 h-1.5 bg-rose-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+      <span class="w-1.5 h-1.5 bg-rose-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+      <span id="typing-sender" class="ml-1 text-[11px]">กำลังพิมพ์...</span>
+    </div>
+
+    <!-- Choices Panel -->
+    <footer id="choice-container" class="bg-neutral-900 border-t border-neutral-800 p-3 flex flex-col gap-2 z-10 max-h-[45vh] overflow-y-auto">
+      <!-- 4 Choices Buttons -->
+    </footer>
+
+    <!-- Score Modal -->
+    <div id="score-modal" class="hidden absolute inset-0 bg-black/80 backdrop-blur-sm z-30 flex items-center justify-center p-6">
+      <div class="bg-neutral-850 border border-neutral-700 w-full max-w-sm rounded-2xl p-5 space-y-4 shadow-2xl bg-neutral-900">
+        <h2 class="text-base font-bold text-rose-400 border-b border-neutral-800 pb-2">คะแนนความประทับใจ (Affection)</h2>
+        <div class="space-y-2.5 text-xs" id="score-body"></div>
+        <button onclick="toggleScoreModal()" class="w-full bg-neutral-800 text-neutral-300 py-2 rounded-xl text-xs hover:bg-neutral-700 transition">
+          ปิด
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // --- ฐานข้อมูลตัวละคร ---
+    const cast = {
+      yichen: { name: 'เซิ่นอี้เฉิน', role: 'บอสหนุ่ม', color: 'text-sky-400' },
+      zixi:   { name: 'หลินจื่อซี', role: 'ดีไซเนอร์หน้าหวาน', color: 'text-pink-400' },
+      luwei:  { name: 'ลู่เหวย',  role: 'นักแข่งเท่สตรีท', color: 'text-amber-400' },
+      baiyu:  { name: 'เจียงไป๋อวี่', role: 'คุณหมออบอุ่น', color: 'text-emerald-400' },
+      yingyin:{ name: 'ซ่งอิงอิน', role: 'สาวมั่นคู่แข่ง', color: 'text-purple-400' },
+      sys:    { name: 'LUMEN BOT', role: 'System', color: 'text-neutral-400' },
+      me:     { name: 'ฉัน', role: 'Player', color: 'text-rose-400' }
+    };
+
+    // --- ตัวแปรเก็บคะแนนความสัมพันธ์ ---
+    const scores = { yichen: 0, zixi: 0, luwei: 0, baiyu: 0 };
+
+    // --- ผังเนื้อเรื่องและบทสนทนา ---
+    const scriptTree = {
+      'DAY1_START': {
+        msgs: [
+          { who: 'sys', text: '🔔 เริ่มต้นโปรเจกต์ LUMEN: ยินดีต้อนรับผู้ร่วมทดลองเดตทั้ง 8 สู่เซี่ยงไฮ้' },
+          { who: 'zixi', text: 'ในที่สุดห้องแชตก็เปิดแล้ว! ตื่นเต้นจังเลยครับ มีใครรออยู่บ้างไหม ✨' },
+          { who: 'luwei', text: 'เพิ่งซ้อมเสร็จเนี่ย จะเริ่มก็รีบเริ่มเหอะ ง่วงชะมัด' },
+          { who: 'yichen', text: 'สวัสดีครับ เพื่อประสิทธิภาพในการคุย แนะนำตัวสั้นๆ แล้วรีบพักผ่อนจะดีกว่า' },
+          { who: 'baiyu', text: 'ยินดีที่ได้รู้จักทุกคนนะครับ ดึกแล้วอย่าลืมดื่มน้ำอุ่นกันด้วยนะ' }
+        ],
+        choices: [
+          {
+            style: 'สไตล์หวานละมุน',
+            text: 'สวัสดีทุกคนค่ะ! แค่เห็นข้อความก็รู้สึกอบอุ่นแล้ว ฝากเนื้อฝากตัวด้วยนะคะ',
+            pts: { zixi: 4, baiyu: 3 },
+            next: 'BRANCH_SWEET'
+          },
+          {
+            style: 'สไตล์บอสนิ่ง/จริงจัง',
+            text: 'เห็นด้วยกับคุณอี้เฉินค่ะ ดึกมากแล้ว คุยกันกระชับๆ จะได้ไม่รบกวนเวลาพักผ่อน',
+            pts: { yichen: 5 },
+            next: 'BRANCH_COOL'
+          },
+          {
+            style: 'สไตล์กวนประสาท/แซว',
+            text: 'ลู่เหวย ดูท่าทางจะง่วงจริงนะ ระวังมือถือหล่นฟาดจมูกล่ะ 555',
+            pts: { luwei: 5 },
+            next: 'BRANCH_TEASE'
+          },
+          {
+            style: 'สไตล์สงวนท่าที/ลึกลับ',
+            text: 'สวัสดีค่ะ ขอแอบดูเงียบๆ ก่อนแล้วกันนะคะ ยังไม่ค่อยคุ้นเท่าไหร่',
+            pts: {},
+            next: 'BRANCH_QUIET'
+          }
+        ]
+      },
+
+      // กิ่ง 1: หวานละมุน
+      'BRANCH_SWEET': {
+        msgs: [
+          { who: 'zixi', text: 'น่ารักจังเลย~ แค่อ่านข้อความก็รู้แล้วว่าต้องเป็นคนใจดีแน่ๆ' },
+          { who: 'baiyu', text: 'ยินดีต้อนรับครับ ถ้ามีเรื่องอะไรไม่สบายใจในแชตนี้ ปรึกษาผมได้ตลอดนะ' },
+          { who: 'yingyin', text: 'เปิดตัวมาก็แจกความสดใสเลยนะจ๊ะ ระวังจะเหนื่อยก่อนครบ 30 วันล่ะ' }
+        ],
+        choices: [
+          {
+            style: 'อ้อนจื่อซี',
+            text: 'ขอบคุณนะจื่อซี พรุ่งนี้ถ้าตื่นสายช่วยปลุกในแชตทีนะ',
+            pts: { zixi: 5 },
+            next: 'DAY1_END'
+          },
+          {
+            style: 'ให้เกียรติคุณหมอ',
+            text: 'ขอบคุณคุณหมอไป๋อวี่มากนะคะ รู้สึกอุ่นใจขึ้นเยอะเลย',
+            pts: { baiyu: 5 },
+            next: 'DAY1_END'
+          },
+          {
+            style: 'ตอบกลับอิงอินแบบมีชั้นเชิง',
+            text: 'ขอบคุณที่เป็นห่วงค่ะคุณอิงอิน แต่ฉันแรงเหลือเฟือแน่นอนค่ะ',
+            pts: { yichen: 2, luwei: 2 },
+            next: 'DAY1_END'
+          },
+          {
+            style: 'ตัดบทสุภาพ',
+            text: 'ทุกคนน่ารักจัง คืนนี้ราตรีสวัสดิ์ล่วงหน้านะคะ',
+            pts: {},
+            next: 'DAY1_END'
+          }
+        ]
+      },
+
+      // กิ่ง 2: นิ่งจริงจัง
+      'BRANCH_COOL': {
+        msgs: [
+          { who: 'yichen', text: 'พูดจามีเหตุผลดีครับ ผมชอบคนที่ตรงประเด็นแบบนี้' },
+          { who: 'luwei', text: 'โห นี่มาเข้าค่ายทหารกันหรือไงเนี่ย ขึงขังกันจังสองคนนี้' },
+          { who: 'zixi', text: 'นั่นสิครับ คลายเครียดกันหน่อยน้าทุกคนน' }
+        ],
+        choices: [
+          {
+            style: 'เข้าข้างอี้เฉิน',
+            text: 'เป้าหมายชัดเจนย่อมดีกว่าอยู่แล้วค่ะ คุณอี้เฉินคิดเหมือนฉันเลย',
+            pts: { yichen: 5 },
+            next: 'DAY1_END'
+          },
+          {
+            style: 'หยอดลู่เหวย',
+            text: 'ค่ายทหารอะไรกัน แค่ไม่อยากให้นายแอบไปหลับต่างหากล่ะ',
+            pts: { luwei: 4 },
+            next: 'DAY1_END'
+          },
+          {
+            style: 'อ่อนลงให้จื่อซี',
+            text: 'โอเคๆ คืนนี้ยอมผ่อนคลายให้จื่อซีวันนึงก็ได้นะ',
+            pts: { zixi: 4 },
+            next: 'DAY1_END'
+          },
+          {
+            style: 'ตัดบทนอน',
+            text: 'งั้นคืนนี้รีบนอนกันเถอะค่ะ พรุ่งนี้มีกิจกรรมรออยู่',
+            pts: { baiyu: 2 },
+            next: 'DAY1_END'
+          }
+        ]
+      },
+
+      // กิ่ง 3: กวนแซว
+      'BRANCH_TEASE': {
+        msgs: [
+          { who: 'luwei', text: 'เห้ย! ปากเก่งใช้ได้นี่ มือนักแข่งอาชีพนะเว้ย ไม่หล่นง่ายๆ หรอก' },
+          { who: 'zixi', text: '5555 ลู่เหวยโดนเปิดก่อนแต่คืนแรกเลย' },
+          { who: 'yichen', text: '...ดูท่าคืนนี้คงไม่ได้นอนกันง่ายๆ สินะครับ' }
+        ],
+        choices: [
+          {
+            style: 'ท้าทายลู่เหวย',
+            text: 'โม้รึเปล่า ไว้มีโอกาสมาประลองกันสักตาไหมล่ะ?',
+            pts: { luwei: 5 },
+            next: 'DAY1_END'
+          },
+          {
+            style: 'ขอโทษบอสแบบน่ารัก',
+            text: 'คุณอี้เฉินอย่าเพิ่งถอนหายใจสิคะ แซวกันนิดเดียวเอง',
+            pts: { yichen: 4 },
+            next: 'DAY1_END'
+          },
+          {
+            style: 'แท็กทีมจื่อซี',
+            text: 'จื่อซีช่วยฉันจับตาดูคนง่วงทีนะ คืนนี้ต้องมีคนหลับคามือถือแน่',
+            pts: { zixi: 4 },
+            next: 'DAY1_END'
+          },
+          {
+            style: 'ถามหาคุณหมอ',
+            text: 'คุณหมอไป๋อวี่คะ มียาแก้ง่วงแจกลู่เหวยไหมคะ?',
+            pts: { baiyu: 4 },
+            next: 'DAY1_END'
+          }
+        ]
+      },
+
+      // กิ่ง 4: รักษาท่าที
+      'BRANCH_QUIET': {
+        msgs: [
+          { who: 'baiyu', text: 'ไม่เป็นไรเลยครับ ค่อยๆ ปรับตัวนะ ไม่ต้องกดดันตัวเอง' },
+          { who: 'zixi', text: 'ถ้าเหงาหรืออยากเม้าท์อะไร ทักหลังไมค์หาผมได้ตลอดเลยนะ!' },
+          { who: 'yichen', text: 'การนิ่งเพื่อวิเคราะห์สถานการณ์ ถือเป็นเรื่องฉลาดครับ' }
+        ],
+        choices: [
+          {
+            style: 'ขอบคุณคุณหมอ',
+            text: 'ขอบคุณนะคะคุณไป๋อวี่ คุณใจดีจังเลย',
+            pts: { baiyu: 5 },
+            next: 'DAY1_END'
+          },
+          {
+            style: 'หยอกจื่อซี',
+            text: 'ทักหลังไมค์เลยเหรอคะ แอบเนียนจีบตั้งแต่ Day 1 เลยรึเปล่าเนี่ย',
+            pts: { zixi: 5 },
+            next: 'DAY1_END'
+          },
+          {
+            style: 'ตอบรับอี้เฉิน',
+            text: 'ขอบคุณค่ะคุณอี้เฉิน หวังว่าจะได้คำแนะนำดีๆ จากคุณนะคะ',
+            pts: { yichen: 4 },
+            next: 'DAY1_END'
+          },
+          {
+            style: 'นิ่งต่อไป',
+            text: 'ค่ะ ฝันดีนะคะทุกคน',
+            pts: {},
+            next: 'DAY1_END'
+          }
+        ]
+      },
+
+      // บทส่งท้าย Day 1
+      'DAY1_END': {
+        msgs: [
+          { who: 'sys', text: '🔒 เวลา 23:59 น. หมดเวลาสนทนากลุ่มของ Day 1' },
+          { who: 'sys', text: '💌 ระบบ Secret Heart: ส่งสติกเกอร์หัวใจนิรนามให้คนที่คุณสะดุดตาที่สุดในคืนนี้' }
+        ],
+        choices: [
+          {
+            style: 'ส่งให้อี้เฉิน',
+            text: '[ส่งหัวใจให้ เซิ่นอี้เฉิน] "ราตรีสวัสดิ์ค่ะ พรุ่งนี้หวังว่าจะได้คุยกันมากขึ้น"',
+            pts: { yichen: 5 },
+            next: 'FINISHED_DEMO'
+          },
+          {
+            style: 'ส่งให้จื่อซี',
+            text: '[ส่งหัวใจให้ หลินจื่อซี] "รอยยิ้มของคุณทำให้คืนนี้น่ารักขึ้นเยอะเลย ฝันดีนะ"',
+            pts: { zixi: 5 },
+            next: 'FINISHED_DEMO'
+          },
+          {
+            style: 'ส่งให้ลู่เหวย',
+            text: '[ส่งหัวใจให้ ลู่เหวย] "อย่าแอบซ้อมจนดึกล่ะ รีบนอนได้แล้ว"',
+            pts: { luwei: 5 },
+            next: 'FINISHED_DEMO'
+          },
+          {
+            style: 'ส่งให้ไป๋อวี่',
+            text: '[ส่งหัวใจให้ เจียงไป๋อวี่] "ขอบคุณสำหรับความอบอุ่นในคืนนี้นะคะ คุณหมอ"',
+            pts: { baiyu: 5 },
+            next: 'FINISHED_DEMO'
+          }
+        ]
+      },
+
+      'FINISHED_DEMO': {
+        msgs: [
+          { who: 'sys', text: '💖 หัวใจของคุณถูกส่งไปเรียบร้อยแล้ว!' },
+          { who: 'sys', text: '🎉 สิ้นสุดบททดสอบ Day 1 (กดปุ่ม "หัวใจสะสม" ด้านบน เพื่อดูคะแนนที่คุณทำได้)' }
+        ],
+        choices: []
+      }
+    };
+
+    // --- ส่วนควบคุมการแสดงผล ---
+    const chatBox = document.getElementById('chat-box');
+    const choiceContainer = document.getElementById('choice-container');
+    const typingBar = document.getElementById('typing-bar');
+    const typingSender = document.getElementById('typing-sender');
+
+    async function runScript(nodeKey) {
+      choiceContainer.innerHTML = '';
+      const node = scriptTree[nodeKey];
+      if (!node) return;
+
+      for (const msg of node.msgs) {
+        await simulateTyping(msg.who);
+        addMessageBubble(msg.who, msg.text);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+
+      renderChoiceButtons(node.choices);
+    }
+
+    function simulateTyping(whoKey) {
+      return new Promise(res => {
+        if (whoKey === 'sys') { setTimeout(res, 250); return; }
+        typingBar.classList.remove('hidden');
+        typingSender.textContent = `${cast[whoKey].name} กำลังพิมพ์...`;
+        setTimeout(() => {
+          typingBar.classList.add('hidden');
+          res();
+        }, 550);
+      });
+    }
+
+    function addMessageBubble(whoKey, text) {
+      const bubble = document.createElement('div');
+      bubble.className = 'chat-bubble flex flex-col space-y-1';
+
+      if (whoKey === 'me') {
+        bubble.className += ' items-end';
+        bubble.innerHTML = `
+          <span class="text-[10px] text-neutral-400 mr-1">คุณ</span>
+          <div class="bg-rose-600 text-white px-3.5 py-2.5 rounded-2xl rounded-tr-none text-xs max-w-[85%] leading-relaxed shadow">
+            ${text}
+          </div>
+        `;
+      } else if (whoKey === 'sys') {
+        bubble.className += ' items-center my-1.5';
+        bubble.innerHTML = `
+          <div class="bg-neutral-800 text-neutral-400 text-[11px] px-3 py-1 rounded-full border border-neutral-700/60 max-w-[90%] text-center">
+            ${text}
+          </div>
+        `;
+      } else {
+        bubble.className += ' items-start';
+        bubble.innerHTML = `
+          <div class="flex items-center space-x-1.5 ml-1">
+            <span class="text-xs font-semibold ${cast[whoKey].color}">${cast[whoKey].name}</span>
+            <span class="text-[10px] text-neutral-400">· ${cast[whoKey].role}</span>
+          </div>
+          <div class="bg-neutral-800 border border-neutral-700/70 text-neutral-200 px-3.5 py-2.5 rounded-2xl rounded-tl-none text-xs max-w-[85%] leading-relaxed shadow">
+            ${text}
+          </div>
+        `;
+      }
+      chatBox.appendChild(bubble);
+    }
+
+    function renderChoiceButtons(choices) {
+      choiceContainer.innerHTML = '';
+      if (!choices || choices.length === 0) return;
+
+      choices.forEach((c) => {
+        const btn = document.createElement('button');
+        btn.className = 'w-full text-left bg-neutral-850 hover:bg-neutral-800 border border-neutral-700/80 hover:border-rose-400/60 p-2.5 rounded-xl transition duration-150 active:scale-[0.99] flex flex-col gap-0.5 bg-neutral-800/80';
+        btn.innerHTML = `
+          <span class="text-[10px] font-semibold text-rose-400 uppercase tracking-wider">${c.style}</span>
+          <span class="text-xs text-neutral-200 leading-snug">${c.text}</span>
+        `;
+        btn.onclick = () => {
+          addMessageBubble('me', c.text);
+          chatBox.scrollTop = chatBox.scrollHeight;
+          if (c.pts) {
+            for (const [guy, val] of Object.entries(c.pts)) {
+              if (scores[guy] !== undefined) scores[guy] += val;
+            }
+          }
+          runScript(c.next);
+        };
+        choiceContainer.appendChild(btn);
+      });
+    }
+
+    function toggleScoreModal() {
+      const modal = document.getElementById('score-modal');
+      modal.classList.toggle('hidden');
+      if (!modal.classList.contains('hidden')) {
+        document.getElementById('score-body').innerHTML = `
+          <div class="flex justify-between items-center p-2 rounded-lg bg-neutral-800/60 border border-neutral-700/60">
+            <span class="text-sky-400 font-medium">เซิ่นอี้เฉิน (CEO)</span>
+            <span class="font-bold text-rose-400">${scores.yichen} แต้ม</span>
+          </div>
+          <div class="flex justify-between items-center p-2 rounded-lg bg-neutral-800/60 border border-neutral-700/60">
+            <span class="text-pink-400 font-medium">หลินจื่อซี (ดีไซเนอร์)</span>
+            <span class="font-bold text-rose-400">${scores.zixi} แต้ม</span>
+          </div>
+          <div class="flex justify-between items-center p-2 rounded-lg bg-neutral-800/60 border border-neutral-700/60">
+            <span class="text-amber-400 font-medium">ลู่เหวย (นักแข่ง)</span>
+            <span class="font-bold text-rose-400">${scores.luwei} แต้ม</span>
+          </div>
+          <div class="flex justify-between items-center p-2 rounded-lg bg-neutral-800/60 border border-neutral-700/60">
+            <span class="text-emerald-400 font-medium">เจียงไป๋อวี่ (จิตแพทย์)</span>
+            <span class="font-bold text-rose-400">${scores.baiyu} แต้ม</span>
+          </div>
+        `;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => runScript('DAY1_START'));
+  </script>
+</body>
+</html>
