@@ -1,15 +1,22 @@
-// LocalStorage Persistence Key
+// Global State & Save System
 let userEmail = '';
+let geminiApiKey = '';
 
 let currentDay = 1;
 let maxUnlockedDay = 1;
 let dialogueQueue = [];
 let masterQueue = [];
+let activeRoomId = null; // 'master', 'group', 'heart'
+let currentNotificationRoomTarget = null;
+
 let isWaitingForPlayer = false;
 let waitingForTap = false;
 let speedMode = 1; // 0=Slow, 1=Normal, 2=Fast, 3=Tap
 const delays = [2200, 1200, 500, 0];
 let currentLang = 'en';
+
+// ลำดับของ Order สำหรับสลับแชตล่าสุดขึ้นบนสุด
+let chatOrderCounter = 100;
 
 let playerProfile = {
   name: 'Lin XinYue',
@@ -36,7 +43,7 @@ const contactsData = {
   consultant: { codeName: 'LUMEN Bot', realName: 'LUMEN Counselor', occupation: 'Relationship Advisor Bot', avatarUrl: '', bgTone: 'bg-emerald-100 text-emerald-800', isSpecial: true }
 };
 
-// 1. LOGIN & LOCALSTORAGE SYSTEM
+// 1. SYSTEM INIT & LOGIN
 window.addEventListener('DOMContentLoaded', () => {
   const savedEmail = localStorage.getItem('lumen_user_email');
   if (savedEmail) {
@@ -60,9 +67,7 @@ function submitEmailLogin() {
 
 function saveUserData() {
   if (!userEmail) return;
-  const storeObj = {
-    currentDay, maxUnlockedDay, playerProfile, endingBookRecords
-  };
+  const storeObj = { currentDay, maxUnlockedDay, playerProfile, endingBookRecords };
   localStorage.setItem(`lumen_save_${userEmail}`, JSON.stringify(storeObj));
 }
 
@@ -76,11 +81,13 @@ function loadUserData() {
     endingBookRecords = data.endingBookRecords || [];
   }
   updateUIFromState();
+  loadApiKeyFromStorage();
 }
 
 function updateUIFromState() {
   document.getElementById('my-player-name').textContent = playerProfile.name;
   document.getElementById('my-player-email').textContent = userEmail;
+  document.getElementById('more-user-email-display').textContent = userEmail;
   document.getElementById('people-player-name').textContent = `${playerProfile.name} (You)`;
   document.getElementById('people-player-sub').textContent = `${playerProfile.occupation} · Participant`;
   document.getElementById('my-day-indicator').textContent = `${currentDay} / 30`;
@@ -94,8 +101,134 @@ function updateUIFromState() {
   }
 }
 
-// 2. MASTER CHAT FLOW
+// 2. IN-APP POPUP NOTIFICATION & DYNAMIC REORDERING SYSTEM
+function triggerInAppNotification(title, msg, avatarText = 'M', targetRoom = 'master', avatarImgUrl = '') {
+  // สลับลำดับให้รายการแชตนี้ขึ้นมาอยู่อันดับ 1 บนสุด
+  moveChannelToTop(targetRoom);
+
+  // อัปเดตข้อความล่าสุดในรายการแชต
+  if (targetRoom === 'master') document.getElementById('master-last-msg').textContent = msg;
+  if (targetRoom === 'group') document.getElementById('group-last-msg').textContent = msg;
+  if (targetRoom === 'heart') document.getElementById('heart-last-msg').textContent = msg;
+
+  // ถ้าผู้เล่นอยู่ในห้องแชตนั้นอยู่แล้ว ไม่ต้องเด้งป๊อปอัปแจ้งเตือน
+  if (activeRoomId === targetRoom) return;
+
+  currentNotificationRoomTarget = targetRoom;
+  const notiBox = document.getElementById('in-app-notification');
+  const avatarBox = document.getElementById('noti-avatar');
+  document.getElementById('noti-title').textContent = title;
+  document.getElementById('noti-body').textContent = msg;
+
+  if (avatarImgUrl) {
+    avatarBox.style.backgroundImage = `url('${avatarImgUrl}')`;
+    avatarBox.textContent = '';
+  } else {
+    avatarBox.style.backgroundImage = 'none';
+    avatarBox.textContent = avatarText;
+  }
+
+  notiBox.classList.remove('hidden', 'noti-slide-up');
+  notiBox.classList.add('noti-slide-down');
+
+  setTimeout(() => {
+    notiBox.classList.remove('noti-slide-down');
+    notiBox.classList.add('noti-slide-up');
+    setTimeout(() => notiBox.classList.add('hidden'), 300);
+  }, 3500);
+}
+
+function clickNotificationBanner() {
+  if (currentNotificationRoomTarget === 'master') openMasterChat();
+  else if (currentNotificationRoomTarget === 'group') openGroupChat();
+  else if (currentNotificationRoomTarget === 'heart') openHeartSendingRoom();
+
+  document.getElementById('in-app-notification').classList.add('hidden');
+}
+
+// สลับลำดับ DOM ให้ห้องล่าสุดมี order น้อยลงเรื่อยๆ (ขึ้นมาด้านบนสุด)
+function moveChannelToTop(channelKey) {
+  chatOrderCounter--;
+  const channelEl = document.getElementById(`channel-${channelKey}`);
+  if (channelEl) channelEl.style.order = chatOrderCounter;
+}
+
+// 3. GEMINI API INTEGRATION SYSTEM
+function loadApiKeyFromStorage() {
+  const savedKey = localStorage.getItem(`lumen_gemini_key_${userEmail}`);
+  if (savedKey) {
+    geminiApiKey = savedKey;
+    document.getElementById('gemini-api-key').value = savedKey;
+    updateApiStatus('connected', 'Saved & Ready');
+  } else {
+    updateApiStatus('disconnected', 'Disconnected');
+  }
+}
+
+function updateApiStatus(state, text) {
+  const badge = document.getElementById('api-status-badge');
+  const dot = document.getElementById('api-status-dot');
+  const txt = document.getElementById('api-status-text');
+  if (!badge || !dot || !txt) return;
+
+  if (state === 'connected') {
+    badge.className = "flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-emerald-100 text-[10px] text-emerald-700 font-bold";
+    dot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
+    txt.textContent = text || "Connected";
+  } else if (state === 'testing') {
+    badge.className = "flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-amber-100 text-[10px] text-amber-700 font-bold";
+    dot.className = "w-2 h-2 rounded-full bg-amber-500 animate-ping";
+    txt.textContent = "Testing...";
+  } else {
+    badge.className = "flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-slate-100 text-[10px] text-slate-500 font-bold";
+    dot.className = "w-2 h-2 rounded-full bg-slate-400";
+    txt.textContent = text || "Disconnected";
+  }
+}
+
+function saveGeminiApiKey() {
+  const keyInput = document.getElementById('gemini-api-key').value.trim();
+  if (!keyInput) {
+    localStorage.removeItem(`lumen_gemini_key_${userEmail}`);
+    geminiApiKey = '';
+    updateApiStatus('disconnected', 'Disconnected');
+    alert('API Key removed.');
+    return;
+  }
+  geminiApiKey = keyInput;
+  localStorage.setItem(`lumen_gemini_key_${userEmail}`, geminiApiKey);
+  updateApiStatus('connected', 'Saved');
+  alert('Gemini API Key saved successfully!');
+}
+
+async function testGeminiConnection() {
+  const keyInput = document.getElementById('gemini-api-key').value.trim();
+  if (!keyInput) { alert('Please enter a Gemini API Key first!'); return; }
+  updateApiStatus('testing', 'Testing...');
+
+  try {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${keyInput}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ parts: [{ text: "Hello, reply with OK if connected." }] }] })
+    });
+
+    if (response.ok) {
+      updateApiStatus('connected', 'Connected');
+      alert('✅ Connection Successful! Gemini API is working properly.');
+    } else {
+      updateApiStatus('disconnected', 'Invalid Key');
+      alert('❌ Connection Failed! Please check your API Key.');
+    }
+  } catch (err) {
+    updateApiStatus('disconnected', 'Error');
+    alert('❌ Connection Error: ' + err.message);
+  }
+}
+
+// 4. MASTER CHAT FLOW
 function openMasterChat() {
+  activeRoomId = 'master';
   document.getElementById('main-header').classList.add('hidden');
   document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
   document.getElementById('chat-inside-header').classList.remove('hidden');
@@ -121,6 +254,7 @@ function processMasterQueue() {
     setTimeout(processMasterQueue, 800);
   } else if (item.type === 'master_msg') {
     addMasterMsg(item.text);
+    triggerInAppNotification('LUMEN Master', item.text, 'M', 'master');
     setTimeout(processMasterQueue, 1200);
   } else if (item.type === 'player_turn') {
     renderMasterInputBar(item.prompt, (text) => {
@@ -144,6 +278,10 @@ function processMasterQueue() {
       document.getElementById('master-last-msg').textContent = 'TDL All Group Unlocked!';
       document.getElementById('master-unread-dot').classList.add('hidden');
       document.getElementById('channel-group').classList.remove('hidden');
+      moveChannelToTop('group');
+      
+      triggerInAppNotification('TDL : All Group', 'Lounge Activated! Tap to join.', 'G', 'group');
+
       document.getElementById('master-form-box').innerHTML = `<button onclick="exitActiveChat(); openGroupChat();" class="w-full bg-gradient-to-r from-fuchsia-400 to-pink-400 text-white font-bold py-2.5 rounded-xl text-xs">Enter TDL All Group Lounge →</button>`;
       saveUserData();
     }
@@ -208,7 +346,7 @@ function renderMasterInputBar(placeholder, cb) {
   };
 }
 
-// 3. POLAROID PROFILE CARD RENDERER (รูปแบบตามรูปถ่ายในข้อความ)
+// 5. POLAROID PROFILE CARD RENDERER
 function createPolaroidCardHTML(cardData, isPlayer = false) {
   const nameAge = isPlayer ? `${playerProfile.name}, ${playerProfile.age}` : `${cardData.realName}, ${cardData.age}`;
   const occ = isPlayer ? playerProfile.occupation : cardData.occupation;
@@ -231,7 +369,6 @@ function createPolaroidCardHTML(cardData, isPlayer = false) {
         <span class="tracking-widest font-sans font-bold text-pink-400">30 DAYS TO LOVE</span>
       </div>
       
-      <!-- Frame รูป Polaroid -->
       <div class="bg-white p-2.5 rounded-lg border border-purple-100 shadow-sm mb-3">
         <div class="aspect-[4/3] w-full rounded overflow-hidden shadow-inner flex flex-col justify-end p-2 ${!playerProfile.avatarDataUrl && isPlayer ? 'bg-purple-200 flex items-center justify-center text-xs font-sans text-purple-700' : ''}" style="${photoStyle}">
           ${!playerProfile.avatarDataUrl && isPlayer ? '📷 Your Photo' : ''}
@@ -242,7 +379,6 @@ function createPolaroidCardHTML(cardData, isPlayer = false) {
         </div>
       </div>
 
-      <!-- รายละเอียดตามแบบภาพที่ 1 -->
       <div class="space-y-2 text-xs text-purple-950 font-sans">
         <div class="border-b border-purple-200/60 pb-1 flex justify-between"><strong class="font-typewriter text-purple-800">Name/Age:</strong> <span>${nameAge}</span></div>
         <div class="border-b border-purple-200/60 pb-1 flex justify-between"><strong class="font-typewriter text-purple-800">Occupation:</strong> <span>${occ}</span></div>
@@ -264,8 +400,9 @@ function renderProfileCardInChat(key, targetStreamId = 'group-stream') {
   stream.scrollTop = stream.scrollHeight;
 }
 
-// 4. GROUP CHAT ENGINE
+// 6. GROUP CHAT ENGINE
 function openGroupChat() {
+  activeRoomId = 'group';
   document.getElementById('main-header').classList.add('hidden');
   document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
   document.getElementById('chat-inside-header').classList.remove('hidden');
@@ -292,6 +429,13 @@ function processGroupQueue() {
   } else if (item.type === 'msg') {
     showTypingIndicator(item.sender, () => {
       renderGroupMsgBubble(item.sender, item.tone, item.text);
+      triggerInAppNotification('TDL : All Group', `${item.sender}: ${item.text}`, item.sender[0], 'group');
+      scheduleGroupNext();
+    });
+  } else if (item.type === 'img') {
+    showTypingIndicator(item.sender, () => {
+      renderGroupImgBubble(item.sender, item.tone, item.src);
+      triggerInAppNotification('TDL : All Group', `${item.sender} sent a photo 📷`, item.sender[0], 'group');
       scheduleGroupNext();
     });
   } else if (item.type === 'card') {
@@ -306,6 +450,8 @@ function processGroupQueue() {
   } else if (item.type === 'master_event') {
     if (item.eventName === 'TRIGGER_HEART_SIGNAL') {
       document.getElementById('channel-heart').classList.remove('hidden');
+      moveChannelToTop('heart');
+      triggerInAppNotification('<Heart Sending>', 'Midnight Heart Signal Activated! 💌', '💌', 'heart');
       saveUserData();
     }
   }
@@ -360,6 +506,24 @@ function renderGroupMsgBubble(sender, tone, text) {
   document.getElementById('group-last-msg').textContent = `${sender}: ${text}`;
 }
 
+function renderGroupImgBubble(sender, tone, imgSrc) {
+  const stream = document.getElementById('group-stream');
+  const b = document.createElement('div');
+  b.className = "chat-bubble flex items-start space-x-2.5";
+  b.innerHTML = `
+    <div class="w-9 h-9 rounded-full ${tone} flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 border border-purple-100 shadow-sm">${sender[0]}</div>
+    <div class="space-y-0.5 max-w-[75%]">
+      <span class="text-[11px] font-semibold text-purple-400 ml-1">${sender}</span>
+      <div class="bg-white border border-purple-100 p-1.5 rounded-2xl rounded-tl-none shadow-sm overflow-hidden">
+        <img src="${imgSrc}" class="rounded-xl w-full h-auto object-cover max-h-60" alt="Chat attachment" onclick="window.open('${imgSrc}', '_blank')">
+      </div>
+    </div>
+  `;
+  stream.appendChild(b);
+  stream.scrollTop = stream.scrollHeight;
+  document.getElementById('group-last-msg').textContent = `${sender}: [Photo 📷]`;
+}
+
 function sendPlayerFreeMessage() {
   const field = document.getElementById('player-free-text');
   const text = field.value.trim();
@@ -389,7 +553,7 @@ function addUserBubble(container, txt) {
   container.scrollTop = container.scrollHeight;
 }
 
-// 5. OTHER TABS & UTILS
+// 7. OTHER TABS & UTILS
 function switchTab(tabKey) {
   exitActiveChat();
   document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
@@ -413,6 +577,7 @@ function switchTab(tabKey) {
 }
 
 function exitActiveChat() {
+  activeRoomId = null;
   document.getElementById('chat-inside-header').classList.add('hidden');
   document.getElementById('room-master').classList.add('hidden');
   document.getElementById('room-group').classList.add('hidden');
@@ -630,7 +795,13 @@ function changeLanguage(lang) {
   }
 }
 
+function openSwitchAccountModal() {
+  document.getElementById('login-email-input').value = '';
+  document.getElementById('modal-email-login').classList.remove('hidden');
+}
+
 function openHeartSendingRoom() {
+  activeRoomId = 'heart';
   document.getElementById('main-header').classList.add('hidden');
   document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
   document.getElementById('chat-inside-header').classList.remove('hidden');
