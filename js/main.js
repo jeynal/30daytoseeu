@@ -1,10 +1,13 @@
-// Global Game State
+// LocalStorage Persistence Key
+let userEmail = '';
+
 let currentDay = 1;
 let maxUnlockedDay = 1;
 let dialogueQueue = [];
+let masterQueue = [];
 let isWaitingForPlayer = false;
 let waitingForTap = false;
-let speedMode = 1; // 0=Slow, 1=Normal, 2=Fast, 3=Tap Mode
+let speedMode = 1; // 0=Slow, 1=Normal, 2=Fast, 3=Tap
 const delays = [2200, 1200, 500, 0];
 let currentLang = 'en';
 
@@ -16,16 +19,16 @@ let playerProfile = {
   interests: 'Reading, writing, music, watching',
   idealType: 'Good guy, taller than me, mature',
   datingStyle: 'Slow burn, fall slow but fall harder',
-  bestQuality: 'Honestly, funny, friendly'
+  bestQuality: 'Honestly, friendly'
 };
 
 let endingBookRecords = [];
 
 const contactsData = {
-  chenxu: { codeName: 'Mr. Horizon', realName: 'Chen Xu (เฉินซวี่)', age: 29, occupation: 'Lead Architect', interests: 'Structure sketches, Coffee', idealType: 'Peace without words', datingStyle: 'More action than words', avatarUrl: 'images/chenxu.jpg', bgTone: 'bg-purple-200 text-purple-800' },
-  xiyao: { codeName: 'Golden Puppy', realName: 'Xia Xiyao (เซี่ยซีเหยา)', age: 22, occupation: 'Idol Vocalist & Dancer', interests: 'Dance, Cheese milk tea', idealType: 'Sweet older sister', datingStyle: 'Clingy & affectionate 24/7', avatarUrl: 'images/xiyao.jpg', bgTone: 'bg-sky-200 text-sky-800' },
-  wenjun: { codeName: 'Velvet Noir', realName: 'Wen Jun (เวินจวิ้น)', age: 28, occupation: 'Art Gallery Owner', interests: 'Vintage wine, Jazz vinyls', idealType: 'Lovely little one', datingStyle: 'Gentle and attentive', avatarUrl: 'images/wenjun.jpg', bgTone: 'bg-indigo-950 text-purple-200' },
-  guyan: { codeName: 'Black Cat', realName: 'Gu Yan (กู้เยี่ยน)', age: 24, occupation: 'Indie Game Developer', interests: 'Midnight coding, Black cats', idealType: 'Quiet person', datingStyle: 'Tsundere with words', avatarUrl: 'images/guyan.jpg', bgTone: 'bg-slate-700 text-slate-200' },
+  chenxu: { codeName: 'Mr. Horizon', realName: 'Chen Xu (เฉินซวี่)', age: 29, occupation: 'Lead Architect', interests: 'Structure sketches, Coffee', idealType: 'Peace without words', datingStyle: 'More action than words', bestQuality: 'Responsibility', avatarUrl: 'images/chenxu.jpg', bgTone: 'bg-purple-200 text-purple-800' },
+  xiyao: { codeName: 'Golden Puppy', realName: 'Xia Xiyao (เซี่ยซีเหยา)', age: 22, occupation: 'Idol Vocalist & Dancer', interests: 'Dance, Cheese milk tea', idealType: 'Sweet older sister', datingStyle: 'Clingy & affectionate 24/7', bestQuality: 'Bright Energy', avatarUrl: 'images/xiyao.jpg', bgTone: 'bg-sky-200 text-sky-800' },
+  wenjun: { codeName: 'Velvet Noir', realName: 'Wen Jun (เวินจวิ้น)', age: 28, occupation: 'Art Gallery Owner', interests: 'Vintage wine, Jazz vinyls', idealType: 'Lovely little one', datingStyle: 'Gentle and attentive', bestQuality: 'Deep Eyes', avatarUrl: 'images/wenjun.jpg', bgTone: 'bg-indigo-950 text-purple-200' },
+  guyan: { codeName: 'Black Cat', realName: 'Gu Yan (กู้เยี่ยน)', age: 24, occupation: 'Indie Game Developer', interests: 'Midnight coding, Black cats', idealType: 'Quiet person', datingStyle: 'Tsundere with words', bestQuality: 'Quiet Focus', avatarUrl: 'images/guyan.jpg', bgTone: 'bg-slate-700 text-slate-200' },
   yingyin: { codeName: 'Scarlet', realName: 'Song Yingyin (ซ่งอิงอิน)', age: 26, occupation: 'Fashion Editor', interests: 'Haute couture, Espresso', idealType: 'Sophisticated gentleman', datingStyle: 'Elegant romance', avatarUrl: 'images/yingyin.jpg', bgTone: 'bg-pink-200 text-pink-800' },
   jiangyue: { codeName: 'Luna', realName: 'Jiang Yue (เจียงเยว่)', age: 25, occupation: 'Classical Pianist', interests: 'Chopin, Afternoon tea', idealType: 'Romantic soul', datingStyle: 'Soft melodic love', avatarUrl: 'images/jiangyue.jpg', bgTone: 'bg-fuchsia-200 text-fuchsia-800' },
   tangmei: { codeName: 'Mochi (Foco)', realName: 'Tang Mei (ถังเม่ย)', age: 23, occupation: 'Food Vlogger', interests: 'Street food, Baking', idealType: 'Someone who loves eating', datingStyle: 'Cute & energetic', avatarUrl: 'images/tangmei.jpg', bgTone: 'bg-purple-200 text-purple-800' },
@@ -33,149 +36,360 @@ const contactsData = {
   consultant: { codeName: 'LUMEN Bot', realName: 'LUMEN Counselor', occupation: 'Relationship Advisor Bot', avatarUrl: '', bgTone: 'bg-emerald-100 text-emerald-800', isSpecial: true }
 };
 
-// SubTab Switcher inside MY Tab
-function switchMySubTab(subKey) {
-  document.getElementById('subtab-mystory').classList.add('hidden');
-  document.getElementById('subtab-ending').classList.add('hidden');
-  document.getElementById('subtab-history').classList.add('hidden');
-
-  document.querySelectorAll('#tab-my button').forEach(b => {
-    b.classList.remove('text-fuchsia-600', 'border-b-2', 'border-fuchsia-500');
-    b.classList.add('text-purple-300');
-  });
-
-  document.getElementById(`subtab-${subKey}`).classList.remove('hidden');
-  const btn = document.getElementById(`subtab-btn-${subKey}`);
-  btn.classList.add('text-fuchsia-600', 'border-b-2', 'border-fuchsia-500');
-  btn.classList.remove('text-purple-300');
-
-  if (subKey === 'history') renderHistoryTab();
-  if (subKey === 'ending') renderEndingBookTab();
-}
-
-// Render Unlocked Days History
-function renderHistoryTab() {
-  const container = document.getElementById('history-days-list');
-  container.innerHTML = '';
-
-  for (let d = 1; d <= maxUnlockedDay; d++) {
-    const isCurrent = (d === currentDay);
-    const item = document.createElement('div');
-    item.className = `p-3 rounded-2xl border ${isCurrent ? 'bg-fuchsia-50 border-fuchsia-300' : 'bg-white border-purple-100'} flex justify-between items-center cursor-pointer hover:border-fuchsia-300 transition shadow-sm`;
-    item.onclick = () => jumpToHistoryDay(d);
-    item.innerHTML = `
-      <div>
-        <span class="text-xs font-bold text-purple-950">Day ${d}</span>
-        <p class="text-[10px] text-purple-400">Episode ${d}</p>
-      </div>
-      <span class="text-xs ${isCurrent ? 'text-fuchsia-600 font-bold' : 'text-purple-300'}">${isCurrent ? 'Playing' : 'Jump ⏱️'}</span>
-    `;
-    container.appendChild(item);
+// 1. LOGIN & LOCALSTORAGE SYSTEM
+window.addEventListener('DOMContentLoaded', () => {
+  const savedEmail = localStorage.getItem('lumen_user_email');
+  if (savedEmail) {
+    userEmail = savedEmail;
+    loadUserData();
+    document.getElementById('modal-email-login').classList.add('hidden');
   }
-}
+});
 
-function jumpToHistoryDay(dayNum) {
-  currentDay = dayNum;
-  document.getElementById('my-day-indicator').textContent = `${currentDay} / 30`;
-  alert(`Jumped back to Day ${dayNum}!`);
-  switchTab('chats');
-  openGroupChat();
-}
-
-// Ending Book Manager
-function renderEndingBookTab() {
-  const container = document.getElementById('ending-records-list');
-  if (endingBookRecords.length === 0) {
-    container.innerHTML = `
-      <div class="p-4 bg-white rounded-2xl border border-purple-100 shadow-sm text-center py-8">
-        <p class="text-xs text-purple-400">No saved ending records yet.</p>
-        <p class="text-[10px] text-purple-300 mt-1">Complete 30 days to unlock and save your ending story!</p>
-      </div>
-    `;
+function submitEmailLogin() {
+  const input = document.getElementById('login-email-input').value.trim();
+  if (!input || !input.includes('@')) {
+    alert('Please enter a valid email address!');
     return;
   }
-
-  container.innerHTML = '';
-  endingBookRecords.forEach((rec, idx) => {
-    const item = document.createElement('div');
-    item.className = "p-3.5 bg-white rounded-2xl border border-purple-100 shadow-sm flex items-center justify-between";
-    item.innerHTML = `
-      <div>
-        <h4 class="text-xs font-bold text-purple-950">${rec.title}</h4>
-        <p class="text-[10px] text-purple-400">Partner: ${rec.partner} · ${rec.date}</p>
-      </div>
-      <button onclick="viewEndingDetail(${idx})" class="text-xs bg-pink-100 text-fuchsia-600 px-3 py-1 rounded-xl font-bold hover:bg-pink-200">View</button>
-    `;
-    container.appendChild(item);
-  });
+  userEmail = input;
+  localStorage.setItem('lumen_user_email', userEmail);
+  loadUserData();
+  document.getElementById('modal-email-login').classList.add('hidden');
 }
 
-function saveCurrentEndingRecord() {
-  const newRecord = {
-    title: `Season Loop #${endingBookRecords.length + 1} Ending`,
-    partner: 'Chen Xu (เฉินซวี่)',
-    date: new Date().toLocaleDateString(),
-    storySummary: 'After 30 days in Shanghai, you walked along the Bund with Chen Xu under the quiet night stars.'
+function saveUserData() {
+  if (!userEmail) return;
+  const storeObj = {
+    currentDay, maxUnlockedDay, playerProfile, endingBookRecords
   };
-  endingBookRecords.push(newRecord);
-  renderEndingBookTab();
-  alert('Ending story saved to Ending Book!');
+  localStorage.setItem(`lumen_save_${userEmail}`, JSON.stringify(storeObj));
 }
 
-function viewEndingDetail(idx) {
-  const rec = endingBookRecords[idx];
-  alert(`📖 [${rec.title}]\n\nPartner: ${rec.partner}\nDate: ${rec.date}\n\n"${rec.storySummary}"`);
+function loadUserData() {
+  const raw = localStorage.getItem(`lumen_save_${userEmail}`);
+  if (raw) {
+    const data = JSON.parse(raw);
+    currentDay = data.currentDay || 1;
+    maxUnlockedDay = data.maxUnlockedDay || 1;
+    playerProfile = data.playerProfile || playerProfile;
+    endingBookRecords = data.endingBookRecords || [];
+  }
+  updateUIFromState();
 }
 
-function restartGameNewLoop() {
-  if (confirm('Are you sure you want to restart the game from Day 1? Your Ending Book records will be saved.')) {
-    currentDay = 1;
-    maxUnlockedDay = 1;
-    document.getElementById('my-day-indicator').textContent = '1 / 30';
-    alert('Game reset to Day 1!');
-    switchTab('chats');
+function updateUIFromState() {
+  document.getElementById('my-player-name').textContent = playerProfile.name;
+  document.getElementById('my-player-email').textContent = userEmail;
+  document.getElementById('people-player-name').textContent = `${playerProfile.name} (You)`;
+  document.getElementById('people-player-sub').textContent = `${playerProfile.occupation} · Participant`;
+  document.getElementById('my-day-indicator').textContent = `${currentDay} / 30`;
+
+  if (playerProfile.avatarDataUrl) {
+    const style = `background-image: url('${playerProfile.avatarDataUrl}'); background-size: cover; background-position: center;`;
+    document.getElementById('people-player-avatar').setAttribute('style', style);
+    document.getElementById('people-player-avatar').textContent = '';
+    document.getElementById('my-player-avatar').setAttribute('style', style);
+    document.getElementById('my-player-avatar').textContent = '';
   }
 }
 
-// File Picker Avatar Selector
-let tempAvatarDataUrl = '';
-function handleAvatarFileSelect(event) {
+// 2. MASTER CHAT FLOW
+function openMasterChat() {
+  document.getElementById('main-header').classList.add('hidden');
+  document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
+  document.getElementById('chat-inside-header').classList.remove('hidden');
+  document.getElementById('active-chat-title').textContent = 'LUMEN Master';
+  document.getElementById('room-master').classList.remove('hidden');
+
+  const stream = document.getElementById('master-stream');
+  if (stream.children.length === 0) {
+    const dayData = window.day1Data;
+    if (dayData && dayData.masterDialogues) {
+      masterQueue = [...dayData.masterDialogues];
+      processMasterQueue();
+    }
+  }
+}
+
+function processMasterQueue() {
+  if (masterQueue.length === 0) return;
+  const item = masterQueue.shift();
+
+  if (item.type === 'sys') {
+    renderSysMsg(document.getElementById('master-stream'), item.text);
+    setTimeout(processMasterQueue, 800);
+  } else if (item.type === 'master_msg') {
+    addMasterMsg(item.text);
+    setTimeout(processMasterQueue, 1200);
+  } else if (item.type === 'player_turn') {
+    renderMasterInputBar(item.prompt, (text) => {
+      addUserBubble(document.getElementById('master-stream'), text);
+      processMasterQueue();
+    });
+  } else if (item.type === 'player_avatar_upload') {
+    document.getElementById('master-form-box').innerHTML = `
+      <div class="space-y-1 text-center p-2 bg-purple-50 rounded-xl border border-purple-100">
+        <label class="text-xs font-semibold text-purple-900 block">Select Profile Avatar Image:</label>
+        <input type="file" accept="image/*" onchange="handleMasterAvatarUpload(event)" class="text-xs text-purple-900 file:mr-2 file:py-1 file:px-3 file:rounded-xl file:border-0 file:bg-pink-100 file:text-fuchsia-600">
+      </div>
+    `;
+  } else if (item.type === 'player_reg_flow') {
+    startMasterRegQuestions(0);
+  } else if (item.type === 'card') {
+    renderProfileCardInChat('player', 'master-stream');
+    setTimeout(processMasterQueue, 1000);
+  } else if (item.type === 'master_event') {
+    if (item.eventName === 'OPEN_GROUP_CHANNEL') {
+      document.getElementById('master-last-msg').textContent = 'TDL All Group Unlocked!';
+      document.getElementById('master-unread-dot').classList.add('hidden');
+      document.getElementById('channel-group').classList.remove('hidden');
+      document.getElementById('master-form-box').innerHTML = `<button onclick="exitActiveChat(); openGroupChat();" class="w-full bg-gradient-to-r from-fuchsia-400 to-pink-400 text-white font-bold py-2.5 rounded-xl text-xs">Enter TDL All Group Lounge →</button>`;
+      saveUserData();
+    }
+  }
+}
+
+function handleMasterAvatarUpload(event) {
   const file = event.target.files[0];
   if (!file) return;
-
   const reader = new FileReader();
   reader.onload = function(e) {
-    tempAvatarDataUrl = e.target.result;
+    playerProfile.avatarDataUrl = e.target.result;
+    updateUIFromState();
+    addUserBubble(document.getElementById('master-stream'), '📷 Avatar photo uploaded!');
+    document.getElementById('master-form-box').innerHTML = '';
+    processMasterQueue();
   };
   reader.readAsDataURL(file);
 }
 
-function saveMyProfileChanges() {
-  if (tempAvatarDataUrl) {
-    playerProfile.avatarDataUrl = tempAvatarDataUrl;
+const regQuestions = [
+  { key: 'name', label: 'Name / Nickname:', placeholder: 'e.g. Lin XinYue' },
+  { key: 'age', label: 'Age:', placeholder: 'e.g. 23' },
+  { key: 'occupation', label: 'Occupation:', placeholder: 'e.g. Automation Engineer' },
+  { key: 'interests', label: 'Interests & Hobbies:', placeholder: 'e.g. Reading, writing' },
+  { key: 'idealType', label: 'Ideal Type:', placeholder: 'e.g. Good guy, mature' },
+  { key: 'datingStyle', label: 'Dating Style:', placeholder: 'e.g. Slow burn' }
+];
+
+function startMasterRegQuestions(idx) {
+  if (idx >= regQuestions.length) {
+    document.getElementById('master-form-box').innerHTML = '';
+    processMasterQueue();
+    return;
   }
-  playerProfile.name = document.getElementById('edit-name').value.trim() || 'Lin XinYue';
-  playerProfile.occupation = document.getElementById('edit-occ').value.trim();
-  playerProfile.interests = document.getElementById('edit-interests').value.trim();
-  playerProfile.idealType = document.getElementById('edit-type').value.trim();
-  playerProfile.datingStyle = document.getElementById('edit-style').value.trim();
-
-  document.getElementById('people-player-name').textContent = `${playerProfile.name} (You)`;
-  document.getElementById('people-player-sub').textContent = `${playerProfile.occupation} · Participant`;
-  document.getElementById('my-player-name').textContent = playerProfile.name;
-
-  if (playerProfile.avatarDataUrl) {
-    const avatarStyle = `background-image: url('${playerProfile.avatarDataUrl}'); background-size: cover; background-position: center;`;
-    document.getElementById('people-player-avatar').setAttribute('style', avatarStyle);
-    document.getElementById('people-player-avatar').textContent = '';
-    document.getElementById('my-player-avatar').setAttribute('style', avatarStyle);
-    document.getElementById('my-player-avatar').textContent = '';
-  }
-
-  closeEditMyProfileModal();
+  const q = regQuestions[idx];
+  addMasterMsg(`[Profile Detail ${idx+1}/6] ${q.label}`);
+  renderMasterInputBar(q.placeholder, (text) => {
+    playerProfile[q.key] = text;
+    updateUIFromState();
+    addUserBubble(document.getElementById('master-stream'), text);
+    startMasterRegQuestions(idx + 1);
+  });
 }
 
-// Existing Core Logic
+function renderMasterInputBar(placeholder, cb) {
+  const box = document.getElementById('master-form-box');
+  box.innerHTML = `
+    <div class="flex gap-2">
+      <input type="text" id="master-input-field" class="flex-1 bg-purple-50/50 border border-purple-200 rounded-xl px-3.5 py-2 text-xs text-purple-950 focus:outline-none" placeholder="${placeholder}">
+      <button id="master-send-btn" class="bg-gradient-to-r from-fuchsia-400 to-pink-400 px-4 py-2 rounded-xl text-xs font-bold text-white">Send</button>
+    </div>
+  `;
+  const field = document.getElementById('master-input-field');
+  const btn = document.getElementById('master-send-btn');
+  field.focus();
+  btn.onclick = () => {
+    const val = field.value.trim();
+    if (!val) return;
+    box.innerHTML = '';
+    cb(val);
+  };
+}
+
+// 3. POLAROID PROFILE CARD RENDERER (รูปแบบตามรูปถ่ายในข้อความ)
+function createPolaroidCardHTML(cardData, isPlayer = false) {
+  const nameAge = isPlayer ? `${playerProfile.name}, ${playerProfile.age}` : `${cardData.realName}, ${cardData.age}`;
+  const occ = isPlayer ? playerProfile.occupation : cardData.occupation;
+  const interests = isPlayer ? playerProfile.interests : cardData.interests;
+  const type = isPlayer ? playerProfile.idealType : cardData.idealType;
+  const dating = isPlayer ? playerProfile.datingStyle : cardData.datingStyle;
+  const best = isPlayer ? playerProfile.bestQuality : cardData.bestQuality;
+
+  let photoStyle = `background-color: #e9d5ff;`;
+  if (isPlayer && playerProfile.avatarDataUrl) {
+    photoStyle = `background-image: url('${playerProfile.avatarDataUrl}'); background-size: cover; background-position: center;`;
+  } else if (!isPlayer && cardData.avatarUrl) {
+    photoStyle = `background-image: url('${cardData.avatarUrl}'); background-size: cover; background-position: center;`;
+  }
+
+  return `
+    <div class="bg-[#f7f5f0] text-purple-950 rounded-xl p-4 shadow-md border border-purple-200/80 max-w-xs mx-auto my-3 font-typewriter">
+      <div class="text-[10px] text-purple-400 border-b border-purple-200/60 pb-1.5 mb-2.5 flex justify-between">
+        <span>Day ${currentDay}. Profile : ${nameAge.split(',')[0]}</span>
+        <span class="tracking-widest font-sans font-bold text-pink-400">30 DAYS TO LOVE</span>
+      </div>
+      
+      <!-- Frame รูป Polaroid -->
+      <div class="bg-white p-2.5 rounded-lg border border-purple-100 shadow-sm mb-3">
+        <div class="aspect-[4/3] w-full rounded overflow-hidden shadow-inner flex flex-col justify-end p-2 ${!playerProfile.avatarDataUrl && isPlayer ? 'bg-purple-200 flex items-center justify-center text-xs font-sans text-purple-700' : ''}" style="${photoStyle}">
+          ${!playerProfile.avatarDataUrl && isPlayer ? '📷 Your Photo' : ''}
+        </div>
+        <div class="mt-2 text-[9px] text-purple-400 font-sans tracking-widest flex justify-between uppercase">
+          <span>30 DAYS TO LOVE</span>
+          <span>THE AFTERIMAGE PARADOX</span>
+        </div>
+      </div>
+
+      <!-- รายละเอียดตามแบบภาพที่ 1 -->
+      <div class="space-y-2 text-xs text-purple-950 font-sans">
+        <div class="border-b border-purple-200/60 pb-1 flex justify-between"><strong class="font-typewriter text-purple-800">Name/Age:</strong> <span>${nameAge}</span></div>
+        <div class="border-b border-purple-200/60 pb-1 flex justify-between"><strong class="font-typewriter text-purple-800">Occupation:</strong> <span>${occ}</span></div>
+        <div class="border-b border-purple-200/60 pb-1"><strong class="font-typewriter text-purple-800 block mb-0.5">Interests:</strong> <div class="bg-purple-100/70 p-1.5 rounded text-[11px]">${interests}</div></div>
+        <div class="border-b border-purple-200/60 pb-1"><strong class="font-typewriter text-purple-800 block mb-0.5">Type:</strong> <div class="bg-purple-100/70 p-1.5 rounded text-[11px]">${type}</div></div>
+        <div class="border-b border-purple-200/60 pb-1"><strong class="font-typewriter text-purple-800 block mb-0.5">Dating Style:</strong> <div class="bg-purple-100/70 p-1.5 rounded text-[11px]">${dating}</div></div>
+        <div><strong class="font-typewriter text-purple-800 block mb-0.5">Best Quality:</strong> <div class="bg-purple-100/70 p-1.5 rounded text-[11px]">${best}</div></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderProfileCardInChat(key, targetStreamId = 'group-stream') {
+  const b = document.createElement('div');
+  b.className = "chat-bubble my-2";
+  b.innerHTML = (key === 'player') ? createPolaroidCardHTML(null, true) : createPolaroidCardHTML(contactsData[key], false);
+  const stream = document.getElementById(targetStreamId);
+  stream.appendChild(b);
+  stream.scrollTop = stream.scrollHeight;
+}
+
+// 4. GROUP CHAT ENGINE
+function openGroupChat() {
+  document.getElementById('main-header').classList.add('hidden');
+  document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
+  document.getElementById('chat-inside-header').classList.remove('hidden');
+  document.getElementById('active-chat-title').textContent = 'TDL : All Group';
+  document.getElementById('room-group').classList.remove('hidden');
+  document.getElementById('group-unread-dot').classList.add('hidden');
+
+  if (dialogueQueue.length === 0) {
+    const dayData = window[`day${currentDay}Data`];
+    if (dayData) {
+      dialogueQueue = [...dayData.dialogues];
+      processGroupQueue();
+    }
+  }
+}
+
+function processGroupQueue() {
+  if (dialogueQueue.length === 0) return;
+  const item = dialogueQueue.shift();
+
+  if (item.type === 'sys') {
+    renderGroupSysMsg(item.text);
+    scheduleGroupNext();
+  } else if (item.type === 'msg') {
+    showTypingIndicator(item.sender, () => {
+      renderGroupMsgBubble(item.sender, item.tone, item.text);
+      scheduleGroupNext();
+    });
+  } else if (item.type === 'card') {
+    renderProfileCardInChat(item.key, 'group-stream');
+    scheduleGroupNext();
+  } else if (item.type === 'player_turn') {
+    isWaitingForPlayer = true;
+    const inputBar = document.getElementById('group-player-input-bar');
+    inputBar.classList.remove('hidden');
+    document.getElementById('player-free-text').placeholder = item.prompt || 'Type response...';
+    document.getElementById('player-free-text').focus();
+  } else if (item.type === 'master_event') {
+    if (item.eventName === 'TRIGGER_HEART_SIGNAL') {
+      document.getElementById('channel-heart').classList.remove('hidden');
+      saveUserData();
+    }
+  }
+}
+
+function scheduleGroupNext() {
+  if (speedMode === 3) {
+    waitingForTap = true;
+    document.getElementById('next-tap-bar').classList.remove('hidden');
+  } else {
+    setTimeout(processGroupQueue, delays[speedMode]);
+  }
+}
+
+function advanceDialogue() {
+  if (waitingForTap) { waitingForTap = false; processGroupQueue(); }
+}
+
+function showTypingIndicator(sender, cb) {
+  if (speedMode === 3) { cb(); return; }
+  const indicator = document.getElementById('typing-indicator');
+  indicator.classList.remove('hidden');
+  document.getElementById('typing-name').textContent = `${sender} is typing...`;
+  setTimeout(() => { indicator.classList.add('hidden'); cb(); }, Math.min(650, delays[speedMode]));
+}
+
+function renderGroupSysMsg(txt) {
+  renderSysMsg(document.getElementById('group-stream'), txt);
+}
+
+function renderSysMsg(container, txt) {
+  const b = document.createElement('div');
+  b.className = "flex justify-center my-2 chat-bubble";
+  b.innerHTML = `<div class="bg-purple-100/60 text-purple-600 border border-purple-200/50 px-3.5 py-1.5 rounded-full text-[11px] max-w-[90%] text-center">${txt}</div>`;
+  container.appendChild(b);
+  container.scrollTop = container.scrollHeight;
+}
+
+function renderGroupMsgBubble(sender, tone, text) {
+  const stream = document.getElementById('group-stream');
+  const b = document.createElement('div');
+  b.className = "chat-bubble flex items-start space-x-2.5";
+  b.innerHTML = `
+    <div class="w-9 h-9 rounded-full ${tone} flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 border border-purple-100 shadow-sm">${sender[0]}</div>
+    <div class="space-y-0.5 max-w-[80%]">
+      <span class="text-[11px] font-semibold text-purple-400 ml-1">${sender}</span>
+      <div class="bg-white border border-purple-100 text-purple-950 px-3.5 py-2 rounded-2xl rounded-tl-none text-xs leading-relaxed shadow-sm">${text}</div>
+    </div>
+  `;
+  stream.appendChild(b);
+  stream.scrollTop = stream.scrollHeight;
+  document.getElementById('group-last-msg').textContent = `${sender}: ${text}`;
+}
+
+function sendPlayerFreeMessage() {
+  const field = document.getElementById('player-free-text');
+  const text = field.value.trim();
+  if (!text) return;
+  field.value = '';
+  document.getElementById('group-player-input-bar').classList.add('hidden');
+  isWaitingForPlayer = false;
+
+  addUserBubble(document.getElementById('group-stream'), text);
+  processGroupQueue();
+}
+
+function addMasterMsg(txt) {
+  const stream = document.getElementById('master-stream');
+  const b = document.createElement('div');
+  b.className = "chat-bubble flex items-start space-x-2";
+  b.innerHTML = `<div class="w-7 h-7 rounded-full bg-gradient-to-tr from-fuchsia-400 to-pink-400 flex items-center justify-center text-[10px] font-bold text-white shrink-0 mt-0.5">M</div><div class="bg-white border border-purple-100 text-purple-900 px-3.5 py-2 rounded-2xl rounded-tl-none text-xs max-w-[85%] shadow-sm">${txt}</div>`;
+  stream.appendChild(b);
+  stream.scrollTop = stream.scrollHeight;
+}
+
+function addUserBubble(container, txt) {
+  const b = document.createElement('div');
+  b.className = "chat-bubble flex justify-end";
+  b.innerHTML = `<div class="bg-gradient-to-r from-fuchsia-400 to-pink-400 text-white px-3.5 py-2 rounded-2xl rounded-tr-none text-xs max-w-[80%] shadow-sm">${txt}</div>`;
+  container.appendChild(b);
+  container.scrollTop = container.scrollHeight;
+}
+
+// 5. OTHER TABS & UTILS
 function switchTab(tabKey) {
   exitActiveChat();
   document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
@@ -207,6 +421,91 @@ function exitActiveChat() {
   document.getElementById('tab-chats').classList.remove('hidden');
 }
 
+function switchMySubTab(subKey) {
+  document.getElementById('subtab-mystory').classList.add('hidden');
+  document.getElementById('subtab-ending').classList.add('hidden');
+  document.getElementById('subtab-history').classList.add('hidden');
+
+  document.querySelectorAll('#tab-my button').forEach(b => {
+    b.classList.remove('text-fuchsia-600', 'border-b-2', 'border-fuchsia-500');
+    b.classList.add('text-purple-300');
+  });
+
+  document.getElementById(`subtab-${subKey}`).classList.remove('hidden');
+  const btn = document.getElementById(`subtab-btn-${subKey}`);
+  btn.classList.add('text-fuchsia-600', 'border-b-2', 'border-fuchsia-500');
+  btn.classList.remove('text-purple-300');
+
+  if (subKey === 'history') renderHistoryTab();
+  if (subKey === 'ending') renderEndingBookTab();
+}
+
+function renderHistoryTab() {
+  const container = document.getElementById('history-days-list');
+  container.innerHTML = '';
+  for (let d = 1; d <= maxUnlockedDay; d++) {
+    const isCurrent = (d === currentDay);
+    const item = document.createElement('div');
+    item.className = `p-3 rounded-2xl border ${isCurrent ? 'bg-fuchsia-50 border-fuchsia-300' : 'bg-white border-purple-100'} flex justify-between items-center cursor-pointer hover:border-fuchsia-300 transition shadow-sm`;
+    item.onclick = () => jumpToHistoryDay(d);
+    item.innerHTML = `<div><span class="text-xs font-bold text-purple-950">Day ${d}</span><p class="text-[10px] text-purple-400">Episode ${d}</p></div><span class="text-xs ${isCurrent ? 'text-fuchsia-600 font-bold' : 'text-purple-300'}">${isCurrent ? 'Playing' : 'Jump ⏱️'}</span>`;
+    container.appendChild(item);
+  }
+}
+
+function jumpToHistoryDay(dayNum) {
+  currentDay = dayNum;
+  document.getElementById('my-day-indicator').textContent = `${currentDay} / 30`;
+  saveUserData();
+  alert(`Jumped back to Day ${dayNum}!`);
+  switchTab('chats');
+  openGroupChat();
+}
+
+function renderEndingBookTab() {
+  const container = document.getElementById('ending-records-list');
+  if (endingBookRecords.length === 0) {
+    container.innerHTML = `<div class="p-4 bg-white rounded-2xl border border-purple-100 shadow-sm text-center py-8"><p class="text-xs text-purple-400">No saved ending records yet.</p><p class="text-[10px] text-purple-300 mt-1">Complete 30 days to save your story!</p></div>`;
+    return;
+  }
+  container.innerHTML = '';
+  endingBookRecords.forEach((rec, idx) => {
+    const item = document.createElement('div');
+    item.className = "p-3.5 bg-white rounded-2xl border border-purple-100 shadow-sm flex items-center justify-between";
+    item.innerHTML = `<div><h4 class="text-xs font-bold text-purple-950">${rec.title}</h4><p class="text-[10px] text-purple-400">Partner: ${rec.partner} · ${rec.date}</p></div><button onclick="viewEndingDetail(${idx})" class="text-xs bg-pink-100 text-fuchsia-600 px-3 py-1 rounded-xl font-bold hover:bg-pink-200">View</button>`;
+    container.appendChild(item);
+  });
+}
+
+function saveCurrentEndingRecord() {
+  const newRecord = {
+    title: `Season Loop #${endingBookRecords.length + 1} Ending`,
+    partner: 'Chen Xu (เฉินซวี่)',
+    date: new Date().toLocaleDateString(),
+    storySummary: 'After 30 days in Shanghai, you walked along the Bund with Chen Xu under the quiet night stars.'
+  };
+  endingBookRecords.push(newRecord);
+  saveUserData();
+  renderEndingBookTab();
+  alert('Ending story saved to Ending Book!');
+}
+
+function viewEndingDetail(idx) {
+  const rec = endingBookRecords[idx];
+  alert(`📖 [${rec.title}]\n\nPartner: ${rec.partner}\nDate: ${rec.date}\n\n"${rec.storySummary}"`);
+}
+
+function restartGameNewLoop() {
+  if (confirm('Are you sure you want to restart the game from Day 1? Saved Ending Records will be kept.')) {
+    currentDay = 1;
+    maxUnlockedDay = 1;
+    saveUserData();
+    updateUIFromState();
+    alert('Game reset to Day 1!');
+    switchTab('chats');
+  }
+}
+
 function renderPeopleTab() {
   const list = document.getElementById('people-friends-list');
   list.innerHTML = '';
@@ -227,10 +526,7 @@ function renderPeopleTab() {
 
     item.innerHTML = `
       ${avatarHTML}
-      <div class="flex-1 min-w-0">
-        <h4 class="text-xs font-bold text-purple-950 truncate">${displayName}</h4>
-        <p class="text-[10px] text-purple-400 mt-0.5 truncate">${subTitle}</p>
-      </div>
+      <div class="flex-1 min-w-0"><h4 class="text-xs font-bold text-purple-950 truncate">${displayName}</h4><p class="text-[10px] text-purple-400 mt-0.5 truncate">${subTitle}</p></div>
       <span class="text-[10px] text-purple-300">View &gt;</span>
     `;
     list.appendChild(item);
@@ -240,17 +536,12 @@ function renderPeopleTab() {
 function openContactProfileModal(key) {
   const person = contactsData[key];
   if (!person) return;
-
   const modal = document.getElementById('modal-contact-view');
   const avatarBox = document.getElementById('modal-profile-avatar');
-  const nameLabel = document.getElementById('modal-profile-name');
-  const subLabel = document.getElementById('modal-profile-sub');
-  const detailsBox = document.getElementById('modal-profile-details');
-
   const displayName = (currentDay === 1 && !person.isSpecial) ? person.codeName : person.realName;
 
-  nameLabel.textContent = displayName;
-  subLabel.textContent = `${person.codeName} · ${person.occupation || 'Participant'}`;
+  document.getElementById('modal-profile-name').textContent = displayName;
+  document.getElementById('modal-profile-sub').textContent = `${person.codeName} · ${person.occupation || 'Participant'}`;
 
   if (currentDay >= 2 && person.avatarUrl) {
     avatarBox.style.backgroundImage = `url('${person.avatarUrl}')`;
@@ -261,12 +552,11 @@ function openContactProfileModal(key) {
     avatarBox.textContent = displayName[0];
   }
 
-  detailsBox.innerHTML = `
+  document.getElementById('modal-profile-details').innerHTML = `
     <div><strong class="text-purple-300">Occupation:</strong> ${person.occupation || 'N/A'}</div>
     ${person.interests ? `<div><strong class="text-purple-300">Interests:</strong> ${person.interests}</div>` : ''}
     ${person.idealType ? `<div><strong class="text-purple-300">Ideal Type:</strong> ${person.idealType}</div>` : ''}
   `;
-
   modal.classList.remove('hidden');
 }
 
@@ -285,6 +575,28 @@ function openEditMyProfileModal() {
 
 function closeEditMyProfileModal() {
   document.getElementById('modal-edit-profile').classList.add('hidden');
+}
+
+let tempAvatarDataUrl = '';
+function handleAvatarFileSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) { tempAvatarDataUrl = e.target.result; };
+  reader.readAsDataURL(file);
+}
+
+function saveMyProfileChanges() {
+  if (tempAvatarDataUrl) playerProfile.avatarDataUrl = tempAvatarDataUrl;
+  playerProfile.name = document.getElementById('edit-name').value.trim() || 'Lin XinYue';
+  playerProfile.occupation = document.getElementById('edit-occ').value.trim();
+  playerProfile.interests = document.getElementById('edit-interests').value.trim();
+  playerProfile.idealType = document.getElementById('edit-type').value.trim();
+  playerProfile.datingStyle = document.getElementById('edit-style').value.trim();
+
+  updateUIFromState();
+  saveUserData();
+  closeEditMyProfileModal();
 }
 
 function toggleChatSettingsModal() {
@@ -318,227 +630,6 @@ function changeLanguage(lang) {
   }
 }
 
-function openMasterChat() {
-  document.getElementById('main-header').classList.add('hidden');
-  document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
-  document.getElementById('chat-inside-header').classList.remove('hidden');
-  document.getElementById('active-chat-title').textContent = 'LUMEN Master';
-  document.getElementById('room-master').classList.remove('hidden');
-
-  const stream = document.getElementById('master-stream');
-  if (stream.children.length === 0) {
-    addMasterMsg("Welcome, Participant #8. Submit your Profile Card details.");
-    setTimeout(() => renderMasterRegInput(0), 800);
-  }
-}
-
-const regQuestions = [
-  { key: 'name', label: 'Name / Nickname:', placeholder: 'e.g. Lin XinYue', type: 'text' },
-  { key: 'age', label: 'Age:', placeholder: 'e.g. 23', type: 'number' },
-  { key: 'occupation', label: 'Occupation:', placeholder: 'e.g. Automation Engineer', type: 'text' },
-  { key: 'interests', label: 'Interests & Hobbies:', placeholder: 'e.g. Reading, writing', type: 'text' },
-  { key: 'idealType', label: 'Ideal Type:', placeholder: 'e.g. Good guy, mature', type: 'text' },
-  { key: 'datingStyle', label: 'Dating Style:', placeholder: 'e.g. Slow burn', type: 'text' },
-  { key: 'bestQuality', label: 'Best Quality:', placeholder: 'e.g. Friendly', type: 'text' }
-];
-
-function renderMasterRegInput(idx) {
-  if (idx >= regQuestions.length) {
-    addMasterMsg("Registration complete! Profile Card minted.");
-    setTimeout(() => {
-      addMasterMsg("🔔 NOTICE: TDL All Group lounge has opened! Tap '←' to exit and enter All Group.");
-      document.getElementById('master-last-msg').textContent = 'Profile confirmed. Join All Group!';
-      document.getElementById('master-unread-dot').classList.add('hidden');
-      document.getElementById('channel-group').classList.remove('hidden');
-      document.getElementById('master-form-box').innerHTML = `<button onclick="exitActiveChat();" class="w-full bg-gradient-to-r from-fuchsia-400 to-pink-400 text-white font-bold py-2.5 rounded-xl text-xs">Tap ← to Exit</button>`;
-    }, 900);
-    return;
-  }
-  const q = regQuestions[idx];
-  addMasterMsg(`[Question ${idx+1}/7] ${q.label}`);
-  document.getElementById('master-form-box').innerHTML = `
-    <div class="flex gap-2">
-      <input type="${q.type}" id="reg-input-field" class="flex-1 bg-purple-50/50 border border-purple-200 rounded-xl px-3.5 py-2 text-xs text-purple-950 focus:outline-none" placeholder="${q.placeholder}">
-      <button onclick="submitMasterRegInput(${idx})" class="bg-gradient-to-r from-fuchsia-400 to-pink-400 px-4 py-2 rounded-xl text-xs font-bold text-white">Send</button>
-    </div>
-  `;
-  document.getElementById('reg-input-field').focus();
-}
-
-function submitMasterRegInput(idx) {
-  const val = document.getElementById('reg-input-field').value.trim();
-  if (!val) return;
-  playerProfile[regQuestions[idx].key] = val;
-  addUserBubble(document.getElementById('master-stream'), val);
-  document.getElementById('people-player-name').textContent = `${playerProfile.name} (You)`;
-  document.getElementById('my-player-name').textContent = playerProfile.name;
-  setTimeout(() => renderMasterRegInput(idx + 1), 400);
-}
-
-function addMasterMsg(txt) {
-  const stream = document.getElementById('master-stream');
-  const b = document.createElement('div');
-  b.className = "chat-bubble flex items-start space-x-2";
-  b.innerHTML = `<div class="w-7 h-7 rounded-full bg-gradient-to-tr from-fuchsia-400 to-pink-400 flex items-center justify-center text-[10px] font-bold text-white shrink-0 mt-0.5">M</div><div class="bg-white border border-purple-100 text-purple-900 px-3.5 py-2 rounded-2xl rounded-tl-none text-xs max-w-[85%] shadow-sm">${txt}</div>`;
-  stream.appendChild(b);
-  stream.scrollTop = stream.scrollHeight;
-}
-
-function addUserBubble(container, txt) {
-  const b = document.createElement('div');
-  b.className = "chat-bubble flex justify-end";
-  b.innerHTML = `<div class="bg-gradient-to-r from-fuchsia-400 to-pink-400 text-white px-3.5 py-2 rounded-2xl rounded-tr-none text-xs max-w-[80%] shadow-sm">${txt}</div>`;
-  container.appendChild(b);
-  container.scrollTop = container.scrollHeight;
-}
-
-function openGroupChat() {
-  document.getElementById('main-header').classList.add('hidden');
-  document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
-  document.getElementById('chat-inside-header').classList.remove('hidden');
-  document.getElementById('active-chat-title').textContent = 'TDL : All Group';
-  document.getElementById('room-group').classList.remove('hidden');
-  document.getElementById('group-unread-dot').classList.add('hidden');
-
-  if (dialogueQueue.length === 0) {
-    const dayData = window[`day${currentDay}Data`];
-    if (dayData) {
-      dialogueQueue = [...dayData.dialogues];
-      processGroupQueue();
-    }
-  }
-}
-
-function processGroupQueue() {
-  if (dialogueQueue.length === 0) return;
-  const item = dialogueQueue.shift();
-
-  if (item.type === 'sys') {
-    renderGroupSysMsg(item.text);
-    scheduleGroupNext();
-  } else if (item.type === 'msg') {
-    showTypingIndicator(item.sender, () => {
-      renderGroupMsgBubble(item.sender, item.tone, item.text);
-      scheduleGroupNext();
-    });
-  } else if (item.type === 'card') {
-    renderProfileCardInChat(item.key);
-    scheduleGroupNext();
-  } else if (item.type === 'player_turn') {
-    isWaitingForPlayer = true;
-    const inputBar = document.getElementById('group-player-input-bar');
-    inputBar.classList.remove('hidden');
-    document.getElementById('player-free-text').placeholder = item.prompt || 'Type response...';
-    document.getElementById('player-free-text').focus();
-  } else if (item.type === 'master_event') {
-    if (item.eventName === 'TRIGGER_ICEBREAKER') {
-      const dayData = window[`day${currentDay}Data`];
-      if (dayData && dayData.icebreakerDialogues) {
-        dialogueQueue = [...dayData.icebreakerDialogues];
-        processGroupQueue();
-      }
-    } else if (item.eventName === 'TRIGGER_HEART_SIGNAL') {
-      document.getElementById('channel-heart').classList.remove('hidden');
-    }
-  }
-}
-
-function scheduleGroupNext() {
-  if (speedMode === 3) {
-    waitingForTap = true;
-    document.getElementById('next-tap-bar').classList.remove('hidden');
-  } else {
-    setTimeout(processGroupQueue, delays[speedMode]);
-  }
-}
-
-function advanceDialogue() {
-  if (waitingForTap) { waitingForTap = false; processGroupQueue(); }
-}
-
-function showTypingIndicator(sender, cb) {
-  if (speedMode === 3) { cb(); return; }
-  const indicator = document.getElementById('typing-indicator');
-  indicator.classList.remove('hidden');
-  document.getElementById('typing-name').textContent = `${sender} is typing...`;
-  setTimeout(() => { indicator.classList.add('hidden'); cb(); }, Math.min(650, delays[speedMode]));
-}
-
-function renderGroupSysMsg(txt) {
-  const stream = document.getElementById('group-stream');
-  const b = document.createElement('div');
-  b.className = "flex justify-center my-2 chat-bubble";
-  b.innerHTML = `<div class="bg-purple-100/60 text-purple-600 border border-purple-200/50 px-3.5 py-1.5 rounded-full text-[11px] max-w-[90%] text-center">${txt}</div>`;
-  stream.appendChild(b);
-  stream.scrollTop = stream.scrollHeight;
-}
-
-function renderGroupMsgBubble(sender, tone, text) {
-  const stream = document.getElementById('group-stream');
-  const b = document.createElement('div');
-  b.className = "chat-bubble flex items-start space-x-2.5";
-  b.innerHTML = `
-    <div class="w-9 h-9 rounded-full ${tone} flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 border border-purple-100 shadow-sm">${sender[0]}</div>
-    <div class="space-y-0.5 max-w-[80%]">
-      <span class="text-[11px] font-semibold text-purple-400 ml-1">${sender}</span>
-      <div class="bg-white border border-purple-100 text-purple-950 px-3.5 py-2 rounded-2xl rounded-tl-none text-xs leading-relaxed shadow-sm">${text}</div>
-    </div>
-  `;
-  stream.appendChild(b);
-  stream.scrollTop = stream.scrollHeight;
-  document.getElementById('group-last-msg').textContent = `${sender}: ${text}`;
-}
-
-function sendPlayerFreeMessage() {
-  const field = document.getElementById('player-free-text');
-  const text = field.value.trim();
-  if (!text) return;
-  field.value = '';
-  document.getElementById('group-player-input-bar').classList.add('hidden');
-  isWaitingForPlayer = false;
-
-  addUserBubble(document.getElementById('group-stream'), text);
-  processGroupQueue();
-}
-
-function createPolaroidCardHTML(cardData, isPlayer = false) {
-  const nameAge = isPlayer ? `${playerProfile.name}, ${playerProfile.age}` : `${cardData.realName}, ${cardData.age}`;
-  const occ = isPlayer ? playerProfile.occupation : cardData.occupation;
-  const interests = isPlayer ? playerProfile.interests : cardData.interests;
-  const type = isPlayer ? playerProfile.idealType : cardData.idealType;
-  const dating = isPlayer ? playerProfile.datingStyle : cardData.datingStyle;
-  const best = isPlayer ? playerProfile.bestQuality : cardData.bestQuality;
-  const desc = isPlayer ? 'Aesthetic candid: Soft shoulder sweater, side profile.' : cardData.photoDesc;
-
-  return `
-    <div class="bg-white text-purple-950 rounded-xl p-4 shadow-sm border border-purple-100 max-w-sm mx-auto my-2 font-typewriter">
-      <div class="flex justify-between items-center text-[10px] text-purple-300 border-b border-purple-100 pb-1.5 mb-2.5">
-        <span>Day ${currentDay}. Profile : ${nameAge.split(',')[0]}</span>
-        <span class="tracking-wider text-pink-400">30 DAYS TO LOVE</span>
-      </div>
-      <div class="bg-purple-50/60 rounded-lg aspect-[4/3] w-full overflow-hidden border border-purple-100 mb-3 p-3 flex flex-col justify-end relative shadow-inner">
-        <div class="bg-purple-950/70 backdrop-blur-xs p-2.5 rounded text-[10px] text-purple-100 leading-relaxed font-sans">📷 <em>${desc}</em></div>
-      </div>
-      <div class="space-y-1.5 text-xs text-purple-900">
-        <div class="border-b border-purple-100 pb-1 flex justify-between"><span class="font-bold underline text-purple-400">Name/Age:</span><span class="font-semibold text-purple-950">${nameAge}</span></div>
-        <div class="border-b border-purple-100 pb-1 flex justify-between"><span class="font-bold underline text-purple-400">Occupation:</span><span>${occ}</span></div>
-        <div class="border-b border-purple-100 pb-1"><span class="font-bold underline text-purple-400 block mb-0.5">Interests:</span><span class="inline-block bg-purple-100/60 text-purple-900 px-2 py-0.5 rounded text-[11px]">${interests}</span></div>
-        <div class="border-b border-purple-100 pb-1"><span class="font-bold underline text-purple-400 block mb-0.5">Type:</span><div class="bg-purple-100/60 text-purple-900 p-1.5 rounded text-[11px]">${type}</div></div>
-        <div class="border-b border-purple-100 pb-1"><span class="font-bold underline text-purple-400 block mb-0.5">Dating Style:</span><div class="bg-purple-100/60 text-purple-900 p-1.5 rounded text-[11px]">${dating}</div></div>
-        <div><span class="font-bold underline text-purple-400 block mb-0.5">Best Quality:</span><div class="bg-purple-100/60 text-purple-900 px-2 py-0.5 rounded text-[11px]">${best}</div></div>
-      </div>
-    </div>
-  `;
-}
-
-function renderProfileCardInChat(key) {
-  const b = document.createElement('div');
-  b.className = "chat-bubble my-2";
-  b.innerHTML = (key === 'player') ? createPolaroidCardHTML(null, true) : createPolaroidCardHTML(contactsData[key], false);
-  document.getElementById('group-stream').appendChild(b);
-  document.getElementById('group-stream').scrollTop = document.getElementById('group-stream').scrollHeight;
-}
-
 function openHeartSendingRoom() {
   document.getElementById('main-header').classList.add('hidden');
   document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
@@ -558,6 +649,7 @@ function openHeartSendingRoom() {
   });
 }
 
+let targetGuyKey = null;
 function selectHeartTarget(key, el) {
   targetGuyKey = key;
   document.querySelectorAll('#heart-target-list > div').forEach(d => d.classList.remove('border-fuchsia-400', 'bg-pink-50/50'));
@@ -582,4 +674,5 @@ function submitMidnightHeart() {
 
   document.getElementById('heart-result-box').classList.remove('hidden');
   document.getElementById('heart-reply-view').innerHTML = `<span class="text-[10px] text-purple-400 block mb-1">Delivered to ${guy.realName}:</span>"${msg}"<div class="mt-2 pt-2 border-t border-purple-100 text-fuchsia-600 font-semibold">${reactions[targetGuyKey]}</div>`;
+  saveUserData();
 }
