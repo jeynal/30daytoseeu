@@ -1,5 +1,6 @@
 // Global Game State
-let currentDay = 1; // เปลี่ยนเป็น 2 เพื่อเฉลยชื่อจริงและรูปโปรไฟล์ผู้แข่งทุกคนในวันที่ 2
+let currentDay = 1;
+let maxUnlockedDay = 1;
 let dialogueQueue = [];
 let isWaitingForPlayer = false;
 let waitingForTap = false;
@@ -7,10 +8,9 @@ let speedMode = 1; // 0=Slow, 1=Normal, 2=Fast, 3=Tap Mode
 const delays = [2200, 1200, 500, 0];
 let currentLang = 'en';
 
-// ข้อมูลโปรไฟล์ผู้เล่น
 let playerProfile = {
   name: 'Lin XinYue',
-  avatarUrl: '',
+  avatarDataUrl: '',
   age: 23,
   occupation: 'Automation Engineer',
   interests: 'Reading, writing, music, watching',
@@ -19,104 +19,163 @@ let playerProfile = {
   bestQuality: 'Honestly, funny, friendly'
 };
 
-// ข้อมูลผู้ติดต่อทั้งหมด 9 คน (ผู้เข้าร่วม 8 คน + พีดี Master + บอทที่ปรึกษา)
+let endingBookRecords = [];
+
 const contactsData = {
-  chenxu: {
-    codeName: 'Mr. Horizon',
-    realName: 'Chen Xu (เฉินซวี่)',
-    age: 29,
-    occupation: 'Lead Architect',
-    interests: 'Structure sketches, Black coffee',
-    idealType: 'Peace without words',
-    datingStyle: 'More action than words',
-    avatarUrl: 'images/chenxu.jpg', // ใส่พาธรูปในโฟลเดอร์รูปได้
-    bgTone: 'bg-purple-200 text-purple-800'
-  },
-  xiyao: {
-    codeName: 'Golden Puppy',
-    realName: 'Xia Xiyao (เซี่ยซีเหยา)',
-    age: 22,
-    occupation: 'Idol Vocalist & Dancer',
-    interests: 'Dance, Cheese milk tea',
-    idealType: 'Sweet older sister',
-    datingStyle: 'Clingy & affectionate 24/7',
-    avatarUrl: 'images/xiyao.jpg',
-    bgTone: 'bg-sky-200 text-sky-800'
-  },
-  wenjun: {
-    codeName: 'Velvet Noir',
-    realName: 'Wen Jun (เวินจวิ้น)',
-    age: 28,
-    occupation: 'Art Gallery Owner',
-    interests: 'Vintage wine, Jazz vinyls',
-    idealType: 'Lovely little one',
-    datingStyle: 'Gentle and attentive',
-    avatarUrl: 'images/wenjun.jpg',
-    bgTone: 'bg-indigo-950 text-purple-200'
-  },
-  guyan: {
-    codeName: 'Black Cat',
-    realName: 'Gu Yan (กู้เยี่ยน)',
-    age: 24,
-    occupation: 'Indie Game Developer',
-    interests: 'Midnight coding, Black cats',
-    idealType: 'Quiet person who respects silence',
-    datingStyle: 'Tsundere with words',
-    avatarUrl: 'images/guyan.jpg',
-    bgTone: 'bg-slate-700 text-slate-200'
-  },
-  yingyin: {
-    codeName: 'Scarlet',
-    realName: 'Song Yingyin (ซ่งอิงอิน)',
-    age: 26,
-    occupation: 'Fashion Editor',
-    interests: 'Haute couture, Espresso',
-    idealType: 'Sophisticated gentleman',
-    datingStyle: 'Elegant romance',
-    avatarUrl: 'images/yingyin.jpg',
-    bgTone: 'bg-pink-200 text-pink-800'
-  },
-  jiangyue: {
-    codeName: 'Luna',
-    realName: 'Jiang Yue (เจียงเยว่)',
-    age: 25,
-    occupation: 'Classical Pianist',
-    interests: 'Chopin, Afternoon tea',
-    idealType: 'Romantic soul',
-    datingStyle: 'Soft melodic love',
-    avatarUrl: 'images/jiangyue.jpg',
-    bgTone: 'bg-fuchsia-200 text-fuchsia-800'
-  },
-  tangmei: {
-    codeName: 'Mochi (Foco)',
-    realName: 'Tang Mei (ถังเม่ย)',
-    age: 23,
-    occupation: 'Food Vlogger',
-    interests: 'Street food, Baking',
-    idealType: 'Someone who loves eating',
-    datingStyle: 'Cute & energetic',
-    avatarUrl: 'images/tangmei.jpg',
-    bgTone: 'bg-purple-200 text-purple-800'
-  },
-  master: {
-    codeName: 'Producer',
-    realName: 'Plan Master',
-    occupation: 'Executive Director of LUMEN',
-    avatarUrl: '',
-    bgTone: 'bg-pink-100 text-fuchsia-700',
-    isSpecial: true
-  },
-  consultant: {
-    codeName: 'LUMEN Bot',
-    realName: 'LUMEN Counselor (ที่ปรึกษา)',
-    occupation: 'Relationship Advisor Bot',
-    avatarUrl: '',
-    bgTone: 'bg-emerald-100 text-emerald-800',
-    isSpecial: true
-  }
+  chenxu: { codeName: 'Mr. Horizon', realName: 'Chen Xu (เฉินซวี่)', age: 29, occupation: 'Lead Architect', interests: 'Structure sketches, Coffee', idealType: 'Peace without words', datingStyle: 'More action than words', avatarUrl: 'images/chenxu.jpg', bgTone: 'bg-purple-200 text-purple-800' },
+  xiyao: { codeName: 'Golden Puppy', realName: 'Xia Xiyao (เซี่ยซีเหยา)', age: 22, occupation: 'Idol Vocalist & Dancer', interests: 'Dance, Cheese milk tea', idealType: 'Sweet older sister', datingStyle: 'Clingy & affectionate 24/7', avatarUrl: 'images/xiyao.jpg', bgTone: 'bg-sky-200 text-sky-800' },
+  wenjun: { codeName: 'Velvet Noir', realName: 'Wen Jun (เวินจวิ้น)', age: 28, occupation: 'Art Gallery Owner', interests: 'Vintage wine, Jazz vinyls', idealType: 'Lovely little one', datingStyle: 'Gentle and attentive', avatarUrl: 'images/wenjun.jpg', bgTone: 'bg-indigo-950 text-purple-200' },
+  guyan: { codeName: 'Black Cat', realName: 'Gu Yan (กู้เยี่ยน)', age: 24, occupation: 'Indie Game Developer', interests: 'Midnight coding, Black cats', idealType: 'Quiet person', datingStyle: 'Tsundere with words', avatarUrl: 'images/guyan.jpg', bgTone: 'bg-slate-700 text-slate-200' },
+  yingyin: { codeName: 'Scarlet', realName: 'Song Yingyin (ซ่งอิงอิน)', age: 26, occupation: 'Fashion Editor', interests: 'Haute couture, Espresso', idealType: 'Sophisticated gentleman', datingStyle: 'Elegant romance', avatarUrl: 'images/yingyin.jpg', bgTone: 'bg-pink-200 text-pink-800' },
+  jiangyue: { codeName: 'Luna', realName: 'Jiang Yue (เจียงเยว่)', age: 25, occupation: 'Classical Pianist', interests: 'Chopin, Afternoon tea', idealType: 'Romantic soul', datingStyle: 'Soft melodic love', avatarUrl: 'images/jiangyue.jpg', bgTone: 'bg-fuchsia-200 text-fuchsia-800' },
+  tangmei: { codeName: 'Mochi (Foco)', realName: 'Tang Mei (ถังเม่ย)', age: 23, occupation: 'Food Vlogger', interests: 'Street food, Baking', idealType: 'Someone who loves eating', datingStyle: 'Cute & energetic', avatarUrl: 'images/tangmei.jpg', bgTone: 'bg-purple-200 text-purple-800' },
+  master: { codeName: 'Producer', realName: 'Plan Master', occupation: 'Executive Director of LUMEN', avatarUrl: '', bgTone: 'bg-pink-100 text-fuchsia-700', isSpecial: true },
+  consultant: { codeName: 'LUMEN Bot', realName: 'LUMEN Counselor', occupation: 'Relationship Advisor Bot', avatarUrl: '', bgTone: 'bg-emerald-100 text-emerald-800', isSpecial: true }
 };
 
-// UI & Tab Switcher
+// SubTab Switcher inside MY Tab
+function switchMySubTab(subKey) {
+  document.getElementById('subtab-mystory').classList.add('hidden');
+  document.getElementById('subtab-ending').classList.add('hidden');
+  document.getElementById('subtab-history').classList.add('hidden');
+
+  document.querySelectorAll('#tab-my button').forEach(b => {
+    b.classList.remove('text-fuchsia-600', 'border-b-2', 'border-fuchsia-500');
+    b.classList.add('text-purple-300');
+  });
+
+  document.getElementById(`subtab-${subKey}`).classList.remove('hidden');
+  const btn = document.getElementById(`subtab-btn-${subKey}`);
+  btn.classList.add('text-fuchsia-600', 'border-b-2', 'border-fuchsia-500');
+  btn.classList.remove('text-purple-300');
+
+  if (subKey === 'history') renderHistoryTab();
+  if (subKey === 'ending') renderEndingBookTab();
+}
+
+// Render Unlocked Days History
+function renderHistoryTab() {
+  const container = document.getElementById('history-days-list');
+  container.innerHTML = '';
+
+  for (let d = 1; d <= maxUnlockedDay; d++) {
+    const isCurrent = (d === currentDay);
+    const item = document.createElement('div');
+    item.className = `p-3 rounded-2xl border ${isCurrent ? 'bg-fuchsia-50 border-fuchsia-300' : 'bg-white border-purple-100'} flex justify-between items-center cursor-pointer hover:border-fuchsia-300 transition shadow-sm`;
+    item.onclick = () => jumpToHistoryDay(d);
+    item.innerHTML = `
+      <div>
+        <span class="text-xs font-bold text-purple-950">Day ${d}</span>
+        <p class="text-[10px] text-purple-400">Episode ${d}</p>
+      </div>
+      <span class="text-xs ${isCurrent ? 'text-fuchsia-600 font-bold' : 'text-purple-300'}">${isCurrent ? 'Playing' : 'Jump ⏱️'}</span>
+    `;
+    container.appendChild(item);
+  }
+}
+
+function jumpToHistoryDay(dayNum) {
+  currentDay = dayNum;
+  document.getElementById('my-day-indicator').textContent = `${currentDay} / 30`;
+  alert(`Jumped back to Day ${dayNum}!`);
+  switchTab('chats');
+  openGroupChat();
+}
+
+// Ending Book Manager
+function renderEndingBookTab() {
+  const container = document.getElementById('ending-records-list');
+  if (endingBookRecords.length === 0) {
+    container.innerHTML = `
+      <div class="p-4 bg-white rounded-2xl border border-purple-100 shadow-sm text-center py-8">
+        <p class="text-xs text-purple-400">No saved ending records yet.</p>
+        <p class="text-[10px] text-purple-300 mt-1">Complete 30 days to unlock and save your ending story!</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = '';
+  endingBookRecords.forEach((rec, idx) => {
+    const item = document.createElement('div');
+    item.className = "p-3.5 bg-white rounded-2xl border border-purple-100 shadow-sm flex items-center justify-between";
+    item.innerHTML = `
+      <div>
+        <h4 class="text-xs font-bold text-purple-950">${rec.title}</h4>
+        <p class="text-[10px] text-purple-400">Partner: ${rec.partner} · ${rec.date}</p>
+      </div>
+      <button onclick="viewEndingDetail(${idx})" class="text-xs bg-pink-100 text-fuchsia-600 px-3 py-1 rounded-xl font-bold hover:bg-pink-200">View</button>
+    `;
+    container.appendChild(item);
+  });
+}
+
+function saveCurrentEndingRecord() {
+  const newRecord = {
+    title: `Season Loop #${endingBookRecords.length + 1} Ending`,
+    partner: 'Chen Xu (เฉินซวี่)',
+    date: new Date().toLocaleDateString(),
+    storySummary: 'After 30 days in Shanghai, you walked along the Bund with Chen Xu under the quiet night stars.'
+  };
+  endingBookRecords.push(newRecord);
+  renderEndingBookTab();
+  alert('Ending story saved to Ending Book!');
+}
+
+function viewEndingDetail(idx) {
+  const rec = endingBookRecords[idx];
+  alert(`📖 [${rec.title}]\n\nPartner: ${rec.partner}\nDate: ${rec.date}\n\n"${rec.storySummary}"`);
+}
+
+function restartGameNewLoop() {
+  if (confirm('Are you sure you want to restart the game from Day 1? Your Ending Book records will be saved.')) {
+    currentDay = 1;
+    maxUnlockedDay = 1;
+    document.getElementById('my-day-indicator').textContent = '1 / 30';
+    alert('Game reset to Day 1!');
+    switchTab('chats');
+  }
+}
+
+// File Picker Avatar Selector
+let tempAvatarDataUrl = '';
+function handleAvatarFileSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    tempAvatarDataUrl = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveMyProfileChanges() {
+  if (tempAvatarDataUrl) {
+    playerProfile.avatarDataUrl = tempAvatarDataUrl;
+  }
+  playerProfile.name = document.getElementById('edit-name').value.trim() || 'Lin XinYue';
+  playerProfile.occupation = document.getElementById('edit-occ').value.trim();
+  playerProfile.interests = document.getElementById('edit-interests').value.trim();
+  playerProfile.idealType = document.getElementById('edit-type').value.trim();
+  playerProfile.datingStyle = document.getElementById('edit-style').value.trim();
+
+  document.getElementById('people-player-name').textContent = `${playerProfile.name} (You)`;
+  document.getElementById('people-player-sub').textContent = `${playerProfile.occupation} · Participant`;
+  document.getElementById('my-player-name').textContent = playerProfile.name;
+
+  if (playerProfile.avatarDataUrl) {
+    const avatarStyle = `background-image: url('${playerProfile.avatarDataUrl}'); background-size: cover; background-position: center;`;
+    document.getElementById('people-player-avatar').setAttribute('style', avatarStyle);
+    document.getElementById('people-player-avatar').textContent = '';
+    document.getElementById('my-player-avatar').setAttribute('style', avatarStyle);
+    document.getElementById('my-player-avatar').textContent = '';
+  }
+
+  closeEditMyProfileModal();
+}
+
+// Existing Core Logic
 function switchTab(tabKey) {
   exitActiveChat();
   document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
@@ -148,15 +207,12 @@ function exitActiveChat() {
   document.getElementById('tab-chats').classList.remove('hidden');
 }
 
-// 1. Render รายชื่อผู้ติดต่อครบทั้ง 9 คน + ลูกเล่นชื่อสุ่มวันแรก / เฉลยวันที่สอง
 function renderPeopleTab() {
   const list = document.getElementById('people-friends-list');
   list.innerHTML = '';
-
   document.getElementById('people-day-status').textContent = currentDay === 1 ? 'Day 1: Anonymous Code Names' : 'Day 2+: Profile Unlocked';
 
   Object.entries(contactsData).forEach(([key, person]) => {
-    // วันแรกโชว์เฉพาะ Code Name วันที่ 2 โชว์ชื่อจริงและภาพ
     const displayName = (currentDay === 1 && !person.isSpecial) ? person.codeName : person.realName;
     const subTitle = (currentDay === 1 && !person.isSpecial) ? 'Anonymous Participant' : (person.codeName || person.occupation);
 
@@ -165,8 +221,6 @@ function renderPeopleTab() {
     item.onclick = () => openContactProfileModal(key);
 
     let avatarHTML = `<div class="w-11 h-11 rounded-full ${person.bgTone} flex items-center justify-center font-bold text-xs shrink-0 border border-purple-100 shadow-sm">${displayName[0]}</div>`;
-    
-    // แสดงรูปโปรไฟล์ในหน้าสัมผัสถ้าผ่านวันแรกแล้วมี URL รูปภาพ
     if (currentDay >= 2 && person.avatarUrl) {
       avatarHTML = `<div class="w-11 h-11 rounded-full border border-purple-100 shadow-sm shrink-0 bg-cover bg-center overflow-hidden" style="background-image: url('${person.avatarUrl}')"></div>`;
     }
@@ -183,7 +237,6 @@ function renderPeopleTab() {
   });
 }
 
-// 2. Fullscreen Profile Viewer Modal (ภาพที่ 3)
 function openContactProfileModal(key) {
   const person = contactsData[key];
   if (!person) return;
@@ -221,15 +274,12 @@ function closeContactProfileModal() {
   document.getElementById('modal-contact-view').classList.add('hidden');
 }
 
-// 3. Edit Player's Profile Modal
 function openEditMyProfileModal() {
-  document.getElementById('edit-avatar-url').value = playerProfile.avatarUrl || '';
   document.getElementById('edit-name').value = playerProfile.name;
   document.getElementById('edit-occ').value = playerProfile.occupation;
   document.getElementById('edit-interests').value = playerProfile.interests;
   document.getElementById('edit-type').value = playerProfile.idealType;
   document.getElementById('edit-style').value = playerProfile.datingStyle;
-
   document.getElementById('modal-edit-profile').classList.remove('hidden');
 }
 
@@ -237,42 +287,13 @@ function closeEditMyProfileModal() {
   document.getElementById('modal-edit-profile').classList.add('hidden');
 }
 
-function saveMyProfileChanges() {
-  playerProfile.avatarUrl = document.getElementById('edit-avatar-url').value.trim();
-  playerProfile.name = document.getElementById('edit-name').value.trim() || 'Lin XinYue';
-  playerProfile.occupation = document.getElementById('edit-occ').value.trim();
-  playerProfile.interests = document.getElementById('edit-interests').value.trim();
-  playerProfile.idealType = document.getElementById('edit-type').value.trim();
-  playerProfile.datingStyle = document.getElementById('edit-style').value.trim();
-
-  document.getElementById('people-player-name').textContent = `${playerProfile.name} (You)`;
-  document.getElementById('people-player-sub').textContent = `${playerProfile.occupation} · Participant`;
-  document.getElementById('my-player-name').textContent = playerProfile.name;
-
-  if (playerProfile.avatarUrl) {
-    const avatarStyle = `background-image: url('${playerProfile.avatarUrl}'); background-size: cover; background-position: center;`;
-    document.getElementById('people-player-avatar').setAttribute('style', avatarStyle);
-    document.getElementById('people-player-avatar').textContent = '';
-    document.getElementById('my-player-avatar').setAttribute('style', avatarStyle);
-    document.getElementById('my-player-avatar').textContent = '';
-  }
-
-  closeEditMyProfileModal();
-}
-
-// 4. Chat Settings Modal & Logic
 function toggleChatSettingsModal() {
   document.getElementById('modal-chat-settings').classList.toggle('hidden');
 }
 
 function changeSpeedModeFromSettings(val) {
   speedMode = parseInt(val);
-  const tapBar = document.getElementById('next-tap-bar');
-  if (speedMode === 3) {
-    tapBar.classList.remove('hidden');
-  } else {
-    tapBar.classList.add('hidden');
-  }
+  document.getElementById('next-tap-bar').classList.toggle('hidden', speedMode !== 3);
 }
 
 function applyChatTheme(theme) {
@@ -297,7 +318,6 @@ function changeLanguage(lang) {
   }
 }
 
-// Engine Functions
 function openMasterChat() {
   document.getElementById('main-header').classList.add('hidden');
   document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
