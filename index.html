@@ -21,11 +21,38 @@
       from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    /* Notification Popup Animation */
+    .noti-slide-down { animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .noti-slide-up { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes slideUp {
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(-100%); opacity: 0; }
+    }
   </style>
 </head>
 <body class="flex justify-center select-none">
 
-  <!-- MODAL: EMAIL LOGIN / SYSTEM SAVE (เด้งอันแรกสุดเพื่อกันข้อมูลหาย) -->
+  <!-- IN-APP NOTIFICATION POPUP (การแจ้งเตือนป๊อปอัปเด้งจากด้านบน) -->
+  <div id="in-app-notification" class="hidden fixed top-3 left-0 right-0 z-50 px-4 max-w-md mx-auto pointer-events-none">
+    <div onclick="clickNotificationBanner()" class="bg-white/95 backdrop-blur-md border border-purple-200/80 rounded-2xl p-3 shadow-2xl flex items-center space-x-3 pointer-events-auto cursor-pointer active:scale-95 transition">
+      <div id="noti-avatar" class="w-10 h-10 rounded-full bg-gradient-to-tr from-fuchsia-400 to-pink-400 flex items-center justify-center font-bold text-white text-xs shadow-sm shrink-0 overflow-hidden bg-cover bg-center">
+        M
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex justify-between items-baseline">
+          <h4 id="noti-title" class="font-bold text-xs text-purple-950 truncate">LUMEN Master</h4>
+          <span id="noti-time" class="text-[9px] text-fuchsia-500 font-semibold">Just now</span>
+        </div>
+        <p id="noti-body" class="text-xs text-purple-600 truncate mt-0.5">New message received...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: EMAIL LOGIN -->
   <div id="modal-email-login" class="fixed inset-0 z-50 bg-purple-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-xs rounded-3xl p-6 space-y-4 shadow-2xl border border-purple-100 text-center">
       <div class="w-12 h-12 mx-auto rounded-full bg-gradient-to-tr from-fuchsia-400 to-pink-400 flex items-center justify-center text-white text-xl font-bold shadow-md">💌</div>
@@ -41,6 +68,7 @@
     </div>
   </div>
 
+  <!-- MOBILE CONTAINER -->
   <div class="w-full max-w-md h-full flex flex-col bg-[#fcf8ff] shadow-2xl relative overflow-hidden border-x border-purple-100">
 
     <!-- TOP HEADER (MAIN) -->
@@ -65,11 +93,12 @@
     <!-- MAIN VIEWPORT -->
     <main id="chat-viewport-bg" class="flex-1 overflow-hidden relative flex flex-col bg-[#faf5ff] pb-14 transition-colors">
 
-      <!-- TAB 1: CHATS -->
+      <!-- TAB 1: CHATS (DYNAMIC CHAT LIST - สลับลำดับใหม่อยู่บนสุด) -->
       <section id="tab-chats" class="tab-page flex-1 overflow-y-auto flex flex-col pt-2">
-        <div class="divide-y divide-purple-100/60" id="chat-channel-list">
+        <div class="divide-y divide-purple-100/60 flex flex-col" id="chat-channel-list">
           
-          <div id="channel-master" onclick="openMasterChat()" class="p-4 flex items-center space-x-3.5 hover:bg-purple-50/50 cursor-pointer transition bg-pink-50/30">
+          <!-- Master Chat (Order 1) -->
+          <div id="channel-master" onclick="openMasterChat()" class="p-4 flex items-center space-x-3.5 hover:bg-purple-50/50 cursor-pointer transition bg-pink-50/30 order-1">
             <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-fuchsia-400 to-pink-400 flex items-center justify-center font-bold text-white text-base shadow-sm shrink-0">M</div>
             <div class="flex-1 min-w-0">
               <div class="flex justify-between items-baseline">
@@ -77,13 +106,14 @@
                   LUMEN Master
                   <span id="master-unread-dot" class="w-2 h-2 rounded-full bg-pink-400 animate-ping"></span>
                 </h4>
-                <span class="text-[10px] text-fuchsia-500 font-semibold">Producer</span>
+                <span id="master-time-label" class="text-[10px] text-fuchsia-500 font-semibold">Producer</span>
               </div>
               <p id="master-last-msg" class="text-xs text-purple-400 truncate mt-0.5">Welcome! Tap to confirm your profile card...</p>
             </div>
           </div>
 
-          <div id="channel-group" onclick="openGroupChat()" class="hidden p-4 flex items-center space-x-3.5 hover:bg-purple-50/50 cursor-pointer transition">
+          <!-- Group Chat (Order 2) -->
+          <div id="channel-group" onclick="openGroupChat()" class="hidden p-4 flex items-center space-x-3.5 hover:bg-purple-50/50 cursor-pointer transition order-2">
             <div class="w-12 h-12 rounded-full overflow-hidden grid grid-cols-2 grid-rows-2 bg-purple-100 border border-purple-200/60 shrink-0">
               <div class="bg-purple-200 flex items-center justify-center text-[8px] font-bold text-purple-700">CX</div>
               <div class="bg-sky-200 flex items-center justify-center text-[8px] font-bold text-sky-700">XY</div>
@@ -96,18 +126,19 @@
                   TDL : All Group
                   <span id="group-unread-dot" class="w-2 h-2 rounded-full bg-pink-400"></span>
                 </h4>
-                <span class="text-[10px] text-fuchsia-400 font-semibold">19:00</span>
+                <span id="group-time-label" class="text-[10px] text-fuchsia-400 font-semibold">19:00</span>
               </div>
               <p id="group-last-msg" class="text-xs text-purple-400 truncate mt-0.5">Tap to join group lounge...</p>
             </div>
           </div>
 
-          <div id="channel-heart" onclick="openHeartSendingRoom()" class="hidden p-4 flex items-center space-x-3.5 hover:bg-purple-50/50 cursor-pointer transition">
+          <!-- Heart Sending Room (Order 3) -->
+          <div id="channel-heart" onclick="openHeartSendingRoom()" class="hidden p-4 flex items-center space-x-3.5 hover:bg-purple-50/50 cursor-pointer transition order-3">
             <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-sky-300 to-pink-300 flex items-center justify-center font-bold text-white text-sm shadow-sm shrink-0">💌</div>
             <div class="flex-1 min-w-0">
               <div class="flex justify-between items-baseline">
                 <h4 class="text-sm font-bold text-purple-950 truncate">&lt;Heart Sending&gt;</h4>
-                <span class="text-[10px] text-fuchsia-400 font-semibold">23:59</span>
+                <span id="heart-time-label" class="text-[10px] text-fuchsia-400 font-semibold">23:59</span>
               </div>
               <p id="heart-last-msg" class="text-xs text-purple-400 truncate mt-0.5">Activated! Tap to send heart.</p>
             </div>
@@ -203,12 +234,40 @@
         </div>
       </section>
 
-      <!-- TAB 5: MORE -->
-      <section id="tab-more" class="tab-page hidden flex-1 overflow-y-auto p-4 space-y-4">
-        <h2 class="text-base font-bold text-purple-950">Settings & Info</h2>
-        <div class="p-3 bg-white rounded-xl space-y-2 border border-purple-100 text-xs">
-          <label class="block font-semibold text-purple-900">Gemini API Key (Optional):</label>
-          <input type="password" id="gemini-api-key" placeholder="AIzaSy..." class="w-full p-2 bg-purple-50/50 border border-purple-200 rounded-lg text-xs focus:outline-none focus:border-fuchsia-400">
+      <!-- TAB 5: MORE (SETTINGS & API) -->
+      <section id="tab-more" class="tab-page hidden flex-1 overflow-y-auto p-5 space-y-5">
+        <h2 class="text-base font-bold text-purple-950">Settings & Account</h2>
+
+        <div class="p-4 bg-white rounded-2xl space-y-3 border border-purple-100 shadow-sm text-xs">
+          <div class="flex justify-between items-center pb-2 border-b border-purple-100">
+            <span class="font-bold text-purple-900">Current Account:</span>
+            <span id="more-user-email-display" class="font-semibold text-fuchsia-600">Not logged in</span>
+          </div>
+          <p class="text-[11px] text-purple-400">Your game progress and character data are bound to this email.</p>
+          <button onclick="openSwitchAccountModal()" class="w-full bg-purple-100 hover:bg-purple-200 text-purple-800 font-bold py-2 rounded-xl transition text-xs">
+            🔄 Switch Account / Log in with New Email
+          </button>
+        </div>
+
+        <div class="p-4 bg-white rounded-2xl space-y-3 border border-purple-100 shadow-sm text-xs">
+          <div class="flex justify-between items-center">
+            <label class="font-bold text-purple-900 block">Gemini API Key (AI Integration):</label>
+            <div id="api-status-badge" class="flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-slate-100 text-[10px] text-slate-500 font-bold">
+              <span id="api-status-dot" class="w-2 h-2 rounded-full bg-slate-400"></span>
+              <span id="api-status-text">Disconnected</span>
+            </div>
+          </div>
+
+          <input type="password" id="gemini-api-key" placeholder="AIzaSy..." class="w-full p-2.5 bg-purple-50/60 border border-purple-200 rounded-xl text-xs focus:outline-none focus:border-fuchsia-400">
+
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <button onclick="testGeminiConnection()" class="bg-purple-100 hover:bg-purple-200 text-purple-800 font-bold py-2 rounded-xl transition">
+              🧪 Test Connection
+            </button>
+            <button onclick="saveGeminiApiKey()" class="bg-gradient-to-r from-fuchsia-400 to-pink-400 hover:from-fuchsia-500 hover:to-pink-500 text-white font-bold py-2 rounded-xl transition shadow-sm">
+              💾 Save API Key
+            </button>
+          </div>
         </div>
       </section>
 
@@ -278,17 +337,15 @@
         <h3 class="font-bold text-purple-950 text-sm">Chat Settings ⚙️</h3>
         <button onclick="toggleChatSettingsModal()" class="text-purple-400 hover:text-purple-700 text-sm font-bold">✕</button>
       </div>
-
       <div class="space-y-1">
         <label class="text-xs font-semibold text-purple-900 block">Text Scroll Mode:</label>
         <select id="setting-speed-select" onchange="changeSpeedModeFromSettings(this.value)" class="w-full bg-purple-50/60 border border-purple-200 rounded-xl p-2 text-xs text-purple-950 focus:outline-none">
-          <option value="0">🐌 Slow (ช้า)</option>
-          <option value="1">⚡ Normal (ปานกลาง)</option>
-          <option value="2">🚀 Fast (เร็ว)</option>
-          <option value="3">👆 Tap Mode (กดหน้าจอเพื่ออ่านข้อความถัดไป)</option>
+          <option value="0">🐌 Slow</option>
+          <option value="1">⚡ Normal</option>
+          <option value="2">🚀 Fast</option>
+          <option value="3">👆 Tap Mode</option>
         </select>
       </div>
-
       <div class="space-y-1">
         <label class="text-xs font-semibold text-purple-900 block">Chat Theme Color:</label>
         <div class="grid grid-cols-4 gap-2 pt-1">
@@ -298,16 +355,14 @@
           <button onclick="applyChatTheme('dark')" class="h-8 rounded-xl bg-slate-800 text-white border border-slate-700 flex items-center justify-center text-xs">🖤</button>
         </div>
       </div>
-
       <div class="space-y-1">
-        <label class="text-xs font-semibold text-purple-900 block">Language (ภาษา):</label>
+        <label class="text-xs font-semibold text-purple-900 block">Language:</label>
         <select id="setting-lang-select" onchange="changeLanguage(this.value)" class="w-full bg-purple-50/60 border border-purple-200 rounded-xl p-2 text-xs text-purple-950 focus:outline-none">
-          <option value="en">🇬🇧 English (Main)</option>
+          <option value="en">🇬🇧 English</option>
           <option value="th">🇹🇭 ภาษาไทย</option>
-          <option value="zh">🇨🇳 中文 (Chinese)</option>
+          <option value="zh">🇨🇳 中文</option>
         </select>
       </div>
-
       <button onclick="toggleChatSettingsModal()" class="w-full bg-gradient-to-r from-fuchsia-400 to-pink-400 text-white font-bold py-2 rounded-xl text-xs shadow-sm">Save & Close</button>
     </div>
   </div>
@@ -319,11 +374,10 @@
         <h3 class="font-bold text-purple-950 text-sm">Edit My Profile ✏️</h3>
         <button onclick="closeEditMyProfileModal()" class="text-purple-400 hover:text-purple-700 text-sm font-bold">✕</button>
       </div>
-
       <div class="space-y-2.5 text-xs">
         <div>
-          <label class="font-semibold text-purple-900 block mb-1">Upload Avatar (เลือกรูปจากคลัง):</label>
-          <input type="file" id="edit-avatar-file" accept="image/*" onchange="handleAvatarFileSelect(event)" class="w-full text-xs text-purple-900 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-pink-100 file:text-fuchsia-600 hover:file:bg-pink-200 cursor-pointer">
+          <label class="font-semibold text-purple-900 block mb-1">Upload Avatar:</label>
+          <input type="file" id="edit-avatar-file" accept="image/*" onchange="handleAvatarFileSelect(event)" class="w-full text-xs text-purple-900 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-pink-100 file:text-fuchsia-600">
         </div>
         <div>
           <label class="font-semibold text-purple-900 block mb-1">Name / Nickname:</label>
@@ -346,7 +400,6 @@
           <input type="text" id="edit-style" class="w-full bg-purple-50/50 border border-purple-200 rounded-xl p-2 text-xs focus:outline-none">
         </div>
       </div>
-
       <button onclick="saveMyProfileChanges()" class="w-full bg-gradient-to-r from-fuchsia-400 to-pink-400 text-white font-bold py-2.5 rounded-xl text-xs shadow-sm">Save Changes</button>
     </div>
   </div>
@@ -356,18 +409,14 @@
     <div class="flex justify-between items-center z-10">
       <button onclick="closeContactProfileModal()" class="w-8 h-8 rounded-full bg-black/30 flex items-center justify-center text-white text-lg font-bold hover:bg-black/50">✕</button>
     </div>
-
     <div class="flex flex-col items-center justify-center my-auto space-y-4 z-10 text-center">
-      <div id="modal-profile-avatar" class="w-32 h-32 rounded-full border-2 border-white/80 shadow-2xl overflow-hidden bg-purple-300 flex items-center justify-center text-3xl font-bold text-white bg-cover bg-center">
-      </div>
+      <div id="modal-profile-avatar" class="w-32 h-32 rounded-full border-2 border-white/80 shadow-2xl overflow-hidden bg-purple-300 flex items-center justify-center text-3xl font-bold text-white bg-cover bg-center"></div>
       <div>
         <h2 id="modal-profile-name" class="text-xl font-bold tracking-wide">Choi Sanghyeon</h2>
         <p id="modal-profile-sub" class="text-xs text-slate-300 mt-1">Mr. Horizon · Participant</p>
       </div>
-      <div id="modal-profile-details" class="max-w-xs bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl p-4 text-left text-xs space-y-1.5 text-slate-200">
-      </div>
+      <div id="modal-profile-details" class="max-w-xs bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl p-4 text-left text-xs space-y-1.5 text-slate-200"></div>
     </div>
-
     <div class="z-10 text-center pb-2">
       <span class="text-[10px] text-white/50 tracking-widest uppercase">LUMEN Shanghai Participant</span>
     </div>
