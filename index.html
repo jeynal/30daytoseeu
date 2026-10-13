@@ -9,13 +9,9 @@
   <style>
     * { box-sizing: border-box; }
     html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
+      margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: #f3e8ff; /* Soft Pastel Purple Background */
+      background-color: #f3e8ff;
     }
     .font-typewriter { font-family: 'Courier Prime', monospace; }
     ::-webkit-scrollbar { width: 3px; }
@@ -29,15 +25,14 @@
 </head>
 <body class="flex justify-center select-none">
 
-  <!-- Mobile Screen Frame (Pastel Theme) -->
   <div class="w-full max-w-md h-full flex flex-col bg-[#fcf8ff] shadow-2xl relative overflow-hidden border-x border-purple-100">
 
-    <!-- ================= 1. HEADER ด้านบน (Clean - No Unused Buttons) ================= -->
+    <!-- TOP HEADER (MAIN) -->
     <header id="main-header" class="bg-white/80 backdrop-blur-md px-5 py-3.5 flex items-center justify-between z-20 shrink-0 border-b border-purple-100/60">
       <h1 id="header-page-title" class="font-bold text-xl tracking-tight text-purple-950">Chats</h1>
     </header>
 
-    <!-- Header เฉพาะตอนอยู่ในห้องแชต -->
+    <!-- TOP HEADER (ACTIVE ROOM) -->
     <header id="chat-inside-header" class="hidden bg-white/90 backdrop-blur-md border-b border-purple-100 px-4 py-2.5 flex items-center justify-between z-20 shrink-0">
       <div class="flex items-center space-x-3">
         <button onclick="exitActiveChat()" class="text-purple-800 hover:text-purple-950 font-bold text-xl p-1">←</button>
@@ -51,30 +46,20 @@
           <span class="text-sm font-bold">⏩</span>
           <span id="speed-label" class="text-[9px]">Slow</span>
         </button>
-        <div class="flex flex-col items-center">
-          <span class="text-sm">🔋</span>
-          <span class="text-[9px]">100%</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <span class="text-sm">🪙</span>
-          <span class="text-[9px]">48</span>
-        </div>
+        <div class="flex flex-col items-center"><span class="text-sm">🔋</span><span class="text-[9px]">100%</span></div>
+        <div class="flex flex-col items-center"><span class="text-sm">🪙</span><span class="text-[9px]">48</span></div>
       </div>
     </header>
 
-    <!-- ================= 2. SCROLLABLE VIEWPORT (Pastel BG) ================= -->
+    <!-- MAIN VIEWPORT -->
     <main class="flex-1 overflow-hidden relative flex flex-col bg-[#faf5ff] pb-14">
 
-      <!-- ================= TAB 1: CHATS (เริ่มมีแค่ Master เท่านั้น!) ================= -->
+      <!-- TAB 1: CHATS -->
       <section id="tab-chats" class="tab-page flex-1 overflow-y-auto flex flex-col pt-2">
-        
         <div class="divide-y divide-purple-100/60" id="chat-channel-list">
           
-          <!-- แชต 1: Master (โชว์อันแรกสุดคนเดียว) -->
           <div id="channel-master" onclick="openMasterChat()" class="p-4 flex items-center space-x-3.5 hover:bg-purple-50/50 cursor-pointer transition bg-pink-50/30">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-fuchsia-400 to-pink-400 flex items-center justify-center font-bold text-white text-base shadow-sm shrink-0">
-              M
-            </div>
+            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-fuchsia-400 to-pink-400 flex items-center justify-center font-bold text-white text-base shadow-sm shrink-0">M</div>
             <div class="flex-1 min-w-0">
               <div class="flex justify-between items-baseline">
                 <h4 class="text-xs font-bold text-purple-950 truncate flex items-center gap-1.5">
@@ -87,12 +72,11 @@
             </div>
           </div>
 
-          <!-- แชต 2: All Group (ซ่อนอยู่ จะปลดล็อกหลังคุยกับ Master เสร็จ) -->
           <div id="channel-group" onclick="openGroupChat()" class="hidden p-4 flex items-center space-x-3.5 hover:bg-purple-50/50 cursor-pointer transition">
             <div class="w-12 h-12 rounded-full overflow-hidden grid grid-cols-2 grid-rows-2 bg-purple-100 border border-purple-200/60 shrink-0">
               <div class="bg-purple-200 flex items-center justify-center text-[8px] font-bold text-purple-700">CX</div>
               <div class="bg-sky-200 flex items-center justify-center text-[8px] font-bold text-sky-700">XY</div>
-              <div class="bg-indigo-900 flex items-center justify-center text-[8px] font-bold text-purple-200">WJ</div>
+              <div class="bg-indigo-950 flex items-center justify-center text-[8px] font-bold text-purple-200">WJ</div>
               <div class="bg-slate-700 flex items-center justify-center text-[8px] font-bold text-slate-200">GY</div>
             </div>
             <div class="flex-1 min-w-0">
@@ -103,15 +87,12 @@
                 </h4>
                 <span class="text-[10px] text-fuchsia-400 font-semibold">19:00</span>
               </div>
-              <p id="group-last-msg" class="text-xs text-purple-400 truncate mt-0.5">Golden Puppy: Hey everyone!! Finally opened!</p>
+              <p id="group-last-msg" class="text-xs text-purple-400 truncate mt-0.5">Tap to join group lounge...</p>
             </div>
           </div>
 
-          <!-- แชต 3: Heart Sending (ซ่อนอยู่ จะปลดล็อกช่วงดึก) -->
           <div id="channel-heart" onclick="openHeartSendingRoom()" class="hidden p-4 flex items-center space-x-3.5 hover:bg-purple-50/50 cursor-pointer transition">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-sky-300 to-pink-300 flex items-center justify-center font-bold text-white text-sm shadow-sm shrink-0">
-              💌
-            </div>
+            <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-sky-300 to-pink-300 flex items-center justify-center font-bold text-white text-sm shadow-sm shrink-0">💌</div>
             <div class="flex-1 min-w-0">
               <div class="flex justify-between items-baseline">
                 <h4 class="text-sm font-bold text-purple-950 truncate">&lt;Heart Sending&gt;</h4>
@@ -124,26 +105,20 @@
         </div>
       </section>
 
-      <!-- ================= TAB 2: PEOPLE ================= -->
+      <!-- TAB 2: PEOPLE -->
       <section id="tab-people" class="tab-page hidden flex-1 overflow-y-auto flex flex-col">
         <div class="p-4 flex items-center space-x-3.5 border-b border-purple-100 bg-white/50">
-          <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-pink-300 to-fuchsia-300 flex items-center justify-center text-sm font-bold text-white shadow-sm">
-            You
-          </div>
+          <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-pink-300 to-fuchsia-300 flex items-center justify-center text-sm font-bold text-white shadow-sm">You</div>
           <div>
             <h3 id="people-player-name" class="font-bold text-sm text-purple-950">Lin XinYue (You)</h3>
             <p id="people-player-sub" class="text-xs text-purple-400 mt-0.5">Automation Engineer · Participant</p>
           </div>
         </div>
-
-        <div class="px-4 py-2 bg-purple-50/60">
-          <span class="text-xs text-purple-400 font-semibold">Friends (8)</span>
-        </div>
-
+        <div class="px-4 py-2 bg-purple-50/60"><span class="text-xs text-purple-400 font-semibold">Friends (8)</span></div>
         <div id="people-friends-list" class="divide-y divide-purple-100/60"></div>
       </section>
 
-      <!-- ================= TAB 3: STORY ================= -->
+      <!-- TAB 3: STORY -->
       <section id="tab-story" class="tab-page hidden flex-1 overflow-y-auto p-4 space-y-4">
         <div class="rounded-2xl overflow-hidden border border-purple-200/60 shadow-sm relative bg-gradient-to-br from-indigo-950 via-purple-900 to-fuchsia-950 text-center p-6 text-white aspect-[4/3] flex flex-col justify-center items-center">
           <div class="border border-white/20 p-5 rounded-xl w-full h-full flex flex-col justify-between items-center bg-black/20 backdrop-blur-xs">
@@ -154,27 +129,23 @@
               <p class="text-[9px] text-purple-200 mt-1 max-w-[200px]">30 Days Anonymous Love Project.</p>
             </div>
             <div class="flex justify-between w-full text-[9px] border-t border-white/20 pt-1 text-purple-200">
-              <span>Season 1</span>
-              <span>EXP. Day 30</span>
+              <span>Season 1</span><span>EXP. Day 30</span>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ================= TAB 4: MY ================= -->
+      <!-- TAB 4: MY -->
       <section id="tab-my" class="tab-page hidden flex-1 overflow-y-auto flex flex-col">
         <div class="flex border-b border-purple-100 text-xs font-bold px-4 pt-1 bg-white/50">
           <button class="py-2.5 text-fuchsia-600 border-b-2 border-fuchsia-500 mr-4">My story</button>
           <button class="py-2.5 text-purple-300 hover:text-purple-600 mr-4">Ending Book</button>
           <button class="py-2.5 text-purple-300 hover:text-purple-600">History</button>
         </div>
-
         <div class="p-5 space-y-5">
           <div class="flex items-center justify-between pb-3 border-b border-purple-100">
             <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-pink-300 to-fuchsia-300 flex items-center justify-center text-sm font-bold text-white shadow-sm">
-                You
-              </div>
+              <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-pink-300 to-fuchsia-300 flex items-center justify-center text-sm font-bold text-white shadow-sm">You</div>
               <div>
                 <h3 class="font-bold text-sm text-purple-950">30 Days in Shanghai</h3>
                 <p id="my-player-name" class="text-xs text-purple-400 mt-0.5">Lin XinYue</p>
@@ -182,783 +153,84 @@
             </div>
             <button onclick="openMasterChat()" class="text-xs text-purple-400 hover:text-purple-800">Edit Profile &gt;</button>
           </div>
-
-          <div class="flex justify-between items-center text-xs">
-            <span class="text-purple-700 font-semibold">📖 EPISODE</span>
-            <span class="font-bold text-purple-950">1 / 120</span>
-          </div>
-
-          <div class="flex justify-between items-center text-xs">
-            <span class="text-purple-700 font-semibold">Ⓜ️ CHATTING STATUS</span>
-            <span class="font-bold text-fuchsia-500">In progress</span>
-          </div>
-
-          <div class="flex justify-between items-center text-xs pt-1">
-            <span class="text-purple-700 font-semibold">⏱️ TIME LEAP</span>
-            <span class="font-bold text-purple-950">6</span>
-          </div>
-
-          <button onclick="openGroupChat()" class="w-full bg-gradient-to-r from-fuchsia-400 to-pink-400 hover:from-fuchsia-500 hover:to-pink-500 text-white py-3 rounded-2xl text-xs font-bold transition shadow-sm tracking-wider uppercase">
-            ENTER CHAT / ALL GROUP
-          </button>
+          <div class="flex justify-between items-center text-xs"><span class="text-purple-700 font-semibold">📖 EPISODE</span><span id="my-day-indicator" class="font-bold text-purple-950">1 / 30</span></div>
+          <div class="flex justify-between items-center text-xs"><span class="text-purple-700 font-semibold">Ⓜ️ CHATTING STATUS</span><span class="font-bold text-fuchsia-500">In progress</span></div>
+          <button onclick="openGroupChat()" class="w-full bg-gradient-to-r from-fuchsia-400 to-pink-400 hover:from-fuchsia-500 hover:to-pink-500 text-white py-3 rounded-2xl text-xs font-bold transition shadow-sm tracking-wider uppercase">ENTER CHAT / ALL GROUP</button>
         </div>
       </section>
 
-      <!-- ================= TAB 5: MORE ================= -->
+      <!-- TAB 5: MORE -->
       <section id="tab-more" class="tab-page hidden flex-1 overflow-y-auto p-4 space-y-4">
         <h2 class="text-base font-bold text-purple-950">Settings & Info</h2>
-        <div class="space-y-3 text-xs">
-          <div class="p-3 bg-white rounded-xl space-y-2 border border-purple-100">
-            <label class="block font-semibold text-purple-900">Gemini API Key (Optional):</label>
-            <input type="password" id="gemini-api-key" placeholder="AIzaSy..." class="w-full p-2 bg-purple-50/50 border border-purple-200 rounded-lg text-xs focus:outline-none focus:border-fuchsia-400">
-            <p class="text-[10px] text-purple-400">หากไม่ใส่ ระบบจะประมวลผลคำตอบและคะแนนความเสน่หาด้วยระบบ Script ภายในแอป</p>
-          </div>
+        <div class="p-3 bg-white rounded-xl space-y-2 border border-purple-100 text-xs">
+          <label class="block font-semibold text-purple-900">Gemini API Key (Optional):</label>
+          <input type="password" id="gemini-api-key" placeholder="AIzaSy..." class="w-full p-2 bg-purple-50/50 border border-purple-200 rounded-lg text-xs focus:outline-none focus:border-fuchsia-400">
         </div>
       </section>
 
-      <!-- ================= ROOM 1: MASTER (INTERVIEW) ================= -->
+      <!-- ROOM 1: MASTER -->
       <section id="room-master" class="hidden flex-1 flex flex-col h-full bg-[#fdfbfe] overflow-hidden">
         <div id="master-stream" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
-        <div id="master-input-panel" class="p-3 border-t border-purple-100 bg-white">
-          <div id="master-form-box" class="space-y-2"></div>
-        </div>
+        <div id="master-input-panel" class="p-3 border-t border-purple-100 bg-white"><div id="master-form-box" class="space-y-2"></div></div>
       </section>
 
-      <!-- ================= ROOM 2: ALL GROUP CHAT ================= -->
+      <!-- ROOM 2: GROUP -->
       <section id="room-group" class="hidden flex-1 flex flex-col h-full bg-[#fcf9ff] overflow-hidden">
         <div id="group-stream" class="flex-1 overflow-y-auto p-4 space-y-3.5"></div>
-
-        <!-- Typing status -->
         <div id="typing-indicator" class="hidden px-4 py-1.5 text-xs text-purple-400 italic flex items-center gap-1.5 bg-purple-50/50 border-t border-purple-100">
           <span class="w-1.5 h-1.5 bg-fuchsia-400 rounded-full animate-bounce"></span>
           <span class="w-1.5 h-1.5 bg-fuchsia-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
           <span class="w-1.5 h-1.5 bg-fuchsia-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
           <span id="typing-name" class="ml-1 text-[11px]">typing...</span>
         </div>
-
-        <!-- Tap Next Button -->
         <div id="next-tap-bar" class="hidden p-2 bg-purple-50/40 border-t border-purple-100 text-center">
           <button onclick="advanceDialogue()" class="w-full py-2 bg-white hover:bg-purple-50 text-purple-800 text-xs font-semibold rounded-xl border border-purple-200/80 shadow-sm flex items-center justify-center gap-1">
             <span>Tap to read next message</span> ▼
           </button>
         </div>
-
-        <!-- Player Free Input Field -->
         <div id="group-player-input-bar" class="hidden p-2.5 bg-white border-t border-purple-100 flex items-center gap-2">
-          <input type="text" id="player-free-text" placeholder="Type your response to the group..." class="flex-1 bg-purple-50/50 border border-purple-200 rounded-xl px-3.5 py-2 text-xs text-purple-950 focus:outline-none focus:border-fuchsia-400">
-          <button onclick="sendPlayerFreeMessage()" class="bg-gradient-to-r from-fuchsia-400 to-pink-400 hover:from-fuchsia-500 hover:to-pink-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition shadow-sm">
-            Send
-          </button>
+          <input type="text" id="player-free-text" placeholder="Type your response..." class="flex-1 bg-purple-50/50 border border-purple-200 rounded-xl px-3.5 py-2 text-xs text-purple-950 focus:outline-none focus:border-fuchsia-400">
+          <button onclick="sendPlayerFreeMessage()" class="bg-gradient-to-r from-fuchsia-400 to-pink-400 text-white px-4 py-2 rounded-xl text-xs font-bold transition shadow-sm">Send</button>
         </div>
       </section>
 
-      <!-- ================= ROOM 3: HEART SENDING ================= -->
+      <!-- ROOM 3: HEART -->
       <section id="room-heart" class="hidden flex-1 flex flex-col h-full bg-[#fdfbfe] p-5 overflow-y-auto space-y-4">
         <div>
           <span class="text-[10px] bg-pink-100 text-fuchsia-600 px-2.5 py-0.5 rounded-full font-bold">23:59 PM</span>
-          <h2 class="text-base font-bold text-purple-950 mt-2">Anonymous Heart Signal (Day 1)</h2>
+          <h2 class="text-base font-bold text-purple-950 mt-2">Anonymous Heart Signal</h2>
           <p class="text-xs text-purple-400 mt-0.5">Select one of the 4 guys and send your anonymous secret message.</p>
         </div>
-
         <div id="heart-target-list" class="space-y-2"></div>
-
         <div id="heart-msg-box" class="hidden space-y-2 pt-2 border-t border-purple-100">
           <label class="text-xs text-purple-800 font-semibold">Your Secret Message:</label>
           <textarea id="heart-input-text" rows="3" class="w-full bg-purple-50/50 border border-purple-200 rounded-xl p-3 text-xs text-purple-950 focus:outline-none focus:border-fuchsia-400" placeholder="Type your message to him..."></textarea>
-          <button onclick="submitMidnightHeart()" class="w-full bg-gradient-to-r from-fuchsia-400 to-pink-400 hover:from-fuchsia-500 hover:to-pink-500 text-white font-bold py-2.5 rounded-xl text-xs shadow-sm transition">
-            💌 Send Secret Heart
-          </button>
+          <button onclick="submitMidnightHeart()" class="w-full bg-gradient-to-r from-fuchsia-400 to-pink-400 text-white font-bold py-2.5 rounded-xl text-xs shadow-sm transition">💌 Send Secret Heart</button>
         </div>
-
         <div id="heart-result-box" class="hidden bg-white border border-purple-100 p-4 rounded-2xl space-y-3 shadow-sm">
           <p class="text-xs text-emerald-600 font-bold">✓ Heart Signal delivered!</p>
           <div id="heart-reply-view" class="p-3 bg-purple-50/40 rounded-xl border border-purple-100 text-xs text-purple-800 italic"></div>
-          <p class="text-[11px] text-purple-400 text-center pt-2">🎉 Day 1 Completed! Good night.</p>
+          <p class="text-[11px] text-purple-400 text-center pt-2">🎉 Day Completed! Good night.</p>
         </div>
       </section>
 
     </main>
 
-    <!-- ================= 3. PERMANENT BOTTOM NAV (PASTEL ICONS) ================= -->
+    <!-- BOTTOM NAV BAR -->
     <nav id="bottom-bar" class="absolute bottom-0 left-0 right-0 h-14 bg-white/95 backdrop-blur-md border-t border-purple-100 px-4 flex justify-around items-center z-50 shrink-0">
-      <button onclick="switchTab('chats')" id="nav-chats" class="nav-btn text-fuchsia-500 flex flex-col items-center">
-        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-      </button>
-      <button onclick="switchTab('people')" id="nav-people" class="nav-btn text-purple-300 hover:text-purple-600 flex flex-col items-center">
-        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-      </button>
-      <button onclick="switchTab('story')" id="nav-story" class="nav-btn text-purple-300 hover:text-purple-600 flex flex-col items-center">
-        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M3 3v8h8V3H3zm0 18h8v-8H3v8zm10-18v8h8V3h-8zm0 18h8v-8h-8v8z"/></svg>
-      </button>
-      <button onclick="switchTab('my')" id="nav-my" class="nav-btn text-purple-300 hover:text-purple-600 flex flex-col items-center">
-        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
-      </button>
-      <button onclick="switchTab('more')" id="nav-more" class="nav-btn text-purple-300 hover:text-purple-600 flex flex-col items-center">
-        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-      </button>
+      <button onclick="switchTab('chats')" id="nav-chats" class="nav-btn text-fuchsia-500 flex flex-col items-center"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></button>
+      <button onclick="switchTab('people')" id="nav-people" class="nav-btn text-purple-300 hover:text-purple-600 flex flex-col items-center"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></button>
+      <button onclick="switchTab('story')" id="nav-story" class="nav-btn text-purple-300 hover:text-purple-600 flex flex-col items-center"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M3 3v8h8V3H3zm0 18h8v-8H3v8zm10-18v8h8V3h-8zm0 18h8v-8h-8v8z"/></svg></button>
+      <button onclick="switchTab('my')" id="nav-my" class="nav-btn text-purple-300 hover:text-purple-600 flex flex-col items-center"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg></button>
+      <button onclick="switchTab('more')" id="nav-more" class="nav-btn text-purple-300 hover:text-purple-600 flex flex-col items-center"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
     </nav>
 
   </div>
 
-  <script>
-    // -------------------------------------------------------------
-    // DATA PROFILES (4 หนุ่มตี๋จีน Candid + โปรไฟล์ผู้เล่น)
-    // -------------------------------------------------------------
-    let playerProfile = {
-      name: 'Lin XinYue',
-      age: 23,
-      occupation: 'Automation Engineer',
-      interests: 'Reading, writing, listening, watching, drawing, playing',
-      idealType: 'Good guy, taller than me, mature',
-      datingStyle: 'Slow burn, fall slow but fall harder',
-      bestQuality: 'Honestly, funny, friendly'
-    };
-
-    const boys = {
-      chenxu: {
-        codeName: 'Mr. Horizon',
-        realName: 'Chen Xu (เฉินซวี่)',
-        age: 29,
-        occupation: 'Lead Architect',
-        interests: 'Structure sketches, Black coffee, Bund walks',
-        idealType: 'Someone who feels like peace without needing words',
-        datingStyle: 'More action than words / In it for the long haul',
-        bestQuality: 'Steadiness and unwavering clarity',
-        photoDesc: 'Aesthetic candid: Blue sweater neck, clean sharp jawline, peaceful lighting.',
-        bgTone: 'bg-purple-200 text-purple-800',
-        score: 0
-      },
-      xiyao: {
-        codeName: 'Golden Puppy',
-        realName: 'Xia Xiyao (เซี่ยซีเหยา)',
-        age: 22,
-        occupation: 'Idol Vocalist & Dancer',
-        interests: 'Dance choreography, Cheese milk tea, Voice notes',
-        idealType: 'A sweet older sister who pats my head when exhausted',
-        datingStyle: 'Clingy & affectionate 24/7, 100% loyal',
-        bestQuality: 'Pure heart and endless energetic devotion',
-        photoDesc: 'Aesthetic candid: Soft pastel blue knit, gentle side profile, clean youthful aesthetic.',
-        bgTone: 'bg-sky-200 text-sky-800',
-        score: 0
-      },
-      wenjun: {
-        codeName: 'Velvet Noir',
-        realName: 'Wen Jun (เวินจวิ้น)',
-        age: 28,
-        occupation: 'Lounge & Art Gallery Owner',
-        interests: 'Vintage wine, Jazz vinyls, Contemporary art',
-        idealType: 'A lovely little one who makes me want to tease and spoil',
-        datingStyle: 'Gentle and attentive, but with a heart-racing gaze',
-        bestQuality: 'Gaze that makes someone feel uniquely special',
-        photoDesc: 'Aesthetic candid: Dark collared shirt unbuttoned, collarbone, moody lounge atmosphere.',
-        bgTone: 'bg-indigo-950 text-purple-200',
-        score: 0
-      },
-      guyan: {
-        codeName: 'Black Cat',
-        realName: 'Gu Yan (กู้เยี่ยน)',
-        age: 24,
-        occupation: 'Indie Game Developer',
-        interests: 'Midnight coding, Black cats, Over-ear headphones',
-        idealType: 'Someone quiet who understands and respects my silence',
-        datingStyle: 'Tsundere with words, but remembers every single little detail',
-        bestQuality: 'Quiet attentiveness hidden beneath coldness',
-        photoDesc: 'Aesthetic candid: Dark cap, track jacket, sharp side profile in neon city.',
-        bgTone: 'bg-slate-700 text-slate-200',
-        score: 0
-      }
-    };
-
-    const girls = {
-      yingyin: { name: 'Scarlet (ซ่งอิงอิน)', job: 'Fashion Editor', bgTone: 'bg-pink-200 text-pink-800' },
-      jiangyue: { name: 'Luna (เจียงเยว่)', job: 'Classical Pianist', bgTone: 'bg-fuchsia-200 text-fuchsia-800' },
-      tangmei: { name: 'Mochi (ถังเม่ย)', job: 'Food Vlogger', bgTone: 'bg-purple-200 text-purple-800' }
-    };
-
-    // -------------------------------------------------------------
-    // SPEED CONTROLLER
-    // -------------------------------------------------------------
-    let speedMode = 0; // 0 = Slow, 1 = Normal, 2 = Tap
-    const delays = [1700, 950, 0];
-
-    function toggleSpeed() {
-      speedMode = (speedMode + 1) % 3;
-      const label = document.getElementById('speed-label');
-      const tapBar = document.getElementById('next-tap-bar');
-      if (speedMode === 0) {
-        label.textContent = 'Slow';
-        tapBar.classList.add('hidden');
-      } else if (speedMode === 1) {
-        label.textContent = 'Normal';
-        tapBar.classList.add('hidden');
-      } else {
-        label.textContent = 'Tap Mode';
-        tapBar.classList.remove('hidden');
-      }
-    }
-
-    // -------------------------------------------------------------
-    // NAVIGATION CONTROLLER
-    // -------------------------------------------------------------
-    function switchTab(tabKey) {
-      exitActiveChat();
-      document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
-      document.querySelectorAll('.nav-btn').forEach(b => {
-        b.classList.remove('text-fuchsia-500');
-        b.classList.add('text-purple-300');
-      });
-
-      const targetPage = document.getElementById(`tab-${tabKey}`);
-      const targetBtn = document.getElementById(`nav-${tabKey}`);
-      if (targetPage) targetPage.classList.remove('hidden');
-      if (targetBtn) {
-        targetBtn.classList.add('text-fuchsia-500');
-        targetBtn.classList.remove('text-purple-300');
-      }
-
-      const titles = { chats: 'Chats', people: 'People', story: 'Story', my: 'MY', more: 'More' };
-      document.getElementById('header-page-title').textContent = titles[tabKey] || 'Chats';
-
-      if (tabKey === 'people') renderPeopleTab();
-    }
-
-    function exitActiveChat() {
-      document.getElementById('chat-inside-header').classList.add('hidden');
-      document.getElementById('room-master').classList.add('hidden');
-      document.getElementById('room-group').classList.add('hidden');
-      document.getElementById('room-heart').classList.add('hidden');
-
-      document.getElementById('main-header').classList.remove('hidden');
-      document.getElementById('tab-chats').classList.remove('hidden');
-    }
-
-    function renderPeopleTab() {
-      const list = document.getElementById('people-friends-list');
-      list.innerHTML = '';
-      const friends = [
-        { name: boys.chenxu.realName, code: 'Mr. Horizon', tone: boys.chenxu.bgTone },
-        { name: boys.xiyao.realName, code: 'Golden Puppy', tone: boys.xiyao.bgTone },
-        { name: boys.wenjun.realName, code: 'Velvet Noir', tone: boys.wenjun.bgTone },
-        { name: boys.guyan.realName, code: 'Black Cat', tone: boys.guyan.bgTone },
-        { name: girls.yingyin.name, code: 'Scarlet', tone: girls.yingyin.bgTone },
-        { name: girls.jiangyue.name, code: 'Luna', tone: girls.jiangyue.bgTone },
-        { name: girls.tangmei.name, code: 'Mochi (Foco)', tone: girls.tangmei.bgTone },
-        { name: 'Plan Master', code: 'Producer', tone: 'bg-pink-100 text-fuchsia-700' }
-      ];
-
-      friends.forEach(f => {
-        const item = document.createElement('div');
-        item.className = "p-3.5 px-4 flex items-center space-x-3.5 hover:bg-purple-50/50 transition";
-        item.innerHTML = `
-          <div class="w-11 h-11 rounded-full ${f.tone} flex items-center justify-center font-bold text-xs shrink-0 border border-purple-100 shadow-sm">
-            ${f.code[0]}
-          </div>
-          <div>
-            <h4 class="text-xs font-bold text-purple-950">${f.name}</h4>
-            <p class="text-[10px] text-purple-400">${f.code}</p>
-          </div>
-        `;
-        list.appendChild(item);
-      });
-    }
-
-    // -------------------------------------------------------------
-    // MASTER CHAT ENGINE (Producer Registration)
-    // -------------------------------------------------------------
-    const regQuestions = [
-      { key: 'name', label: 'Name / Nickname:', placeholder: 'e.g. Lin XinYue', type: 'text' },
-      { key: 'age', label: 'Age:', placeholder: 'e.g. 23', type: 'number' },
-      { key: 'occupation', label: 'Occupation:', placeholder: 'e.g. Automation Engineer', type: 'text' },
-      { key: 'interests', label: 'Interests & Hobbies:', placeholder: 'e.g. Reading, writing, music, cafes', type: 'text' },
-      { key: 'idealType', label: 'Ideal Type:', placeholder: 'e.g. Good guy, taller than me, mature', type: 'text' },
-      { key: 'datingStyle', label: 'Dating Style:', placeholder: 'e.g. Slow burn, fall slow but fall harder', type: 'text' },
-      { key: 'bestQuality', label: 'Best Quality:', placeholder: 'e.g. Honestly, funny, friendly', type: 'text' }
-    ];
-
-    let regIndex = 0;
-
-    function openMasterChat() {
-      document.getElementById('main-header').classList.add('hidden');
-      document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
-
-      document.getElementById('chat-inside-header').classList.remove('hidden');
-      document.getElementById('active-chat-title').textContent = 'LUMEN Master';
-      document.getElementById('active-chat-sub').textContent = 'Producer (1:1 Interview)';
-
-      document.getElementById('room-master').classList.remove('hidden');
-
-      const stream = document.getElementById('master-stream');
-      if (stream.children.length === 0) {
-        addMasterMsg("Welcome, Participant #8. I am Master, the executive producer of 30 Days in Shanghai.");
-        setTimeout(() => {
-          addMasterMsg("Before the All-Group chatroom activates tonight, please submit your Profile Card details.");
-          renderMasterRegInput(0);
-        }, 800);
-      }
-    }
-
-    function renderMasterRegInput(idx) {
-      regIndex = idx;
-      if (idx >= regQuestions.length) {
-        addMasterMsg("Registration complete! Your official Profile Card has been minted.");
-        setTimeout(() => {
-          addMasterMsg("🔔 NOTICE: TDL All Group lounge has officially opened with 8 members! Please tap '←' at the top left to exit this chat and enter the All Group room.");
-          document.getElementById('master-last-msg').textContent = 'Profile confirmed. Join All Group!';
-          document.getElementById('master-unread-dot').classList.add('hidden');
-          
-          // ปลดล็อกแชตรวม TDL All Group หลังคุยกับ Master เสร็จ!
-          document.getElementById('channel-group').classList.remove('hidden');
-
-          document.getElementById('master-form-box').innerHTML = `
-            <button onclick="exitActiveChat();" class="w-full bg-gradient-to-r from-fuchsia-400 to-pink-400 hover:from-fuchsia-500 hover:to-pink-500 text-white font-bold py-2.5 rounded-xl text-xs transition shadow-sm">
-              Tap ← to Exit & Check Lounge List
-            </button>
-          `;
-        }, 900);
-        return;
-      }
-
-      const q = regQuestions[idx];
-      addMasterMsg(`[Question ${idx+1}/7] ${q.label}`);
-      document.getElementById('master-form-box').innerHTML = `
-        <div class="flex gap-2">
-          <input type="${q.type}" id="reg-input-field" class="flex-1 bg-purple-50/50 border border-purple-200 rounded-xl px-3.5 py-2 text-xs text-purple-950 focus:outline-none focus:border-fuchsia-400" placeholder="${q.placeholder}">
-          <button onclick="submitMasterRegInput(${idx})" class="bg-gradient-to-r from-fuchsia-400 to-pink-400 hover:from-fuchsia-500 hover:to-pink-500 px-4 py-2 rounded-xl text-xs font-bold text-white transition shadow-sm">Send</button>
-        </div>
-      `;
-      document.getElementById('reg-input-field').focus();
-    }
-
-    function submitMasterRegInput(idx) {
-      const field = document.getElementById('reg-input-field');
-      const val = field.value.trim();
-      if (!val) return;
-
-      playerProfile[regQuestions[idx].key] = val;
-      addUserBubble(document.getElementById('master-stream'), val);
-
-      document.getElementById('people-player-name').textContent = `${playerProfile.name} (You)`;
-      document.getElementById('people-player-sub').textContent = `${playerProfile.occupation} · Participant`;
-      document.getElementById('my-player-name').textContent = playerProfile.name;
-
-      setTimeout(() => renderMasterRegInput(idx + 1), 400);
-    }
-
-    function addMasterMsg(txt) {
-      const stream = document.getElementById('master-stream');
-      const b = document.createElement('div');
-      b.className = "chat-bubble flex items-start space-x-2";
-      b.innerHTML = `
-        <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-fuchsia-400 to-pink-400 flex items-center justify-center text-[10px] font-bold text-white shrink-0 mt-0.5 shadow-sm">M</div>
-        <div class="bg-white border border-purple-100 text-purple-900 px-3.5 py-2 rounded-2xl rounded-tl-none text-xs max-w-[85%] leading-relaxed shadow-sm">
-          ${txt}
-        </div>
-      `;
-      stream.appendChild(b);
-      stream.scrollTop = stream.scrollHeight;
-    }
-
-    function addUserBubble(container, txt) {
-      const b = document.createElement('div');
-      b.className = "chat-bubble flex justify-end";
-      b.innerHTML = `
-        <div class="bg-gradient-to-r from-fuchsia-400 to-pink-400 text-white px-3.5 py-2 rounded-2xl rounded-tr-none text-xs max-w-[80%] leading-relaxed shadow-sm">
-          ${txt}
-        </div>
-      `;
-      container.appendChild(b);
-      container.scrollTop = container.scrollHeight;
-    }
-
-    // -------------------------------------------------------------
-    // ALL GROUP CHAT ENGINE (Pastel Chat Bubbles)
-    // -------------------------------------------------------------
-    let dialogueQueue = [];
-    let isWaitingForPlayer = false;
-    let waitingForTap = false;
-
-    function openGroupChat() {
-      document.getElementById('main-header').classList.add('hidden');
-      document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
-
-      document.getElementById('chat-inside-header').classList.remove('hidden');
-      document.getElementById('active-chat-title').textContent = 'TDL : All Group';
-      document.getElementById('active-chat-sub').textContent = '8 Members (Shanghai)';
-
-      document.getElementById('room-group').classList.remove('hidden');
-      document.getElementById('group-unread-dot').classList.add('hidden');
-
-      if (dialogueQueue.length === 0) {
-        buildExtendedGroupDialogue();
-        processGroupQueue();
-      }
-    }
-
-    function buildExtendedGroupDialogue() {
-      dialogueQueue = [
-        { type: 'sys', text: 'Now, feel free to begin the conversation.' },
-        { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'Hey everyone!! Finally the room opened 🎉' },
-        { type: 'msg', sender: 'Mochi', tone: girls.tangmei.bgTone, text: 'hiiii everyone!! OMG there are so many of us here 😮' },
-        { type: 'msg', sender: 'Scarlet', tone: girls.yingyin.bgTone, text: 'Hello. Nice to meet everyone on this first night.' },
-        { type: 'msg', sender: 'Black Cat', tone: boys.guyan.bgTone, text: '...so many notification dings already. It’s loud.' },
-        { type: 'msg', sender: 'Mr. Horizon', tone: boys.chenxu.bgTone, text: 'Good evening. It is quite late, hope nobody had a rough arrival in Shanghai.' },
-        { type: 'msg', sender: 'Velvet Noir', tone: boys.wenjun.bgTone, text: 'Evening all. The weather tonight in the city is quite pleasant.' },
-        { type: 'msg', sender: 'Luna', tone: girls.jiangyue.bgTone, text: 'Hello! I was so nervous waiting for the room to activate haha ☺️' },
-        { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'Me too Luna! My hands were literally shaking while holding my phone!' },
-        { type: 'msg', sender: 'Mr. Horizon', tone: boys.chenxu.bgTone, text: 'Take it easy. We have 30 days ahead of us. No need to rush.' },
-
-        // Free Player Turn 1
-        { type: 'player_turn', prompt: 'Say hello to everyone in the group...' },
-
-        { type: 'msg', sender: 'Mochi', tone: girls.tangmei.bgTone, text: 'Wait wait, since we are all using code names, let\'s guess something funny first!' },
-        { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'Ooh what is it Mochi? Tell us!' },
-        { type: 'msg', sender: 'Mochi', tone: girls.tangmei.bgTone, text: 'Which of the two is the fact then... Handsome or responsible?' },
-        { type: 'msg', sender: 'Scarlet', tone: girls.yingyin.bgTone, text: 'Hoping for the former ☺️' },
-        { type: 'msg', sender: 'Luna', tone: girls.jiangyue.bgTone, text: 'It\'s definitely the former right?! Haha' },
-        { type: 'msg', sender: 'Velvet Noir', tone: boys.wenjun.bgTone, text: 'Probably the former. But responsibility carries more weight long term.' },
-        { type: 'msg', sender: 'Mr. Horizon', tone: boys.chenxu.bgTone, text: 'Not quite... why can\'t someone strive to be both?' },
-        { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'Hahaha Mr. Horizon is definitely trying to be both!' },
-        { type: 'msg', sender: 'Black Cat', tone: boys.guyan.bgTone, text: '...pointless debate.' },
-        { type: 'msg', sender: 'Mochi', tone: girls.tangmei.bgTone, text: 'Aww Black Cat you are such a party pooper 555' },
-
-        // Free Player Turn 2
-        { type: 'player_turn', prompt: 'Share your thoughts on handsome vs responsible...' },
-
-        { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'Anyone hungry right now? I\'m craving cheese milk tea so badly 🧋' },
-        { type: 'msg', sender: 'Mr. Horizon', tone: boys.chenxu.bgTone, text: 'Drinking sweet tea this late will keep you awake. Warm water is safer.' },
-        { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'Mr. Horizon talks just like a caring dad haha!' },
-        { type: 'msg', sender: 'Velvet Noir', tone: boys.wenjun.bgTone, text: 'He is not wrong though. Take care of your throat if you sing often.' },
-
-        { type: 'master_event', eventName: 'TRIGGER_ICEBREAKER' }
-      ];
-    }
-
-    function triggerIcebreakerReveal() {
-      dialogueQueue = [
-        { type: 'sys', text: '📢 [LUMEN MASTER]: It is 21:00. Time for the Icebreaker: Profile Cards Reveal.' },
-        { type: 'sys', text: 'The producer will drop the official Profile Cards one by one. Let\'s see who can guess the owners!' },
-
-        // Card 1: Chen Xu
-        { type: 'card', key: 'chenxu' },
-        { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'WHOA! Look at that jawline and blue knit sweater! So aesthetic!' },
-        { type: 'msg', sender: 'Mochi', tone: girls.tangmei.bgTone, text: 'Lead Architect, 29 years old... "More action than words". This has to be Mr. Horizon!' },
-        { type: 'msg', sender: 'Scarlet', tone: girls.yingyin.bgTone, text: 'Agreed. The steady and mature tone matches him completely.' },
-        { type: 'msg', sender: 'Velvet Noir', tone: boys.wenjun.bgTone, text: 'No doubt about it. Horizon, is this you?' },
-        { type: 'msg', sender: 'Mr. Horizon', tone: boys.chenxu.bgTone, text: 'You all analyzed it so thoroughly... Yes, it is mine. My real name is Chen Xu (เฉินซวี่). Nice to formally meet you all.' },
-
-        // Card 2: Xia Xiyao
-        { type: 'card', key: 'xiyao' },
-        { type: 'msg', sender: 'Scarlet', tone: girls.yingyin.bgTone, text: 'Wait! Pastel blue sweater, idol vocalist, 22 yo, loves cheese milk tea??' },
-        { type: 'msg', sender: 'Mochi', tone: girls.tangmei.bgTone, text: 'Hahaha is there even any mystery left?! Golden Puppy, you leaked your own tea earlier!' },
-        { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'Eeeek! Busted!! Yes, I am Xia Xiyao (เซี่ยซีเหยา)! Please take care of me jiejie and everyone!' },
-        { type: 'msg', sender: 'Black Cat', tone: boys.guyan.bgTone, text: '...obvious from space.' },
-
-        // Card 3: Gu Yan
-        { type: 'card', key: 'guyan' },
-        { type: 'msg', sender: 'Luna', tone: girls.jiangyue.bgTone, text: 'Black cap, headphones, midnight coding... "Tsundere with words"?' },
-        { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: 'Black Cat!! That cool side profile is definitely you!' },
-        { type: 'msg', sender: 'Black Cat', tone: boys.guyan.bgTone, text: '...Yeah. Gu Yan (กู้เยี่ยน). Game programmer.' },
-        { type: 'msg', sender: 'Mr. Horizon', tone: boys.chenxu.bgTone, text: 'Welcome, Gu Yan. Quiet people often carry the deepest thoughts.' },
-
-        // Card 4: Wen Jun
-        { type: 'card', key: 'wenjun' },
-        { type: 'msg', sender: 'Mochi', tone: girls.tangmei.bgTone, text: 'OMG! Dark shirt unbuttoned, lounge atmosphere... Art gallery owner?!' },
-        { type: 'msg', sender: 'Scarlet', tone: girls.yingyin.bgTone, text: 'Velvet Noir. That explains why your texts felt so refined and experienced.' },
-        { type: 'msg', sender: 'Velvet Noir', tone: boys.wenjun.bgTone, text: 'Guessed right. I am Wen Jun (เวินจวิ้น). Glad to meet you all.' },
-
-        // Card 5: Player's Card
-        { type: 'card', key: 'player' },
-        { type: 'msg', sender: 'Mr. Horizon', tone: boys.chenxu.bgTone, text: `Automation Engineer... and '${playerProfile.datingStyle}'. It feels grounded, sincere, and very rare.` },
-        { type: 'msg', sender: 'Golden Puppy', tone: boys.xiyao.bgTone, text: `Waaah such a pretty candid photo!! "Slow burn, fall slow but fall harder"... That line gave me goosebumps!!` },
-        { type: 'msg', sender: 'Velvet Noir', tone: boys.wenjun.bgTone, text: `Little one... your card leaves an impression that lingers. I like how honest you are.` },
-        { type: 'msg', sender: 'Black Cat', tone: boys.guyan.bgTone, text: `...Automation engineer? Unexpected. Cool job.` },
-
-        // Free Player Turn 3
-        { type: 'player_turn', prompt: 'Everyone is complimenting your card! Reply back to them...' },
-
-        { type: 'msg', sender: 'Mochi', tone: girls.tangmei.bgTone, text: 'Now that everyone\'s cards are revealed, I feel like we got so much closer already!' },
-        { type: 'msg', sender: 'Mr. Horizon', tone: boys.chenxu.bgTone, text: 'It has been a wonderful first night. Everyone should get some sleep soon.' },
-        { type: 'sys', text: '🔒 23:55 PM: TDL All Group lounge is now officially closing for Day 1.' },
-        { type: 'sys', text: 'The Master has dispatched the midnight Secret Heart invitation. Please tap "←" to exit and check <Heart Sending>.' },
-        { type: 'master_event', eventName: 'TRIGGER_HEART_SIGNAL' }
-      ];
-    }
-
-    function processGroupQueue() {
-      if (dialogueQueue.length === 0) return;
-
-      const item = dialogueQueue.shift();
-
-      if (item.type === 'sys') {
-        renderGroupSysMsg(item.text);
-        scheduleGroupNext();
-      } else if (item.type === 'msg') {
-        showTypingIndicator(item.sender, () => {
-          renderGroupMsgBubble(item.sender, item.tone, item.text);
-          scheduleGroupNext();
-        });
-      } else if (item.type === 'card') {
-        renderProfileCardInChat(item.key);
-        scheduleGroupNext();
-      } else if (item.type === 'player_turn') {
-        isWaitingForPlayer = true;
-        const inputBar = document.getElementById('group-player-input-bar');
-        inputBar.classList.remove('hidden');
-        document.getElementById('player-free-text').placeholder = item.prompt || 'Type your message...';
-        document.getElementById('player-free-text').focus();
-      } else if (item.type === 'master_event') {
-        if (item.eventName === 'TRIGGER_ICEBREAKER') {
-          triggerIcebreakerReveal();
-          processGroupQueue();
-        } else if (item.eventName === 'TRIGGER_HEART_SIGNAL') {
-          // ปลดล็อกแชตส่งใจ <Heart Sending> ตอนเที่ยงคืน!
-          document.getElementById('channel-heart').classList.remove('hidden');
-        }
-      }
-    }
-
-    function scheduleGroupNext() {
-      if (speedMode === 2) {
-        waitingForTap = true;
-        document.getElementById('next-tap-bar').classList.remove('hidden');
-      } else {
-        setTimeout(processGroupQueue, delays[speedMode]);
-      }
-    }
-
-    function advanceDialogue() {
-      if (waitingForTap) {
-        waitingForTap = false;
-        processGroupQueue();
-      }
-    }
-
-    function showTypingIndicator(sender, cb) {
-      if (speedMode === 2) { cb(); return; }
-      const indicator = document.getElementById('typing-indicator');
-      indicator.classList.remove('hidden');
-      document.getElementById('typing-name').textContent = `${sender} is typing...`;
-      setTimeout(() => {
-        indicator.classList.add('hidden');
-        cb();
-      }, Math.min(650, delays[speedMode]));
-    }
-
-    function renderGroupSysMsg(txt) {
-      const stream = document.getElementById('group-stream');
-      const b = document.createElement('div');
-      b.className = "flex justify-center my-2 chat-bubble";
-      b.innerHTML = `
-        <div class="bg-purple-100/60 text-purple-600 border border-purple-200/50 px-3.5 py-1.5 rounded-full text-[11px] max-w-[90%] text-center">
-          ${txt}
-        </div>
-      `;
-      stream.appendChild(b);
-      stream.scrollTop = stream.scrollHeight;
-    }
-
-    function renderGroupMsgBubble(sender, tone, text) {
-      const stream = document.getElementById('group-stream');
-      const b = document.createElement('div');
-      b.className = "chat-bubble flex items-start space-x-2.5";
-      b.innerHTML = `
-        <div class="w-9 h-9 rounded-full ${tone} flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 border border-purple-100 shadow-sm">
-          ${sender[0]}
-        </div>
-        <div class="space-y-0.5 max-w-[80%]">
-          <span class="text-[11px] font-semibold text-purple-400 ml-1">${sender}</span>
-          <div class="bg-white border border-purple-100 text-purple-950 px-3.5 py-2 rounded-2xl rounded-tl-none text-xs leading-relaxed shadow-sm">
-            ${text}
-          </div>
-        </div>
-      `;
-      stream.appendChild(b);
-      stream.scrollTop = stream.scrollHeight;
-      document.getElementById('group-last-msg').textContent = `${sender}: ${text}`;
-    }
-
-    function sendPlayerFreeMessage() {
-      const field = document.getElementById('player-free-text');
-      const text = field.value.trim();
-      if (!text) return;
-
-      field.value = '';
-      document.getElementById('group-player-input-bar').classList.add('hidden');
-      isWaitingForPlayer = false;
-
-      addUserBubble(document.getElementById('group-stream'), text);
-
-      // Score processing
-      const lower = text.toLowerCase();
-      if (lower.includes('horizon') || lower.includes('chen') || lower.includes('architect') || lower.includes('เฉิน')) {
-        boys.chenxu.score += 5;
-      } else if (lower.includes('puppy') || lower.includes('xiyao') || lower.includes('cute') || lower.includes('tea') || lower.includes('ซีเหยา')) {
-        boys.xiyao.score += 5;
-      } else if (lower.includes('velvet') || lower.includes('wen') || lower.includes('noir') || lower.includes('เวิน')) {
-        boys.wenjun.score += 5;
-      } else if (lower.includes('cat') || lower.includes('guyan') || lower.includes('tsundere') || lower.includes('กู้')) {
-        boys.guyan.score += 5;
-      } else {
-        boys.chenxu.score += 1;
-        boys.xiyao.score += 1;
-        boys.wenjun.score += 1;
-        boys.guyan.score += 1;
-      }
-
-      processGroupQueue();
-    }
-
-    // -------------------------------------------------------------
-    // PROFILE CARDS IN CHAT (Pastel Polaroid)
-    // -------------------------------------------------------------
-    function createPolaroidCardHTML(cardData, isPlayer = false) {
-      const nameAge = isPlayer ? `${playerProfile.name}, ${playerProfile.age}` : `${cardData.realName}, ${cardData.age}`;
-      const occ = isPlayer ? playerProfile.occupation : cardData.occupation;
-      const interests = isPlayer ? playerProfile.interests : cardData.interests;
-      const type = isPlayer ? playerProfile.idealType : cardData.idealType;
-      const dating = isPlayer ? playerProfile.datingStyle : cardData.datingStyle;
-      const best = isPlayer ? playerProfile.bestQuality : cardData.bestQuality;
-      const desc = isPlayer ? 'Aesthetic candid: Warm indoor lighting, soft shoulder sweater, delicate side profile.' : cardData.photoDesc;
-
-      return `
-        <div class="bg-white text-purple-950 rounded-xl p-4 shadow-sm border border-purple-100 max-w-sm mx-auto my-2 font-typewriter">
-          <div class="flex justify-between items-center text-[10px] text-purple-300 border-b border-purple-100 pb-1.5 mb-2.5">
-            <span>Day 1. Profile : ${nameAge.split(',')[0]}</span>
-            <span class="tracking-wider text-pink-400">30 DAYS TO LOVE</span>
-          </div>
-
-          <div class="bg-purple-50/60 rounded-lg aspect-[4/3] w-full overflow-hidden border border-purple-100 mb-3 p-3 flex flex-col justify-end relative shadow-inner">
-            <div class="bg-purple-950/70 backdrop-blur-xs p-2.5 rounded text-[10px] text-purple-100 leading-relaxed font-sans">
-              📷 <em>${desc}</em>
-            </div>
-          </div>
-
-          <div class="space-y-1.5 text-xs text-purple-900">
-            <div class="border-b border-purple-100 pb-1 flex justify-between">
-              <span class="font-bold underline text-purple-400">Name/Age:</span>
-              <span class="font-semibold text-purple-950">${nameAge}</span>
-            </div>
-            <div class="border-b border-purple-100 pb-1 flex justify-between">
-              <span class="font-bold underline text-purple-400">Occupation:</span>
-              <span>${occ}</span>
-            </div>
-            <div class="border-b border-purple-100 pb-1">
-              <span class="font-bold underline text-purple-400 block mb-0.5">Interests:</span>
-              <span class="inline-block bg-purple-100/60 text-purple-900 px-2 py-0.5 rounded text-[11px]">${interests}</span>
-            </div>
-            <div class="border-b border-purple-100 pb-1">
-              <span class="font-bold underline text-purple-400 block mb-0.5">Type:</span>
-              <div class="bg-purple-100/60 text-purple-900 p-1.5 rounded text-[11px] leading-snug">${type}</div>
-            </div>
-            <div class="border-b border-purple-100 pb-1">
-              <span class="font-bold underline text-purple-400 block mb-0.5">Dating Style:</span>
-              <div class="bg-purple-100/60 text-purple-900 p-1.5 rounded text-[11px] leading-snug">${dating}</div>
-            </div>
-            <div>
-              <span class="font-bold underline text-purple-400 block mb-0.5">Best Quality:</span>
-              <div class="bg-purple-100/60 text-purple-900 px-2 py-0.5 rounded text-[11px]">${best}</div>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderProfileCardInChat(key) {
-      const b = document.createElement('div');
-      b.className = "chat-bubble my-2";
-      if (key === 'player') {
-        b.innerHTML = createPolaroidCardHTML(null, true);
-      } else {
-        b.innerHTML = createPolaroidCardHTML(boys[key], false);
-      }
-      document.getElementById('group-stream').appendChild(b);
-      document.getElementById('group-stream').scrollTop = document.getElementById('group-stream').scrollHeight;
-    }
-
-    // -------------------------------------------------------------
-    // HEART SENDING ROOM (MIDNIGHT)
-    // -------------------------------------------------------------
-    let targetGuyKey = null;
-
-    function openHeartSendingRoom() {
-      document.getElementById('main-header').classList.add('hidden');
-      document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
-
-      document.getElementById('chat-inside-header').classList.remove('hidden');
-      document.getElementById('active-chat-title').textContent = '<Heart Sending>';
-      document.getElementById('active-chat-sub').textContent = 'Anonymous Signal (23:59 PM)';
-
-      document.getElementById('room-heart').classList.remove('hidden');
-
-      const targetList = document.getElementById('heart-target-list');
-      targetList.innerHTML = '';
-
-      Object.entries(boys).forEach(([k, guy]) => {
-        const item = document.createElement('div');
-        item.className = "p-3 rounded-2xl bg-white border border-purple-100 hover:border-fuchsia-300 flex items-center justify-between cursor-pointer transition shadow-sm active:scale-[0.99]";
-        item.onclick = () => selectHeartTarget(k, item);
-        item.innerHTML = `
-          <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-full ${guy.bgTone} flex items-center justify-center font-bold text-xs border border-purple-100 shadow-sm">
-              ${guy.realName[0]}
-            </div>
-            <div>
-              <span class="text-xs font-bold text-purple-950">${guy.realName}</span>
-              <p class="text-[10px] text-purple-400">${guy.occupation}</p>
-            </div>
-          </div>
-          <span class="text-xs text-fuchsia-500 font-bold">Select ❤️</span>
-        `;
-        targetList.appendChild(item);
-      });
-    }
-
-    function selectHeartTarget(key, el) {
-      targetGuyKey = key;
-      document.querySelectorAll('#heart-target-list > div').forEach(d => {
-        d.classList.remove('border-fuchsia-400', 'bg-pink-50/50');
-      });
-      el.classList.add('border-fuchsia-400', 'bg-pink-50/50');
-      document.getElementById('heart-msg-box').classList.remove('hidden');
-      document.getElementById('heart-input-text').focus();
-    }
-
-    function submitMidnightHeart() {
-      const msg = document.getElementById('heart-input-text').value.trim();
-      if (!msg) {
-        alert('Please write a message before sending.');
-        return;
-      }
-
-      boys[targetGuyKey].score += 8;
-      document.getElementById('heart-msg-box').classList.add('hidden');
-      document.getElementById('heart-target-list').classList.add('hidden');
-
-      const resultBox = document.getElementById('heart-result-box');
-      const replyView = document.getElementById('heart-reply-view');
-      resultBox.classList.remove('hidden');
-
-      const guy = boys[targetGuyKey];
-      let reaction = '';
-      if (targetGuyKey === 'chenxu') {
-        reaction = `Chen Xu (เฉินซวี่): "Mmh, I received your secret note. Thank you for making tonight feel warm and steady. Get some rest, let's talk tomorrow."`;
-      } else if (targetGuyKey === 'xiyao') {
-        reaction = `Xia Xiyao (เซี่ยซีเหยา): "Did jiejie really pick me!? I'm smiling so hard right now I can't sleep! I'll be waiting for you tomorrow morning!"`;
-      } else if (targetGuyKey === 'wenjun') {
-        reaction = `Wen Jun (เวินจวิ้น): "Mmh... sending this kind of message, little one? You are bolder than you look. Sleep well tonight."`;
-      } else if (targetGuyKey === 'guyan') {
-        reaction = `Gu Yan (กู้เยี่ยน): "...Who said I was waiting for your note? But yeah... good night. Don't stay up late."`;
-      }
-
-      replyView.innerHTML = `
-        <span class="text-[10px] text-purple-400 block mb-1">Delivered to ${guy.realName}'s Secret Inbox:</span>
-        "${msg}"
-        <div class="mt-2 pt-2 border-t border-purple-100 text-fuchsia-600 font-semibold">
-          ${reaction}
-        </div>
-      `;
-      document.getElementById('heart-last-msg').textContent = `Delivered to ${guy.realName}`;
-    }
-  </script>
+  <!-- นำเข้าบทสนทนารายวัน (เพิ่ม day2.js, day3.js ได้เรื่อยๆ ที่นี่) -->
+  <script src="js/stories/day1.js"></script>
+
+  <!-- นำเข้า Script หลักของระบบ -->
+  <script src="js/main.js"></script>
 </body>
 </html>
