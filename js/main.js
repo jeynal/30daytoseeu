@@ -1,38 +1,141 @@
-// Global State & Database
-let currentDay = 1;
+// Global Game State
+let currentDay = 1; // เปลี่ยนเป็น 2 เพื่อเฉลยชื่อจริงและรูปโปรไฟล์ผู้แข่งทุกคนในวันที่ 2
 let dialogueQueue = [];
 let isWaitingForPlayer = false;
 let waitingForTap = false;
-let speedMode = 0; // 0=Slow, 1=Normal, 2=Tap
-const delays = [1700, 950, 0];
+let speedMode = 1; // 0=Slow, 1=Normal, 2=Fast, 3=Tap Mode
+const delays = [2200, 1200, 500, 0];
+let currentLang = 'en';
 
+// ข้อมูลโปรไฟล์ผู้เล่น
 let playerProfile = {
-  name: 'Lin XinYue', age: 23, occupation: 'Automation Engineer',
-  interests: 'Reading, writing, listening, watching',
+  name: 'Lin XinYue',
+  avatarUrl: '',
+  age: 23,
+  occupation: 'Automation Engineer',
+  interests: 'Reading, writing, music, watching',
   idealType: 'Good guy, taller than me, mature',
-  datingStyle: 'Slow burn, fall slow but fall harder', bestQuality: 'Honestly, funny, friendly'
+  datingStyle: 'Slow burn, fall slow but fall harder',
+  bestQuality: 'Honestly, funny, friendly'
 };
 
-const boys = {
-  chenxu: { codeName: 'Mr. Horizon', realName: 'Chen Xu (เฉินซวี่)', age: 29, occupation: 'Lead Architect', interests: 'Structure sketches, Coffee', idealType: 'Someone who feels like peace', datingStyle: 'More action than words', bestQuality: 'Steadiness', photoDesc: 'Aesthetic candid: Blue sweater neck, sharp jawline.', bgTone: 'bg-purple-200 text-purple-800', score: 0 },
-  xiyao: { codeName: 'Golden Puppy', realName: 'Xia Xiyao (เซี่ยซีเหยา)', age: 22, occupation: 'Idol Vocalist', interests: 'Dance, Cheese milk tea', idealType: 'Sweet older sister', datingStyle: 'Clingy & affectionate 24/7', bestQuality: 'Pure heart', photoDesc: 'Aesthetic candid: Soft pastel blue knit.', bgTone: 'bg-sky-200 text-sky-800', score: 0 },
-  wenjun: { codeName: 'Velvet Noir', realName: 'Wen Jun (เวินจวิ้น)', age: 28, occupation: 'Gallery Owner', interests: 'Vintage wine, Jazz', idealType: 'Lovely little one', datingStyle: 'Gentle and attentive', bestQuality: 'Heart-racing gaze', photoDesc: 'Aesthetic candid: Dark collared shirt, collarbone.', bgTone: 'bg-indigo-950 text-purple-200', score: 0 },
-  guyan: { codeName: 'Black Cat', realName: 'Gu Yan (กู้เยี่ยน)', age: 24, occupation: 'Game Developer', interests: 'Midnight coding, Black cats', idealType: 'Quiet person', datingStyle: 'Tsundere with words', bestQuality: 'Quiet attentiveness', photoDesc: 'Aesthetic candid: Dark cap, sharp side profile.', bgTone: 'bg-slate-700 text-slate-200', score: 0 }
+// ข้อมูลผู้ติดต่อทั้งหมด 9 คน (ผู้เข้าร่วม 8 คน + พีดี Master + บอทที่ปรึกษา)
+const contactsData = {
+  chenxu: {
+    codeName: 'Mr. Horizon',
+    realName: 'Chen Xu (เฉินซวี่)',
+    age: 29,
+    occupation: 'Lead Architect',
+    interests: 'Structure sketches, Black coffee',
+    idealType: 'Peace without words',
+    datingStyle: 'More action than words',
+    avatarUrl: 'images/chenxu.jpg', // ใส่พาธรูปในโฟลเดอร์รูปได้
+    bgTone: 'bg-purple-200 text-purple-800'
+  },
+  xiyao: {
+    codeName: 'Golden Puppy',
+    realName: 'Xia Xiyao (เซี่ยซีเหยา)',
+    age: 22,
+    occupation: 'Idol Vocalist & Dancer',
+    interests: 'Dance, Cheese milk tea',
+    idealType: 'Sweet older sister',
+    datingStyle: 'Clingy & affectionate 24/7',
+    avatarUrl: 'images/xiyao.jpg',
+    bgTone: 'bg-sky-200 text-sky-800'
+  },
+  wenjun: {
+    codeName: 'Velvet Noir',
+    realName: 'Wen Jun (เวินจวิ้น)',
+    age: 28,
+    occupation: 'Art Gallery Owner',
+    interests: 'Vintage wine, Jazz vinyls',
+    idealType: 'Lovely little one',
+    datingStyle: 'Gentle and attentive',
+    avatarUrl: 'images/wenjun.jpg',
+    bgTone: 'bg-indigo-950 text-purple-200'
+  },
+  guyan: {
+    codeName: 'Black Cat',
+    realName: 'Gu Yan (กู้เยี่ยน)',
+    age: 24,
+    occupation: 'Indie Game Developer',
+    interests: 'Midnight coding, Black cats',
+    idealType: 'Quiet person who respects silence',
+    datingStyle: 'Tsundere with words',
+    avatarUrl: 'images/guyan.jpg',
+    bgTone: 'bg-slate-700 text-slate-200'
+  },
+  yingyin: {
+    codeName: 'Scarlet',
+    realName: 'Song Yingyin (ซ่งอิงอิน)',
+    age: 26,
+    occupation: 'Fashion Editor',
+    interests: 'Haute couture, Espresso',
+    idealType: 'Sophisticated gentleman',
+    datingStyle: 'Elegant romance',
+    avatarUrl: 'images/yingyin.jpg',
+    bgTone: 'bg-pink-200 text-pink-800'
+  },
+  jiangyue: {
+    codeName: 'Luna',
+    realName: 'Jiang Yue (เจียงเยว่)',
+    age: 25,
+    occupation: 'Classical Pianist',
+    interests: 'Chopin, Afternoon tea',
+    idealType: 'Romantic soul',
+    datingStyle: 'Soft melodic love',
+    avatarUrl: 'images/jiangyue.jpg',
+    bgTone: 'bg-fuchsia-200 text-fuchsia-800'
+  },
+  tangmei: {
+    codeName: 'Mochi (Foco)',
+    realName: 'Tang Mei (ถังเม่ย)',
+    age: 23,
+    occupation: 'Food Vlogger',
+    interests: 'Street food, Baking',
+    idealType: 'Someone who loves eating',
+    datingStyle: 'Cute & energetic',
+    avatarUrl: 'images/tangmei.jpg',
+    bgTone: 'bg-purple-200 text-purple-800'
+  },
+  master: {
+    codeName: 'Producer',
+    realName: 'Plan Master',
+    occupation: 'Executive Director of LUMEN',
+    avatarUrl: '',
+    bgTone: 'bg-pink-100 text-fuchsia-700',
+    isSpecial: true
+  },
+  consultant: {
+    codeName: 'LUMEN Bot',
+    realName: 'LUMEN Counselor (ที่ปรึกษา)',
+    occupation: 'Relationship Advisor Bot',
+    avatarUrl: '',
+    bgTone: 'bg-emerald-100 text-emerald-800',
+    isSpecial: true
+  }
 };
 
-// UI Navigation
+// UI & Tab Switcher
 function switchTab(tabKey) {
   exitActiveChat();
   document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
-  document.querySelectorAll('.nav-btn').forEach(b => { b.classList.remove('text-fuchsia-500'); b.classList.add('text-purple-300'); });
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.remove('text-fuchsia-500');
+    b.classList.add('text-purple-300');
+  });
 
   const targetPage = document.getElementById(`tab-${tabKey}`);
   const targetBtn = document.getElementById(`nav-${tabKey}`);
   if (targetPage) targetPage.classList.remove('hidden');
-  if (targetBtn) { targetBtn.classList.add('text-fuchsia-500'); targetBtn.classList.remove('text-purple-300'); }
+  if (targetBtn) {
+    targetBtn.classList.add('text-fuchsia-500');
+    targetBtn.classList.remove('text-purple-300');
+  }
 
   const titles = { chats: 'Chats', people: 'People', story: 'Story', my: 'MY', more: 'More' };
   document.getElementById('header-page-title').textContent = titles[tabKey] || 'Chats';
+
   if (tabKey === 'people') renderPeopleTab();
 }
 
@@ -45,23 +148,156 @@ function exitActiveChat() {
   document.getElementById('tab-chats').classList.remove('hidden');
 }
 
-function toggleSpeed() {
-  speedMode = (speedMode + 1) % 3;
-  document.getElementById('speed-label').textContent = ['Slow', 'Normal', 'Tap Mode'][speedMode];
-  document.getElementById('next-tap-bar').classList.toggle('hidden', speedMode !== 2);
+// 1. Render รายชื่อผู้ติดต่อครบทั้ง 9 คน + ลูกเล่นชื่อสุ่มวันแรก / เฉลยวันที่สอง
+function renderPeopleTab() {
+  const list = document.getElementById('people-friends-list');
+  list.innerHTML = '';
+
+  document.getElementById('people-day-status').textContent = currentDay === 1 ? 'Day 1: Anonymous Code Names' : 'Day 2+: Profile Unlocked';
+
+  Object.entries(contactsData).forEach(([key, person]) => {
+    // วันแรกโชว์เฉพาะ Code Name วันที่ 2 โชว์ชื่อจริงและภาพ
+    const displayName = (currentDay === 1 && !person.isSpecial) ? person.codeName : person.realName;
+    const subTitle = (currentDay === 1 && !person.isSpecial) ? 'Anonymous Participant' : (person.codeName || person.occupation);
+
+    const item = document.createElement('div');
+    item.className = "p-3.5 px-4 flex items-center space-x-3.5 hover:bg-purple-50/50 transition cursor-pointer";
+    item.onclick = () => openContactProfileModal(key);
+
+    let avatarHTML = `<div class="w-11 h-11 rounded-full ${person.bgTone} flex items-center justify-center font-bold text-xs shrink-0 border border-purple-100 shadow-sm">${displayName[0]}</div>`;
+    
+    // แสดงรูปโปรไฟล์ในหน้าสัมผัสถ้าผ่านวันแรกแล้วมี URL รูปภาพ
+    if (currentDay >= 2 && person.avatarUrl) {
+      avatarHTML = `<div class="w-11 h-11 rounded-full border border-purple-100 shadow-sm shrink-0 bg-cover bg-center overflow-hidden" style="background-image: url('${person.avatarUrl}')"></div>`;
+    }
+
+    item.innerHTML = `
+      ${avatarHTML}
+      <div class="flex-1 min-w-0">
+        <h4 class="text-xs font-bold text-purple-950 truncate">${displayName}</h4>
+        <p class="text-[10px] text-purple-400 mt-0.5 truncate">${subTitle}</p>
+      </div>
+      <span class="text-[10px] text-purple-300">View &gt;</span>
+    `;
+    list.appendChild(item);
+  });
 }
 
-// Master Registration
-const regQuestions = [
-  { key: 'name', label: 'Name / Nickname:', placeholder: 'e.g. Lin XinYue', type: 'text' },
-  { key: 'age', label: 'Age:', placeholder: 'e.g. 23', type: 'number' },
-  { key: 'occupation', label: 'Occupation:', placeholder: 'e.g. Automation Engineer', type: 'text' },
-  { key: 'interests', label: 'Interests & Hobbies:', placeholder: 'e.g. Reading, writing', type: 'text' },
-  { key: 'idealType', label: 'Ideal Type:', placeholder: 'e.g. Good guy, mature', type: 'text' },
-  { key: 'datingStyle', label: 'Dating Style:', placeholder: 'e.g. Slow burn', type: 'text' },
-  { key: 'bestQuality', label: 'Best Quality:', placeholder: 'e.g. Friendly', type: 'text' }
-];
+// 2. Fullscreen Profile Viewer Modal (ภาพที่ 3)
+function openContactProfileModal(key) {
+  const person = contactsData[key];
+  if (!person) return;
 
+  const modal = document.getElementById('modal-contact-view');
+  const avatarBox = document.getElementById('modal-profile-avatar');
+  const nameLabel = document.getElementById('modal-profile-name');
+  const subLabel = document.getElementById('modal-profile-sub');
+  const detailsBox = document.getElementById('modal-profile-details');
+
+  const displayName = (currentDay === 1 && !person.isSpecial) ? person.codeName : person.realName;
+
+  nameLabel.textContent = displayName;
+  subLabel.textContent = `${person.codeName} · ${person.occupation || 'Participant'}`;
+
+  if (currentDay >= 2 && person.avatarUrl) {
+    avatarBox.style.backgroundImage = `url('${person.avatarUrl}')`;
+    avatarBox.textContent = '';
+  } else {
+    avatarBox.style.backgroundImage = 'none';
+    avatarBox.className = `w-32 h-32 rounded-full border-2 border-white/80 shadow-2xl overflow-hidden ${person.bgTone} flex items-center justify-center text-4xl font-bold`;
+    avatarBox.textContent = displayName[0];
+  }
+
+  detailsBox.innerHTML = `
+    <div><strong class="text-purple-300">Occupation:</strong> ${person.occupation || 'N/A'}</div>
+    ${person.interests ? `<div><strong class="text-purple-300">Interests:</strong> ${person.interests}</div>` : ''}
+    ${person.idealType ? `<div><strong class="text-purple-300">Ideal Type:</strong> ${person.idealType}</div>` : ''}
+  `;
+
+  modal.classList.remove('hidden');
+}
+
+function closeContactProfileModal() {
+  document.getElementById('modal-contact-view').classList.add('hidden');
+}
+
+// 3. Edit Player's Profile Modal
+function openEditMyProfileModal() {
+  document.getElementById('edit-avatar-url').value = playerProfile.avatarUrl || '';
+  document.getElementById('edit-name').value = playerProfile.name;
+  document.getElementById('edit-occ').value = playerProfile.occupation;
+  document.getElementById('edit-interests').value = playerProfile.interests;
+  document.getElementById('edit-type').value = playerProfile.idealType;
+  document.getElementById('edit-style').value = playerProfile.datingStyle;
+
+  document.getElementById('modal-edit-profile').classList.remove('hidden');
+}
+
+function closeEditMyProfileModal() {
+  document.getElementById('modal-edit-profile').classList.add('hidden');
+}
+
+function saveMyProfileChanges() {
+  playerProfile.avatarUrl = document.getElementById('edit-avatar-url').value.trim();
+  playerProfile.name = document.getElementById('edit-name').value.trim() || 'Lin XinYue';
+  playerProfile.occupation = document.getElementById('edit-occ').value.trim();
+  playerProfile.interests = document.getElementById('edit-interests').value.trim();
+  playerProfile.idealType = document.getElementById('edit-type').value.trim();
+  playerProfile.datingStyle = document.getElementById('edit-style').value.trim();
+
+  document.getElementById('people-player-name').textContent = `${playerProfile.name} (You)`;
+  document.getElementById('people-player-sub').textContent = `${playerProfile.occupation} · Participant`;
+  document.getElementById('my-player-name').textContent = playerProfile.name;
+
+  if (playerProfile.avatarUrl) {
+    const avatarStyle = `background-image: url('${playerProfile.avatarUrl}'); background-size: cover; background-position: center;`;
+    document.getElementById('people-player-avatar').setAttribute('style', avatarStyle);
+    document.getElementById('people-player-avatar').textContent = '';
+    document.getElementById('my-player-avatar').setAttribute('style', avatarStyle);
+    document.getElementById('my-player-avatar').textContent = '';
+  }
+
+  closeEditMyProfileModal();
+}
+
+// 4. Chat Settings Modal & Logic
+function toggleChatSettingsModal() {
+  document.getElementById('modal-chat-settings').classList.toggle('hidden');
+}
+
+function changeSpeedModeFromSettings(val) {
+  speedMode = parseInt(val);
+  const tapBar = document.getElementById('next-tap-bar');
+  if (speedMode === 3) {
+    tapBar.classList.remove('hidden');
+  } else {
+    tapBar.classList.add('hidden');
+  }
+}
+
+function applyChatTheme(theme) {
+  const bg = document.getElementById('chat-viewport-bg');
+  if (theme === 'purple') bg.className = 'flex-1 overflow-hidden relative flex flex-col bg-[#faf5ff] pb-14';
+  if (theme === 'pink') bg.className = 'flex-1 overflow-hidden relative flex flex-col bg-[#fff5f7] pb-14';
+  if (theme === 'blue') bg.className = 'flex-1 overflow-hidden relative flex flex-col bg-[#f0f9ff] pb-14';
+  if (theme === 'dark') bg.className = 'flex-1 overflow-hidden relative flex flex-col bg-slate-900 text-white pb-14';
+}
+
+function changeLanguage(lang) {
+  currentLang = lang;
+  if (lang === 'th') {
+    document.getElementById('label-tap-next').textContent = 'แตะหน้าจอเพื่ออ่านข้อความถัดไป';
+    document.getElementById('btn-send-msg').textContent = 'ส่ง';
+  } else if (lang === 'zh') {
+    document.getElementById('label-tap-next').textContent = '点击屏幕阅读下一条消息';
+    document.getElementById('btn-send-msg').textContent = '发送';
+  } else {
+    document.getElementById('label-tap-next').textContent = 'Tap to read next message';
+    document.getElementById('btn-send-msg').textContent = 'Send';
+  }
+}
+
+// Engine Functions
 function openMasterChat() {
   document.getElementById('main-header').classList.add('hidden');
   document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
@@ -75,6 +311,16 @@ function openMasterChat() {
     setTimeout(() => renderMasterRegInput(0), 800);
   }
 }
+
+const regQuestions = [
+  { key: 'name', label: 'Name / Nickname:', placeholder: 'e.g. Lin XinYue', type: 'text' },
+  { key: 'age', label: 'Age:', placeholder: 'e.g. 23', type: 'number' },
+  { key: 'occupation', label: 'Occupation:', placeholder: 'e.g. Automation Engineer', type: 'text' },
+  { key: 'interests', label: 'Interests & Hobbies:', placeholder: 'e.g. Reading, writing', type: 'text' },
+  { key: 'idealType', label: 'Ideal Type:', placeholder: 'e.g. Good guy, mature', type: 'text' },
+  { key: 'datingStyle', label: 'Dating Style:', placeholder: 'e.g. Slow burn', type: 'text' },
+  { key: 'bestQuality', label: 'Best Quality:', placeholder: 'e.g. Friendly', type: 'text' }
+];
 
 function renderMasterRegInput(idx) {
   if (idx >= regQuestions.length) {
@@ -126,7 +372,6 @@ function addUserBubble(container, txt) {
   container.scrollTop = container.scrollHeight;
 }
 
-// Group Chat Engine (ดึงข้อมูลแยกวันจาก window[`day${currentDay}Data`])
 function openGroupChat() {
   document.getElementById('main-header').classList.add('hidden');
   document.querySelectorAll('.tab-page').forEach(p => p.classList.add('hidden'));
@@ -179,7 +424,7 @@ function processGroupQueue() {
 }
 
 function scheduleGroupNext() {
-  if (speedMode === 2) {
+  if (speedMode === 3) {
     waitingForTap = true;
     document.getElementById('next-tap-bar').classList.remove('hidden');
   } else {
@@ -192,7 +437,7 @@ function advanceDialogue() {
 }
 
 function showTypingIndicator(sender, cb) {
-  if (speedMode === 2) { cb(); return; }
+  if (speedMode === 3) { cb(); return; }
   const indicator = document.getElementById('typing-indicator');
   indicator.classList.remove('hidden');
   document.getElementById('typing-name').textContent = `${sender} is typing...`;
@@ -236,7 +481,6 @@ function sendPlayerFreeMessage() {
   processGroupQueue();
 }
 
-// Profile Card Renderer
 function createPolaroidCardHTML(cardData, isPlayer = false) {
   const nameAge = isPlayer ? `${playerProfile.name}, ${playerProfile.age}` : `${cardData.realName}, ${cardData.age}`;
   const occ = isPlayer ? playerProfile.occupation : cardData.occupation;
@@ -270,13 +514,10 @@ function createPolaroidCardHTML(cardData, isPlayer = false) {
 function renderProfileCardInChat(key) {
   const b = document.createElement('div');
   b.className = "chat-bubble my-2";
-  b.innerHTML = (key === 'player') ? createPolaroidCardHTML(null, true) : createPolaroidCardHTML(boys[key], false);
+  b.innerHTML = (key === 'player') ? createPolaroidCardHTML(null, true) : createPolaroidCardHTML(contactsData[key], false);
   document.getElementById('group-stream').appendChild(b);
   document.getElementById('group-stream').scrollTop = document.getElementById('group-stream').scrollHeight;
 }
-
-// Heart Signal System
-let targetGuyKey = null;
 
 function openHeartSendingRoom() {
   document.getElementById('main-header').classList.add('hidden');
@@ -287,7 +528,8 @@ function openHeartSendingRoom() {
 
   const targetList = document.getElementById('heart-target-list');
   targetList.innerHTML = '';
-  Object.entries(boys).forEach(([k, guy]) => {
+  ['chenxu', 'xiyao', 'wenjun', 'guyan'].forEach(k => {
+    const guy = contactsData[k];
     const item = document.createElement('div');
     item.className = "p-3 rounded-2xl bg-white border border-purple-100 flex items-center justify-between cursor-pointer transition shadow-sm";
     item.onclick = () => selectHeartTarget(k, item);
@@ -310,7 +552,7 @@ function submitMidnightHeart() {
   document.getElementById('heart-msg-box').classList.add('hidden');
   document.getElementById('heart-target-list').classList.add('hidden');
 
-  const guy = boys[targetGuyKey];
+  const guy = contactsData[targetGuyKey];
   const reactions = {
     chenxu: `Chen Xu (เฉินซวี่): "Mmh, I received your secret note. Get some rest, let's talk tomorrow."`,
     xiyao: `Xia Xiyao (เซี่ยซีเหยา): "Did jiejie really pick me!? I'm smiling so hard right now!"`,
@@ -320,22 +562,4 @@ function submitMidnightHeart() {
 
   document.getElementById('heart-result-box').classList.remove('hidden');
   document.getElementById('heart-reply-view').innerHTML = `<span class="text-[10px] text-purple-400 block mb-1">Delivered to ${guy.realName}:</span>"${msg}"<div class="mt-2 pt-2 border-t border-purple-100 text-fuchsia-600 font-semibold">${reactions[targetGuyKey]}</div>`;
-}
-
-function renderPeopleTab() {
-  const list = document.getElementById('people-friends-list');
-  list.innerHTML = '';
-  const friends = [
-    { name: boys.chenxu.realName, code: 'Mr. Horizon', tone: boys.chenxu.bgTone },
-    { name: boys.xiyao.realName, code: 'Golden Puppy', tone: boys.xiyao.bgTone },
-    { name: boys.wenjun.realName, code: 'Velvet Noir', tone: boys.wenjun.bgTone },
-    { name: boys.guyan.realName, code: 'Black Cat', tone: boys.guyan.bgTone },
-    { name: 'Plan Master', code: 'Producer', tone: 'bg-pink-100 text-fuchsia-700' }
-  ];
-  friends.forEach(f => {
-    const item = document.createElement('div');
-    item.className = "p-3.5 px-4 flex items-center space-x-3.5 hover:bg-purple-50/50 transition";
-    item.innerHTML = `<div class="w-11 h-11 rounded-full ${f.tone} flex items-center justify-center font-bold text-xs shrink-0 border border-purple-100 shadow-sm">${f.code[0]}</div><div><h4 class="text-xs font-bold text-purple-950">${f.name}</h4><p class="text-[10px] text-purple-400">${f.code}</p></div>`;
-    list.appendChild(item);
-  });
 }
