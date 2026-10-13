@@ -1,64 +1,57 @@
 window.day1Data = {
   day: 1,
   title: "Shanghai First Night",
-  dialogues: [
-    { type: 'sys', text: 'Now, feel free to begin the conversation.' },
-    { type: 'msg', sender: 'Golden Puppy', tone: 'bg-sky-200 text-sky-800', text: 'Hey everyone!! Finally the room opened 🎉' },
-    { type: 'msg', sender: 'Mochi', tone: 'bg-purple-200 text-purple-800', text: 'hiiii everyone!! OMG there are so many of us here 😮' },
-    { type: 'msg', sender: 'Scarlet', tone: 'bg-pink-200 text-pink-800', text: 'Hello. Nice to meet everyone on this first night.' },
-    { type: 'msg', sender: 'Black Cat', tone: 'bg-slate-700 text-slate-200', text: '...so many notification dings already. It’s loud.' },
-    { type: 'msg', sender: 'Mr. Horizon', tone: 'bg-purple-200 text-purple-800', text: 'Good evening. It is quite late, hope nobody had a rough arrival in Shanghai.' },
-    { type: 'msg', sender: 'Velvet Noir', tone: 'bg-indigo-950 text-purple-200', text: 'Evening all. The weather tonight in the city is quite pleasant.' },
-    { type: 'msg', sender: 'Luna', tone: 'bg-fuchsia-200 text-fuchsia-800', text: 'Hello! I was so nervous waiting for the room to activate haha ☺️' },
-    { type: 'msg', sender: 'Golden Puppy', tone: 'bg-sky-200 text-sky-800', text: 'Me too Luna! My hands were literally shaking while holding my phone!' },
-    { type: 'msg', sender: 'Mr. Horizon', tone: 'bg-purple-200 text-purple-800', text: 'Take it easy. We have 30 days ahead of us. No need to rush.' },
-
-    // พักให้ผู้เล่นพิมพ์อิสระ
-    { type: 'player_turn', prompt: 'Say hello to everyone in the group...' },
-
-    { type: 'msg', sender: 'Mochi', tone: 'bg-purple-200 text-purple-800', text: 'Wait wait, since we are all using code names, let\'s guess something funny first!' },
-    { type: 'msg', sender: 'Golden Puppy', tone: 'bg-sky-200 text-sky-800', text: 'Ooh what is it Mochi? Tell us!' },
-    { type: 'msg', sender: 'Mochi', tone: 'bg-purple-200 text-purple-800', text: 'Which of the two is the fact then... Handsome or responsible?' },
-    { type: 'msg', sender: 'Scarlet', tone: 'bg-pink-200 text-pink-800', text: 'Hoping for the former ☺️' },
-    { type: 'msg', sender: 'Luna', tone: 'bg-fuchsia-200 text-fuchsia-800', text: 'It\'s definitely the former right?! Haha' },
-    { type: 'msg', sender: 'Velvet Noir', tone: 'bg-indigo-950 text-purple-200', text: 'Probably the former. But responsibility carries more weight long term.' },
-    { type: 'msg', sender: 'Mr. Horizon', tone: 'bg-purple-200 text-purple-800', text: 'Not quite... why can\'t someone strive to be both?' },
-    { type: 'msg', sender: 'Golden Puppy', tone: 'bg-sky-200 text-sky-800', text: 'Hahaha Mr. Horizon is definitely trying to be both!' },
-    { type: 'msg', sender: 'Black Cat', tone: 'bg-slate-700 text-slate-200', text: '...pointless debate.' },
-
-    // พักให้ผู้เล่นพิมพ์ตอบคำถาม
-    { type: 'player_turn', prompt: 'Share your thoughts on handsome vs responsible...' },
-
-    { type: 'msg', sender: 'Golden Puppy', tone: 'bg-sky-200 text-sky-800', text: 'Anyone hungry right now? I\'m craving cheese milk tea so badly 🧋' },
-    { type: 'msg', sender: 'Mr. Horizon', tone: 'bg-purple-200 text-purple-800', text: 'Drinking sweet tea this late will keep you awake. Warm water is safer.' },
-
-    // อีเวนต์เริ่มเผยการ์ดโปรไฟล์
-    { type: 'master_event', eventName: 'TRIGGER_ICEBREAKER' }
-  ],
   
-  // บทรอบเผยการ์ดโปรไฟล์
-  icebreakerDialogues: [
-    { type: 'sys', text: '📢 [LUMEN MASTER]: It is 21:00. Time for the Icebreaker: Profile Cards Reveal.' },
-    { type: 'card', key: 'chenxu' },
-    { type: 'msg', sender: 'Golden Puppy', tone: 'bg-sky-200 text-sky-800', text: 'WHOA! Look at that jawline and blue knit sweater! So aesthetic!' },
-    { type: 'msg', sender: 'Mr. Horizon', tone: 'bg-purple-200 text-purple-800', text: 'Yes, it is mine. My real name is Chen Xu (เฉินซวี่). Nice to meet you all.' },
+  // 1. บทสนทนาในห้อง Master (ต้อนรับ ถามความรู้สึก ยืนยันโปรไฟล์ สรุปการ์ด และบอกกฎ)
+  masterDialogues: [
+    { type: 'sys', text: '✨ LUMEN Shanghai Season 1 Official Channel' },
+    { type: 'master_msg', text: 'Congratulations and welcome, Participant #8! 🎉 We are thrilled to have you here in Shanghai.' },
+    { type: 'master_msg', text: 'How are you feeling right now? Excited or nervous about spending the next 30 days with us?' },
+    { type: 'player_turn', prompt: 'Tell Producer how you feel...' },
 
-    { type: 'card', key: 'xiyao' },
-    { type: 'msg', sender: 'Golden Puppy', tone: 'bg-sky-200 text-sky-800', text: 'Eeeek! Busted!! Yes, I am Xia Xiyao (เซี่ยซีเหยา)!' },
+    { type: 'master_msg', text: 'Haha, that reaction is totally understandable! Everyone is holding their breath right now.' },
+    { type: 'master_msg', text: 'Before we unlock the main lounge, let\'s quickly confirm your Official Profile Card.' },
+    { type: 'master_msg', text: 'Please upload your profile photo first.' },
+    { type: 'player_avatar_upload' }, // จุดให้อัปโหลดรูป
 
-    { type: 'card', key: 'guyan' },
-    { type: 'msg', sender: 'Black Cat', tone: 'bg-slate-700 text-slate-200', text: '...Yeah. Gu Yan (กู้เยี่ยน). Game programmer.' },
+    { type: 'master_msg', text: 'Great photo! Now please answer a few quick questions to complete your card.' },
+    { type: 'player_reg_flow' }, // วนถามชื่อ อาชีพ ความสนใจ สเปก สไตล์การเดต
 
-    { type: 'card', key: 'wenjun' },
-    { type: 'msg', sender: 'Velvet Noir', tone: 'bg-indigo-950 text-purple-200', text: 'Guessed right. I am Wen Jun (เวินจวิ้น). Glad to meet you all.' },
+    { type: 'master_msg', text: 'All details recorded! Here is your official Polaroid Profile Card preview:' },
+    { type: 'card', key: 'player' }, // แสดงการ์ด Polaroid ตามดีไซน์แบบในภาพที่ส่งมา[span_1](start_span)[span_1](end_span)
 
-    { type: 'card', key: 'player' },
-    { type: 'msg', sender: 'Mr. Horizon', tone: 'bg-purple-200 text-purple-800', text: 'Automation Engineer... It feels grounded, sincere, and very rare.' },
-    { type: 'msg', sender: 'Golden Puppy', tone: 'bg-sky-200 text-sky-800', text: 'Waaah such a pretty candid photo!! "Slow burn, fall slow but fall harder"!!' },
+    { type: 'master_msg', text: 'Does everything look perfect to you?' },
+    { type: 'player_turn', prompt: 'Confirm your profile card...' },
 
-    { type: 'player_turn', prompt: 'Everyone is complimenting your card! Reply back to them...' },
+    { type: 'master_msg', text: 'Awesome! Now, please keep these key rules in mind:' },
+    { type: 'master_msg', text: '📌 [RULES OF DAY 1]\n1. All participants must use anonymous Code Names.\n2. Do NOT reveal your real name or exact age on Day 1.\n3. Tomorrow (Day 2), everyone\'s true profiles & photos will be officially unveiled!' },
+    { type: 'master_msg', text: '🔔 The TDL All Group lounge is now OPEN! Tap below to join.' },
+    { type: 'master_event', eventName: 'OPEN_GROUP_CHANNEL' }
+  ],
 
-    { type: 'sys', text: '🔒 23:55 PM: TDL All Group lounge is now officially closing for Day 1.' },
+  // 2. บทสนทนาในห้อง TDL All Group (พูดคุยกลุ่มวันแรก ชวนคุยแบบปิดบังตัวตน)
+  dialogues: [
+    { type: 'sys', text: '📢 TDL : All Group Lounge Activated (8 Participants Online)' },
+    { type: 'msg', sender: 'Golden Puppy', tone: 'bg-sky-200 text-sky-800', text: 'Hey everyone!! Finally the room opened 🎉 Welcome to Shanghai!' },
+    { type: 'msg', sender: 'Mochi', tone: 'bg-purple-200 text-purple-800', text: 'hiiii everyone!! OMG so many people here 😮 So nervous!' },
+    { type: 'msg', sender: 'Scarlet', tone: 'bg-pink-200 text-pink-800', text: 'Hello all. Nice to meet everyone on this first night.' },
+    { type: 'msg', sender: 'Black Cat', tone: 'bg-slate-700 text-slate-200', text: '...so many notification dings already. It’s kinda loud.' },
+    { type: 'msg', sender: 'Mr. Horizon', tone: 'bg-purple-200 text-purple-800', text: 'Good evening everyone. Hope nobody had a rough flight arriving in Shanghai.' },
+    { type: 'msg', sender: 'Velvet Noir', tone: 'bg-indigo-950 text-purple-200', text: 'Evening. The night breeze in the city is quite gentle today.' },
+    { type: 'msg', sender: 'Luna', tone: 'bg-fuchsia-200 text-fuchsia-800', text: 'Hello! Producer said we must keep our real identity hidden today. Super mysterious!' },
+
+    { type: 'player_turn', prompt: 'Say hello to everyone in the lounge...' },
+
+    { type: 'msg', sender: 'Golden Puppy', tone: 'bg-sky-200 text-sky-800', text: 'Haha yay! Participant #8 is here! Love your vibe already!' },
+    { type: 'msg', sender: 'Mr. Horizon', tone: 'bg-purple-200 text-purple-800', text: 'Yes, remember the Producer rules for Day 1: we are all using Code Names today.' },
+    { type: 'msg', sender: 'Mr. Horizon', tone: 'bg-purple-200 text-purple-800', text: 'Tomorrow on Day 2, there will be an official identity guessing event where our real profiles will be revealed!' },
+    { type: 'msg', sender: 'Mochi', tone: 'bg-purple-200 text-purple-800', text: 'Ooooh I can\'t wait for Day 2!! I want to guess who is behind these nicknames so badly!' },
+    { type: 'msg', sender: 'Velvet Noir', tone: 'bg-indigo-950 text-purple-200', text: 'Patience makes the reveal sweeter, doesn\'t it?' },
+    { type: 'msg', sender: 'Black Cat', tone: 'bg-slate-700 text-slate-200', text: '...Don\'t expect too much.' },
+
+    { type: 'player_turn', prompt: 'Share your excitement for tomorrow\'s reveal...' },
+
+    { type: 'sys', text: '🔒 23:55 PM: TDL All Group lounge has officially closed for Day 1.' },
     { type: 'master_event', eventName: 'TRIGGER_HEART_SIGNAL' }
   ]
 };
